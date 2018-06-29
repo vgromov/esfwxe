@@ -1,7 +1,9 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
+#include <esfwxe/utils.h>
 
-#include "EseChannel.h"
+#include <esfwxe/cpp/concept/EseChannel.h>
 
 EseChannelIntf::EseChannelIntf(size_t rxLen, size_t txLen) ESE_NOTHROW : 
 m_breaker(0),

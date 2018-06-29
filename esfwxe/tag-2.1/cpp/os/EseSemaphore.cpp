@@ -1,7 +1,16 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
 
-#include "EseSemaphore.h"
+// FreeRTOS
+#include <FreeRTOS.h>
+#include <queue.h>
+#include <semphr.h>
+#include <task.h>
+#include <timers.h>
+
+#include <esfwxe/cpp/os/EseOsDefs.h>
+#include <esfwxe/cpp/os/EseSemaphore.h>
 
 EseSemaphore::EseSemaphore(size_t maxCount, size_t initialCount) :
 m_h(NULL),
@@ -39,7 +48,7 @@ void EseSemaphore::uninit() ESE_NOTHROW
   }
 }
   
-rtosStatus EseSemaphore::lock(uint32_t tmo /*= rtosMaxDelay*/) ESE_NOTHROW
+rtosStatus EseSemaphore::lock(esU32 tmo /*= rtosMaxDelay*/) ESE_NOTHROW
 {
   if( m_h )
     return (pdTRUE == xSemaphoreTake(m_h, 

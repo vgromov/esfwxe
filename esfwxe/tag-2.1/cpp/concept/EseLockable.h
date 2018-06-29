@@ -1,8 +1,8 @@
 #ifndef _ese_lockable_h_
 #define _ese_lockable_h_
 
-#include "esfwxe/cpp/os/EseOsDefs.h"
-#include "esfwxe/cpp/EseException.h"
+#include <esfwxe/cpp/os/EseOsDefs.h>
+#include <esfwxe/cpp/EseException.h>
 
 /// Locally-scoped locker helper for Locable objects
 ///

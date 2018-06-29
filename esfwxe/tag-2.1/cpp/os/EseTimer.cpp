@@ -1,7 +1,16 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
 
-#include "EseTimer.h"
+// FreeRTOS
+#include <FreeRTOS.h>
+#include <queue.h>
+#include <semphr.h>
+#include <task.h>
+#include <timers.h>
+
+#include <esfwxe/cpp/os/EseOsDefs.h>
+#include <esfwxe/cpp/os/EseTimer.h>
 
 #ifdef configUSE_TIMERS
 

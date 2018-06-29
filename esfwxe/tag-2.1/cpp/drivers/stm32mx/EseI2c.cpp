@@ -1,13 +1,30 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
+#include <esfwxe/utils.h>
 
-#include "EseI2c.h"
+// FreeRTOS
+#include <FreeRTOS.h>
+#include <queue.h>
+#include <semphr.h>
+#include <task.h>
+#include <timers.h>
+
+#include <esfwxe/cpp/concept/EseChannel.h>
+#include <esfwxe/cpp/os/EseMutex.h>
+#include <esfwxe/cpp/os/EseSemaphore.h>
+#include <esfwxe/cpp/os/EseKernel.h>
+
+//----------------------------------------------------------------------
+#include <stm32f1xx.h>
+#include <stm32f1xx_hal.h>
+#include <esfwxe/cpp/drivers/stm32mx/EseI2c.h>
 
 // I2C Hardware initialization|uninitialization parts - must be defined elsewhere
 extern "C" void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c);
 extern "C" void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c);
-
 //----------------------------------------------------------------------
+
 // rough max estimate of ms per 2 bytes at specified baud
 #pragma Otime
 static inline esU32 i2cGetMaxByteTimeoutMs( esU32 len, esU32 baud, esU32 dataBits ) ESE_NOTHROW

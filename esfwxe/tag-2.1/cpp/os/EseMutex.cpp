@@ -1,7 +1,16 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
 
-#include "EseMutex.h"
+// FreeRTOS
+#include <FreeRTOS.h>
+#include <queue.h>
+#include <semphr.h>
+#include <task.h>
+#include <timers.h>
+
+#include <esfwxe/cpp/os/EseOsDefs.h>
+#include <esfwxe/cpp/os/EseMutex.h>
 
 //-------------------------------------------------
 // Non-recursive mutex implementation
@@ -31,7 +40,7 @@ void EseMutex::uninit() ESE_NOTHROW
   }
 }
   
-rtosStatus EseMutex::lock(uint32_t tmo /*= rtosMaxDelay*/) ESE_NOTHROW
+rtosStatus EseMutex::lock(esU32 tmo /*= rtosMaxDelay*/) ESE_NOTHROW
 {
   if( m_h )
     return (pdTRUE == xSemaphoreTake(
@@ -118,7 +127,7 @@ void EseMutexRecursive::uninit() ESE_NOTHROW
   }
 }
   
-rtosStatus EseMutexRecursive::lock(uint32_t tmo /*= rtosMaxDelay*/) ESE_NOTHROW
+rtosStatus EseMutexRecursive::lock(esU32 tmo /*= rtosMaxDelay*/) ESE_NOTHROW
 {
   if( m_h )
     return (pdTRUE == xSemaphoreTakeRecursive(m_h,

@@ -1,8 +1,21 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
+#include <esfwxe/utils.h>
 
 #include <math.h>
-#include "opt3001.h"
+
+#include <esfwxe/cpp/concept/EseChannel.h>
+#include <esfwxe/cpp/os/EseMutex.h>
+#include <esfwxe/cpp/os/EseSemaphore.h>
+
+//----------------------------------------------------------------------
+#include <stm32f1xx.h>
+#include <stm32f1xx_hal.h>
+#include <esfwxe/cpp/drivers/stm32mx/EseI2c.h>
+//----------------------------------------------------------------------
+
+#include <esfwxe/cpp/drivers/sensors/lighting/opt3001.h>
 
 /// OPT3001 registers
 ///
@@ -29,7 +42,7 @@ m_addr(addr)
 
 bool opt3001::regRead(esU8 reg, esU16& data) ESE_NOTHROW
 {
-	if( 
+  if( 
     2 == m_i2c.masterMemReceive(
       m_addr, 
       reg, 

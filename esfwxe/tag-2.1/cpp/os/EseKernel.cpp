@@ -1,7 +1,20 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
 
-#include "EseKernel.h"
+// FreeRTOS
+#include <FreeRTOS.h>
+#include <queue.h>
+#include <semphr.h>
+#include <task.h>
+#include <timers.h>
+
+#include <esfwxe/cpp/os/EseOsDefs.h>
+#include <esfwxe/cpp/EseException.h>
+#include <esfwxe/cpp/concept/EseLockable.h>
+#include <esfwxe/cpp/os/EseMutex.h>
+#include <esfwxe/cpp/os/EseTask.h>
+#include <esfwxe/cpp/os/EseKernel.h>
 
 #if defined(USE_SYSTICK_TRACE)
 # define ESE_SYSTICK_TRACE_CFG  DEBUG_TRACE_PIN_CONFIG(C,11)

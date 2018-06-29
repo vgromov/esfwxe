@@ -1,7 +1,19 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
 
-#include "EseTask.h"
+// FreeRTOS
+#include <FreeRTOS.h>
+#include <queue.h>
+#include <semphr.h>
+#include <task.h>
+#include <timers.h>
+
+#include <esfwxe/cpp/os/EseOsDefs.h>
+#include <esfwxe/cpp/EseException.h>
+#include <esfwxe/cpp/concept/EseLockable.h>
+#include <esfwxe/cpp/os/EseMutex.h>
+#include <esfwxe/cpp/os/EseTask.h>
 
 #if defined(USE_TASK_STACK_HIGH_WATERMARK_TRACE) && \
   1 == INCLUDE_pcTaskGetName && \

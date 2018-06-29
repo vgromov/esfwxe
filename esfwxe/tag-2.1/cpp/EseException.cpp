@@ -1,7 +1,11 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
 
-#include "EseException.h"
+#include <esfwxe/cpp/os/EseOsDefs.h>
+#include <esfwxe/cpp/EseException.h>
+
+#include <stdlib.h>
 
 EseException::EseException(const EseException& src) ESE_NOTHROW :
 m_facility(src.m_facility),

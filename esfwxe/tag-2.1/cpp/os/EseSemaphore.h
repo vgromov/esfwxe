@@ -12,7 +12,7 @@ public:
   inline bool isOk() const ESE_NOTHROW { return 0 != m_h; }
   inline size_t maxCountGet() const ESE_NOTHROW { return m_maxCount; }
 
-  rtosStatus lock(uint32_t tmo = rtosMaxDelay) ESE_NOTHROW;
+  rtosStatus lock(esU32 tmo = rtosMaxDelay) ESE_NOTHROW;
   rtosStatus unlock() ESE_NOTHROW;
 
   rtosStatus lockFromISR(volatile bool& shouldYield) ESE_NOTHROW;

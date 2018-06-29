@@ -1,7 +1,30 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
+#include <esfwxe/trace.h>
+#include <esfwxe/utils.h>
 
-#include "EseUsbCdc.h"
+// FreeRTOS
+#include <FreeRTOS.h>
+#include <queue.h>
+#include <semphr.h>
+#include <task.h>
+#include <timers.h>
+
+#include <esfwxe/cpp/concept/EseChannel.h>
+#include <esfwxe/cpp/EseException.h>
+#include <esfwxe/cpp/os/EseMutex.h>
+#include <esfwxe/cpp/os/EseSemaphore.h>
+#include <esfwxe/cpp/os/EseQueue.h>
+#include <esfwxe/cpp/os/EseTask.h>
+#include <esfwxe/cpp/os/EseKernel.h>
+
+//----------------------------------------------------------------------
+// TODO: conditionally include proper DEFS and HAL for other MCUs
+#include <stm32f1xx.h>
+#include <stm32f1xx_hal.h>
+
+//----------------------------------------------------------------------
+#include <esfwxe/cpp/drivers/stm32mx/EseUsbCdc.h>
 
 #if defined(USE_USB_ISR_TRACE)
 # define ESE_USB_ISR_TRACE_CFG  DEBUG_TRACE_PIN_CONFIG(C,11)

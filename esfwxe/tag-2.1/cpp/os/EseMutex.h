@@ -10,7 +10,7 @@ public:
   virtual ~EseMutex() ESE_NOTHROW;
   
   bool isOk() const ESE_NOTHROW { return 0 != m_h; }
-  rtosStatus lock(uint32_t tmo = rtosMaxDelay) ESE_NOTHROW;
+  rtosStatus lock(esU32 tmo = rtosMaxDelay) ESE_NOTHROW;
   rtosStatus unlock() ESE_NOTHROW;
 
   rtosStatus lockFromISR(volatile bool& shouldYield) ESE_NOTHROW;
@@ -37,7 +37,7 @@ public:
   virtual ~EseMutexRecursive() ESE_NOTHROW;
   
   bool isOk() const ESE_NOTHROW { return 0 != m_h; }
-  rtosStatus lock(uint32_t tmo = rtosMaxDelay) ESE_NOTHROW;
+  rtosStatus lock(esU32 tmo = rtosMaxDelay) ESE_NOTHROW;
   rtosStatus unlock() ESE_NOTHROW;
   
   void init() ESE_NOTHROW;
