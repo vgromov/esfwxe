@@ -5,7 +5,7 @@
 //
 
 #ifdef __cplusplus
-	extern "C" {
+  extern "C" {
 #endif
 
 // Kinda static (compile time) assersion in C
@@ -14,11 +14,11 @@ typedef char static_assertion_##MSG[(!!(COND))*2-1]
 
 // min & max macros
 #ifndef MAX
-# define MAX(a,b)	((a) < (b) ? (b) : (a))
+# define MAX(a,b)  ((a) < (b) ? (b) : (a))
 #endif
 
 #ifndef MIN
-# define MIN(a,b)	((a) < (b) ? (a) : (b))
+# define MIN(a,b)  ((a) < (b) ? (a) : (b))
 #endif
 
 // null string
@@ -26,17 +26,17 @@ extern ES_ASCII_CSTR c_nullString;
 
 // const array items count
 #ifndef CONST_ARRAY_COUNT
-#	define CONST_ARRAY_COUNT( array )	(sizeof(array)/sizeof(array[0]))
+#  define CONST_ARRAY_COUNT( array )  (sizeof(array)/sizeof(array[0]))
 #endif
 
 // BCD byte to ASCII char conversion
-#define LOBCD2CHAR(nBCD)		((((esBCD)(nBCD)) & 0x0F) + 0x30)
-#define HIBCD2CHAR(nBCD)		((((esBCD)(nBCD)) >> 4) + 0x30)
+#define LOBCD2CHAR(nBCD)    ((((esBCD)(nBCD)) & 0x0F) + 0x30)
+#define HIBCD2CHAR(nBCD)    ((((esBCD)(nBCD)) >> 4) + 0x30)
 
 // BCD byte to decimal esU8
-#define esBCD2BYTE(nBCD)	((((esBCD)(nBCD)) >> 4)*10 + (((esBCD)(nBCD)) & 0x0F))
+#define esBCD2BYTE(nBCD)  ((((esBCD)(nBCD)) >> 4)*10 + (((esBCD)(nBCD)) & 0x0F))
 // decimal esU8 to esBCD conversion. !! no byte value validation is made, values greater than 99 will be lost !!
-#define BYTE2esBCD(n)			(((((esU8)(n) / 10) % 10) << 4) + ((esU8)(n) % 10))
+#define BYTE2esBCD(n)      (((((esU8)(n) / 10) % 10) << 4) + ((esU8)(n) % 10))
 
 // return true if float value is not valid
 esBL isInvalidFloatValue(float val);
@@ -54,38 +54,38 @@ esU32 binToHex( const esU8* bin, esU32 binLen, ES_ASCII_STR buff, esU32 buffLen,
 // access bytes in word
 //
 #ifndef LOBYTE
-#	define LOBYTE( w )						((esU16)(w) & 0xFF)
+#  define LOBYTE( w )            ((esU16)(w) & 0xFF)
 #endif
 #ifndef HIBYTE
-#	define HIBYTE( w )						(((esU16)(w) >> 8) & 0xFF)
+#  define HIBYTE( w )            (((esU16)(w) >> 8) & 0xFF)
 #endif
 // make word macro
 //
 #ifndef MAKEWORD
-#	define MAKEWORD(a, b)					((esU16)(((esU8)(((esU32)(a)) & 0xff)) | ((esU16)((esU8)(((esU32)(b)) & 0xff))) << 8))
+#  define MAKEWORD(a, b)          ((esU16)(((esU8)(((esU32)(a)) & 0xff)) | ((esU16)((esU8)(((esU32)(b)) & 0xff))) << 8))
 #endif
 
 // access words in dword
 //
 #ifndef LOWORD
-#	define LOWORD( dw )						((esU16)(((esU32)(dw)) & 0xffff))
+#  define LOWORD( dw )            ((esU16)(((esU32)(dw)) & 0xffff))
 #endif 
 #ifndef HIWORD
-#	define HIWORD( dw )						((esU16)((((esU32)(dw)) >> 16) & 0xffff))
+#  define HIWORD( dw )            ((esU16)((((esU32)(dw)) >> 16) & 0xffff))
 #endif
 // make dword macro
 //
 #ifndef MAKEDWORD
-#	define MAKEDWORD(a, b)				((esU32)(((esU16)(((esU32)(a)) & 0xffff)) | ((esU32)((esU16)(((esU32)(b)) & 0xffff))) << 16))
+#  define MAKEDWORD(a, b)        ((esU32)(((esU16)(((esU32)(a)) & 0xffff)) | ((esU32)((esU16)(((esU32)(b)) & 0xffff))) << 16))
 #endif
 
 // swap word's bytes
-#define	SWAPB_WORD( word )			((esU16)((LOBYTE(word) << 8) + HIBYTE(word)))
+#define  SWAPB_WORD( word )      ((esU16)((LOBYTE(word) << 8) + HIBYTE(word)))
 
 // bit manipulation
-#define ES_BIT_SET( lhs, bit )	(lhs) |= (bit)
-#define ES_BIT_CLR( lhs, bit )	(lhs) &= ~(bit)
-#define ES_BIT_IS_SET(lhs, bit)	((bit) == ((lhs) & (bit)))
+#define ES_BIT_SET( lhs, bit )  (lhs) |= (bit)
+#define ES_BIT_CLR( lhs, bit )  (lhs) &= ~(bit)
+#define ES_BIT_IS_SET(lhs, bit)  ((bit) == ((lhs) & (bit)))
 #define ES_BIT_MASK_MATCH(lhs, mask) (0 != ((lhs) & (mask)))
 #define ES_BIT_MASK_MATCH_ALL   ES_BIT_IS_SET
 
@@ -102,10 +102,10 @@ void nsDelay(esU32 nseconds);
 // following two functions must be implemented in 
 // target application, along with usDelay & nsDelay
 #ifdef USE_CUSTOM_DELAY
-	// initialize system ticks
-	void initSysTicks(void);
-	// retrieve current system ticks
-	esU32 getSysTicks(void);
+  // initialize system ticks
+  void initSysTicks(void);
+  // retrieve current system ticks
+  esU32 getSysTicks(void);
 #endif
 
 // return true if char corresponds to digit [0..9]
@@ -117,7 +117,7 @@ esBL str2esBCD(const char *str, esBCD* bcd);
 // data unpacking from buffer. works with unaligned data in buffer as well
 //
 esBL get_esU8(esU8** start, const esU8* end, esU8* u8);
-#define get_esI8(start, end, i8)	get_esU8((start), (end), (esU8*)(i8))
+#define get_esI8(start, end, i8)  get_esU8((start), (end), (esU8*)(i8))
 esBL get_esU16(esU8** start, const esU8* end, esU16* u16);
 #define get_esI16(start, end, i16) get_esU16((start), (end), (esU16*)(i16))
 esBL get_esU32(esU8** start, const esU8* end, esU32* u32);
@@ -135,7 +135,7 @@ esBL get_esBA(esU8** start, const esU8* end, esBA* ba);
 // data packing to buffer.
 //
 esBL put_esU8(esU8** start, const esU8* end, esU8 u8);
-#define put_esI8(start, end, i8)	put_esU8((start), (end), (esU8)(i8))
+#define put_esI8(start, end, i8)  put_esU8((start), (end), (esU8)(i8))
 esBL put_esU16(esU8** start, const esU8* end, esU16 u16);
 #define put_esI16(start, end, i16) put_esU16((start), (end), (esU16)(i16))
 esBL put_esU32(esU8** start, const esU8* end, esU32 u32);
@@ -165,19 +165,19 @@ int fmtFloatConstRelativeErrorDecimalsGet(ES_ASCII_STR buff, int buffLen, float 
 void memSpaceCalc(esU32 blockCnt, esU32 blockSize, EsMemSpaceInfo* space);
 
 #ifdef ES_USE_STRUTILS_IMPL
-#	include <stdarg.h>
+#  include <stdarg.h>
 
 // streaming pfn return codes
 enum {
-	utilsStreamOk		= 0,
-	utilsStreamEnd	= -1,
+  utilsStreamOk    = 0,
+  utilsStreamEnd  = -1,
 };
 
 // abstract byte streaming function
 typedef int (*utilsPfnChStreamFn)(void* target, esU8 c);
 
 // abstract string formatter and streamer
-int utilsVstrFmtStream(	utilsPfnChStreamFn pfn,	void* target,	ES_ASCII_CSTR fmt, va_list lst);
+int utilsVstrFmtStream(  utilsPfnChStreamFn pfn,  void* target,  ES_ASCII_CSTR fmt, va_list lst);
 
 // custom implementations of string formatting routines
 int utilsSprintf(ES_ASCII_STR target, ES_ASCII_CSTR fmt, ...);
@@ -196,8 +196,8 @@ int utilsStrLenGet(ES_ASCII_CSTR str);
 #endif
 
 #ifdef __cplusplus
-	}
+  }
 #endif
 
-#endif	// _utils_h_
+#endif  // _utils_h_
 
