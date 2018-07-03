@@ -8,31 +8,31 @@
 
 #ifdef __arm__
 
-#	ifndef esIsInfF
-#		define esIsInfF			isinf
-#	endif
+#  ifndef esIsInfF
+#    define esIsInfF      isinf
+#  endif
 
-#	ifndef esFiniteF
-#		define esFiniteF		isfinite
-#	endif
+#  ifndef esFiniteF
+#    define esFiniteF    isfinite
+#  endif
 
-#	ifndef esIsNanF
-#		define esIsNanF			isnan
-#	endif
+#  ifndef esIsNanF
+#    define esIsNanF      isnan
+#  endif
 
 #elif defined(_MSC_VER)
 
-#	ifndef esIsInfF
-#		define esIsInfF(x)	(0==_finite(x))
-#	endif
+#  ifndef esIsInfF
+#    define esIsInfF(x)  (0==_finite(x))
+#  endif
 
-#	ifndef esFiniteF
-#		define esFiniteF	  _finite
-#	endif
+#  ifndef esFiniteF
+#    define esFiniteF    _finite
+#  endif
 
-#	ifndef esIsNanF
-#		define esIsNanF 	 _isnan
-#	endif
+#  ifndef esIsNanF
+#    define esIsNanF    _isnan
+#  endif
 
 #elif defined(__BORLANDC__)
 
@@ -42,17 +42,17 @@ extern int es_finitef(float f);
 extern int es_isnanf(float f);
 # else
 
-#	  ifndef esFiniteF
-#		  define esFiniteF			_finite
-#	  endif
+#    ifndef esFiniteF
+#      define esFiniteF      _finite
+#    endif
 
-#	  ifndef esIsInfF
-#		  define esIsInfF(x)		(0==_finite(x))
-#	  endif
+#    ifndef esIsInfF
+#      define esIsInfF(x)    (0==_finite(x))
+#    endif
 
-#	  ifndef esIsNanF
-#		  define esIsNanF			  _isnan
-#	  endif
+#    ifndef esIsNanF
+#      define esIsNanF        _isnan
+#    endif
 
 # endif
 #endif
@@ -62,48 +62,48 @@ ES_ASCII_CSTR c_nullString = "";
 
 #ifndef USE_CUSTOM_DELAY
 // MCU tick ns estimate
-#define MCU_ns_per_tick 			((esU32)0xFFFFFFFF / Fmcu)
+#define MCU_ns_per_tick       ((esU32)0xFFFFFFFF / Fmcu)
 
 void usDelay(esU32 useconds)
 {
-	useconds = (useconds * 1000) / MCU_ns_per_tick;
-	while( useconds ) --useconds;
+  useconds = (useconds * 1000) / MCU_ns_per_tick;
+  while( useconds ) --useconds;
 }
 
 void nsDelay(esU32 nseconds)
 {
-	while( nseconds > MCU_ns_per_tick ) 
-		nseconds -= MCU_ns_per_tick; 
+  while( nseconds > MCU_ns_per_tick ) 
+    nseconds -= MCU_ns_per_tick; 
 }
 #endif
 
 // return true if float value is not valid
 esBL isInvalidFloatValue(float val)
 {
-	return (esIsInfF(val) || esIsNanF(val));
+  return (esIsInfF(val) || esIsNanF(val));
 }
 
 // round float to nearest greater (lesser) int
 float utilsRoundf(float f)
 {
-	if( f >= 0.f )
-		f = (float)(int)(f + 0.5f);
-	else
-		f = (float)(int)(f - 0.5f);
+  if( f >= 0.f )
+    f = (float)(int)(f + 0.5f);
+  else
+    f = (float)(int)(f - 0.5f);
 
-	return f;
+  return f;
 }
 
 // try to convert 2 chars from str into bcd 
 esBL str2esBCD(const char *str, esBCD* bcd)
 {
-	if( (*str == ' ' || utilsIsDigitChar( *str )) && utilsIsDigitChar(*(str+1)) )
-	{
-		*bcd = (esBCD)((*str == ' ') ? 0 : ((*str - 0x30) << 4)) + (*(str+1) - 0x30);
-		return TRUE;
-	}
+  if( (*str == ' ' || utilsIsDigitChar( *str )) && utilsIsDigitChar(*(str+1)) )
+  {
+    *bcd = (esBCD)((*str == ' ') ? 0 : ((*str - 0x30) << 4)) + (*(str+1) - 0x30);
+    return TRUE;
+  }
 
-	return FALSE;
+  return FALSE;
 }
 
 // valid hex chars
@@ -112,200 +112,200 @@ static const char c_hexChars[16] = {'0','1','2','3','4','5','6','7','8','9','A',
 // convert lo byte nibble to hex byte representation (single char)
 char loNibbleToHex(esU8 n)
 {
-	return c_hexChars[n & 0x0F];
+  return c_hexChars[n & 0x0F];
 }
 
 // return how many bin bytes were converted into hex representation
 esU32 binToHex( const esU8* bin, esU32 binLen, ES_ASCII_STR buff, esU32 buffLen, esBL doZeroTerminate )
 {
-	// check buffers && lengths. hex buffer length must be at least double of bin buffer len
-	if( bin && binLen > 0 && buffLen > 0 && buffLen >= binLen*2 )
-	{
-		const esU8* binEnd = bin+binLen;
-		const esU8* binBeg = bin;
-		ES_ASCII_STR buffEnd = buff+buffLen;
-		while(bin < binEnd)
-		{
-			*buff++ = loNibbleToHex((*bin) >> 4);
-			*buff++ = loNibbleToHex(*bin++);
-		}
-		// zero-terminate char buffer if its length allows it
-		if( doZeroTerminate && buff < buffEnd )
-			*buff = 0;
+  // check buffers && lengths. hex buffer length must be at least double of bin buffer len
+  if( bin && binLen > 0 && buffLen > 0 && buffLen >= binLen*2 )
+  {
+    const esU8* binEnd = bin+binLen;
+    const esU8* binBeg = bin;
+    ES_ASCII_STR buffEnd = buff+buffLen;
+    while(bin < binEnd)
+    {
+      *buff++ = loNibbleToHex((*bin) >> 4);
+      *buff++ = loNibbleToHex(*bin++);
+    }
+    // zero-terminate char buffer if its length allows it
+    if( doZeroTerminate && buff < buffEnd )
+      *buff = 0;
 
-		return bin-binBeg;
-	}
+    return bin-binBeg;
+  }
 
-	return 0;	
+  return 0;  
 }
 
 // count set bits in arbitrary binary buffer
 esU32 countSetBits(const esU8* buff, esU32 buffLen)
 {
-	esU32 result = 0;
-	if( buff && buffLen )
-	{
-		const esU8* end = buff+buffLen;
-	
-		while( buff < end )
-		{
-			esU8 tmp = *buff++;
-			while( tmp )
-			{
-				++result;
-				tmp &= (tmp - 1); // this sets rightmost tmp bit in 0, especially useful for sparse ones
-			}
-		}
-	}
+  esU32 result = 0;
+  if( buff && buffLen )
+  {
+    const esU8* end = buff+buffLen;
+  
+    while( buff < end )
+    {
+      esU8 tmp = *buff++;
+      while( tmp )
+      {
+        ++result;
+        tmp &= (tmp - 1); // this sets rightmost tmp bit in 0, especially useful for sparse ones
+      }
+    }
+  }
 
-	return result;
+  return result;
 }
 
 // reverse bit order in input and return reversed result
 esU8 utilsReverseBits(esU8 in)
 {
-	return (esU8)(((((((esU32)in) * 0x0802LU) & 0x22110LU) | ((((esU32)in) * 0x8020LU) & 0x88440LU))*0x10101LU) >> 16);
+  return (esU8)(((((((esU32)in) * 0x0802LU) & 0x22110LU) | ((((esU32)in) * 0x8020LU) & 0x88440LU))*0x10101LU) >> 16);
 }
 
 // data unpacking from buffer, should be ok with unaligned data in buffer
 //
 static __inline esBL getData(esU8** start, const esU8* end, esU8* data, esU32 size)
 {
-	if( end >= (*start + size) )
-	{
-		while(size--)
-		{
-			*data = *(*start);
-			++data; ++(*start);
-		}
+  if( end >= (*start + size) )
+  {
+    while(size--)
+    {
+      *data = *(*start);
+      ++data; ++(*start);
+    }
 
-		return TRUE;
-	}
-	
-	return FALSE;	
+    return TRUE;
+  }
+  
+  return FALSE;  
 }
 
 esBL get_esU8(esU8** start, const esU8* end, esU8* u8)
 {
-	if( *start < end  )
-	{
-		*u8 = *(*start);
-		++(*start);		
+  if( *start < end  )
+  {
+    *u8 = *(*start);
+    ++(*start);    
 
-		return TRUE;
-	}
-	
-	return FALSE;	
+    return TRUE;
+  }
+  
+  return FALSE;  
 }
 
 esBL get_esBL(esU8** start, const esU8* end, esBL* b)
 {
-	esU8 dummy;
-	esBL result = getData(start, end, &dummy, 1);
-	*b = dummy;
+  esU8 dummy;
+  esBL result = getData(start, end, &dummy, 1);
+  *b = dummy;
 
-	return result;
+  return result;
 }
 
 esBL get_esU16(esU8** start, const esU8* end, esU16* u16)
 {
-	return getData(start, end, (esU8*)u16, 2);
+  return getData(start, end, (esU8*)u16, 2);
 }
 
 esBL get_esU32(esU8** start, const esU8* end, esU32* u32)
 {
-	return getData(start, end, (esU8*)u32, 4);
+  return getData(start, end, (esU8*)u32, 4);
 }
 
 esBL get_esU64(esU8** start, const esU8* end, esU64* u64)
 {
-	return getData(start, end, (esU8*)u64, 8);
+  return getData(start, end, (esU8*)u64, 8);
 }
 
 esBL get_esF(esU8** start, const esU8* end, esF* f)
 {
-	return getData(start, end, (esU8*)f, sizeof(esF));
+  return getData(start, end, (esU8*)f, sizeof(esF));
 }
 
 esBL get_esD(esU8** start, const esU8* end, esD* d)
 {
-	return getData(start, end, (esU8*)d, sizeof(esD));
+  return getData(start, end, (esU8*)d, sizeof(esD));
 }
 
 esBL get_esBA(esU8** start, const esU8* end, esBA* ba)
 {
-	esBL result = getData(start, end, (esU8*)&ba->size, 4) &&
-								((*start) + ba->size) <= end;
-	
-	if( result )
-	{ 
-		ba->data = (esU8*)(*start);	 // the byte array is supposed to be part of data bytestream
-		*start += ba->size;
-	}
+  esBL result = getData(start, end, (esU8*)&ba->size, 4) &&
+                ((*start) + ba->size) <= end;
+  
+  if( result )
+  { 
+    ba->data = (esU8*)(*start);   // the byte array is supposed to be part of data bytestream
+    *start += ba->size;
+  }
 
-	return result;
+  return result;
 }
 
 // data packing to buffer.
 //
 static __inline esBL putData(esU8** start, const esU8* end, const esU8* data, esU32 size)
 {
-	if( end >= (*start + size) )
-	{
-		while(size--)
-		{
-			*(*start) = *data;
-			++data; ++(*start);
-		}
+  if( end >= (*start + size) )
+  {
+    while(size--)
+    {
+      *(*start) = *data;
+      ++data; ++(*start);
+    }
 
-		return TRUE;
-	}
+    return TRUE;
+  }
 
-	return FALSE;
+  return FALSE;
 }
 
 esBL put_esU8(esU8** start, const esU8* end, esU8 u8)
 {
-	if( *start < end )
-	{
-		**start = u8;
-		++(*start);
+  if( *start < end )
+  {
+    **start = u8;
+    ++(*start);
 
-		return TRUE;
-	}
+    return TRUE;
+  }
 
-	return FALSE;	
+  return FALSE;  
 }
 
 esBL put_esU16(esU8** start, const esU8* end, esU16 u16)
 {
-	return putData(start, end, (const esU8*)&u16, 2);
+  return putData(start, end, (const esU8*)&u16, 2);
 }
 
 esBL put_esU32(esU8** start, const esU8* end, esU32 u32)
 {
-	return putData(start, end, (const esU8*)&u32, 4);
+  return putData(start, end, (const esU8*)&u32, 4);
 }
 
 esBL put_esU64(esU8** start, const esU8* end, esU64 u64)
 {
-	return putData(start, end, (const esU8*)&u64, 8);
+  return putData(start, end, (const esU8*)&u64, 8);
 }
 
 esBL put_esF(esU8** start, const esU8* end, esF f)
 {
-	return putData(start, end, (const esU8*)&f, sizeof(esF));
+  return putData(start, end, (const esU8*)&f, sizeof(esF));
 }
 
 esBL put_esD(esU8** start, const esU8* end, esD d)
 {
-	return putData(start, end, (const esU8*)&d, sizeof(esD));
+  return putData(start, end, (const esU8*)&d, sizeof(esD));
 }
 
 esBL put_esBA(esU8** start, const esU8* end, esBA ba)
 {
-	return put_esU32(start, end, ba.size) &&
-				 putData(start, end, ba.data, ba.size);
+  return put_esU32(start, end, ba.size) &&
+         putData(start, end, ba.data, ba.size);
 }
 
 // convert float to formatted string representation
@@ -313,147 +313,147 @@ esBL put_esBA(esU8** start, const esU8* end, esBA ba)
 // formatting helper
 static void int2buff(ES_ASCII_STR* buff, ES_ASCII_CSTR end, int val, esBL neg, int power)
 {
-	ES_ASCII_STR pos = *buff;
-	while(pos < end && power)
-	{
-		int ival = val / power;
-		*pos++ = (char)(0x30 + (neg ? -ival : ival));
-		val -= ival * power;
-		power /= 10;
-	}
+  ES_ASCII_STR pos = *buff;
+  while(pos < end && power)
+  {
+    int ival = val / power;
+    *pos++ = (char)(0x30 + (neg ? -ival : ival));
+    val -= ival * power;
+    power /= 10;
+  }
   *buff = pos;
 }
 
 int fmtFloat(ES_ASCII_STR buff, int buffLen, float val, int decimals)
 {
-	int result = 0;
-	if( buff && 0 < buffLen && !esIsNanF(val) && esFiniteF(val))
-	{
-		ES_ASCII_CSTR end = buff+buffLen;
+  int result = 0;
+  if( buff && 0 < buffLen && !esIsNanF(val) && esFiniteF(val))
+  {
+    ES_ASCII_CSTR end = buff+buffLen;
     ES_ASCII_STR pos = buff;
-		int ipower = 1; 	// integer part power
-		int fpower = 1; // fractional part power
-		double fi;
-		int fpart;
-		int ipart = decimals; // temporarily save decimals
-		esBL neg = val < .0f;
-		// find fractional part as integer
-		while( 0 < decimals-- )
-			fpower *= 10;
-		decimals = ipart; // restore decimals
-		fpart = (int)((modf(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
-		ipart = (int)fi;
-		if( fpart == fpower )
-		{
-			fpart = 0;
-			++ipart;
-		}
-		fpower /= 10; // correct fpower after rounding of extra digit in prev statement
-		if( fpart == fpower*10 )
-		{
-			++ipart;
-			fpart = 0;
-		}
-		// find power of ten in integer part
-		while( ipart / (10*ipower) )
-			ipower *= 10;
-		// put sign
-		if( neg )
-			*pos++ = '-';
-		// put integer part
-		int2buff(&pos, end, ipart, neg, ipower);
-		// put decimals
-		if( 0 < decimals )
-		{
-			*pos++ = '.';
-			int2buff(&pos, end, fpart, neg, fpower);
-		}
-		// terminate with 0 if there is place
-		if( pos < end )
-			*pos = 0;
+    int ipower = 1;   // integer part power
+    int fpower = 1; // fractional part power
+    double fi;
+    int fpart;
+    int ipart = decimals; // temporarily save decimals
+    esBL neg = val < .0f;
+    // find fractional part as integer
+    while( 0 < decimals-- )
+      fpower *= 10;
+    decimals = ipart; // restore decimals
+    fpart = (int)((modf(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
+    ipart = (int)fi;
+    if( fpart == fpower )
+    {
+      fpart = 0;
+      ++ipart;
+    }
+    fpower /= 10; // correct fpower after rounding of extra digit in prev statement
+    if( fpart == fpower*10 )
+    {
+      ++ipart;
+      fpart = 0;
+    }
+    // find power of ten in integer part
+    while( ipart / (10*ipower) )
+      ipower *= 10;
+    // put sign
+    if( neg )
+      *pos++ = '-';
+    // put integer part
+    int2buff(&pos, end, ipart, neg, ipower);
+    // put decimals
+    if( 0 < decimals )
+    {
+      *pos++ = '.';
+      int2buff(&pos, end, fpart, neg, fpower);
+    }
+    // terminate with 0 if there is place
+    if( pos < end )
+      *pos = 0;
 
-		result = pos-buff;
-	}
+    result = pos-buff;
+  }
 
-	return result;
+  return result;
 }
 
 // format float val with constant relative error
 int fmtFloatConstRelativeError(ES_ASCII_STR buff, int buffLen, float val, int decimalsAt1)
 {
-	int decimals = decimalsAt1;
-	float tmp = val;
+  int decimals = decimalsAt1;
+  float tmp = val;
 
-	while( tmp >= 10.f && decimals > 0 )
-	{
-		--decimals;
-		tmp /= 10.f;
-	}
+  while( tmp >= 10.f && decimals > 0 )
+  {
+    --decimals;
+    tmp /= 10.f;
+  }
 
-	return fmtFloat(buff, buffLen, val, decimals);
+  return fmtFloat(buff, buffLen, val, decimals);
 }
 
 // format float val with constant relative error, return resulting decimals
 int fmtFloatConstRelativeErrorDecimalsGet(ES_ASCII_STR buff, int buffLen, float val, int decimalsAt1, int* decimals)
 {
-	float tmp = val;
-	*decimals = decimalsAt1;
+  float tmp = val;
+  *decimals = decimalsAt1;
 
-	while( tmp >= 10.f && *decimals > 0 )
-	{
-		--(*decimals);
-		tmp /= 10.f;
-	}
+  while( tmp >= 10.f && *decimals > 0 )
+  {
+    --(*decimals);
+    tmp /= 10.f;
+  }
 
-	return fmtFloat(buff, buffLen, val, *decimals);
+  return fmtFloat(buff, buffLen, val, *decimals);
 }
 
 // perform EsMemSpaceInfo calculation by selecting appropriate space unit 
 // blockCount is space measured in allocation blocks. blockSize is allocation block size in bytes
 void memSpaceCalc(esU32 blockCnt, esU32 blockSize, EsMemSpaceInfo* space)
 {
-	// max allocation blocks count which may be expressed in units
-	esU32 maxBlocks = 0xFFFFFFFF / blockSize;
-	esU32 newCount;
-	esU32 frac;
+  // max allocation blocks count which may be expressed in units
+  esU32 maxBlocks = 0xFFFFFFFF / blockSize;
+  esU32 newCount;
+  esU32 frac;
 
-	space->frac = 0;
-	if( blockCnt > maxBlocks )
-	{
-		space->unit = msuKbyte;
-		if(blockSize < 1024)
-		{ 
-			space->frac = (esU16)(blockCnt % (1024/blockSize));
-			blockCnt /= (1024/blockSize);
-		}
-		else
-			blockCnt *= (blockSize/1024);
-	}
-	else
-	{
-		space->unit = msuByte;
-		blockCnt *= blockSize;
-	}
-	frac = blockCnt % 1024;
-	newCount = blockCnt / 1024;
-	// try to normalize value to the biggest unit scale
-	while( newCount &&
-				 space->unit < msuGbyte )
-	{
-		++space->unit;
-		if( newCount < 1024 )
-		{
-			space->frac = (esU16)frac;
-			blockCnt = newCount;
-			break;
-		}
-		frac = newCount % 1024;
-		newCount /= 1024;
-	}
-	space->count = (esU16)blockCnt;
+  space->frac = 0;
+  if( blockCnt > maxBlocks )
+  {
+    space->unit = msuKbyte;
+    if(blockSize < 1024)
+    { 
+      space->frac = (esU16)(blockCnt % (1024/blockSize));
+      blockCnt /= (1024/blockSize);
+    }
+    else
+      blockCnt *= (blockSize/1024);
+  }
+  else
+  {
+    space->unit = msuByte;
+    blockCnt *= blockSize;
+  }
+  frac = blockCnt % 1024;
+  newCount = blockCnt / 1024;
+  // try to normalize value to the biggest unit scale
+  while( newCount &&
+         space->unit < msuGbyte )
+  {
+    ++space->unit;
+    if( newCount < 1024 )
+    {
+      space->frac = (esU16)frac;
+      blockCnt = newCount;
+      break;
+    }
+    frac = newCount % 1024;
+    newCount /= 1024;
+  }
+  space->count = (esU16)blockCnt;
 }
 
 #ifdef ES_USE_STRUTILS_IMPL
-#	include "esStrUtils.cc"
+#  include "esStrUtils.cc"
 #endif
 

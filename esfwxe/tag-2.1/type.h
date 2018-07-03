@@ -283,5 +283,13 @@ enum {
 
 #define ESE_FAIL ESE_ASSERT(false)
 
+#if defined(__ARMCC_VERSION)
+# define ESE_ANON_UNION _Pragma("anon_unions")
+#elif defined(__GNUC__)
+# define ESE_ANON_UNION
+#else
+# define ESE_ANON_UNION
+#endif
+
 #endif  // __esfwxe_type_h__
 
