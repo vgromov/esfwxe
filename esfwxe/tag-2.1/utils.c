@@ -166,6 +166,30 @@ esU8 utilsReverseBits(esU8 in)
 {
   return (esU8)(((((((esU32)in) * 0x0802LU) & 0x22110LU) | ((((esU32)in) * 0x8020LU) & 0x88440LU))*0x10101LU) >> 16);
 }
+//----------------------------------------------------------------------------------------------
+
+void eseUtilsSwapInt(int* a, int* b)
+{
+  int tmp = *b;
+  *b = *a;
+  *a = tmp;
+}
+//----------------------------------------------------------------------------------------------
+
+void eseUtilsSwapB(esU8* pb, int count)
+{
+  esU8* pEnd = pb+count;
+  esU8 tmp;
+
+  while(pb < pEnd)
+  {
+    tmp = pb[0];
+    pb[0] = pb[1];
+    pb[1] = tmp;
+    pb += 2;
+  }
+}
+//----------------------------------------------------------------------------------------------
 
 // data unpacking from buffer, should be ok with unaligned data in buffer
 //

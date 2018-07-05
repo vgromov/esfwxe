@@ -94,6 +94,12 @@ esU32 countSetBits(const esU8* buff, esU32 buffLen);
 // reverse bit order in input and return reversed result
 esU8 utilsReverseBits(esU8 in);
 
+// swap two integer values
+void eseUtilsSwapInt(int* a, int* b);
+
+// swap odd and even bytes in buffer. !no check is made against 2^n buffer length!
+void eseUtilsSwapB(esU8* pb, int count);
+
 // ns & mks delay 
 void usDelay(esU32 useconds);
 void nsDelay(esU32 nseconds);
