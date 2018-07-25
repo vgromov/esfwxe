@@ -190,6 +190,94 @@ void eseUtilsSwapB(esU8* pb, int count)
   }
 }
 //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+
+const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU32* utf32)
+{
+  if( !buff || !buffEnd || !utf32 || buffEnd <= buff )
+    return NULL;
+
+  const char* pos = buff;
+
+  bool sequence = false;
+  esU8 bytecnt = 0;
+  esU32 out = 0;
+
+  while( pos < buffEnd )
+  {
+    // Check if symbol at pos is stand-alone, or part of combined utf-8 sequence
+    esU8 b = *((const esU8*)pos++);
+
+    if( b & 0x80 ) //< Either start of the sequence, or continuation
+    {
+      if( 0xC0 == (b & 0xC0) ) //< Continuation
+      {
+        if( !sequence || 0 == bytecnt ) //< Continuation without a start, or bytecount is exceeded, reset and skip
+        {
+          bytecnt = 0;
+          out = 0;
+          continue;
+        }
+        else
+        {
+          --bytecnt;
+          out |= (((esU32)(b & 0x3F)) << bytecnt*6);
+
+          if( 0 == bytecnt ) //< Finished, exiting
+            break;
+        }
+      }
+      else //< Starting
+      {
+        if( sequence ) //< Already started - reset and skip
+        {
+          sequence = false;
+          bytecnt = 0;
+          out = 0;
+          continue;
+        }
+        else
+        {
+          sequence = true; //< Start sequence, calculate amount of trailing bytes
+          bytecnt = 0;
+          while( b & 0x80 )
+          {
+            ++bytecnt;
+            b <<= 1;
+          }
+
+          // Check the resulting byte count. If invalid - reset and skip
+          if( bytecnt > 4 )
+          {
+            sequence = false;
+            bytecnt = 0;
+            out = 0;
+            continue;
+          }
+
+          // Assign the rest of byte, taking into account that is is already shifted left by bytecnt+1
+          out = ((esU32)b) << (5*bytecnt-7);
+          --bytecnt;
+        }
+      }
+    }
+    else //< Stand-alone char, exit immediately
+    {
+      out = b;
+      break;
+    }
+  }
+
+  if( 0 != bytecnt ) //< Unfinished multibyte sequence, reset out to 0
+    out = 0;
+
+  *utf32 = out;
+
+  return pos;
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 // data unpacking from buffer, should be ok with unaligned data in buffer
 //
@@ -208,6 +296,7 @@ static __inline esBL getData(esU8** start, const esU8* end, esU8* data, esU32 si
   
   return FALSE;  
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esU8(esU8** start, const esU8* end, esU8* u8)
 {
@@ -221,6 +310,7 @@ esBL get_esU8(esU8** start, const esU8* end, esU8* u8)
   
   return FALSE;  
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esBL(esU8** start, const esU8* end, esBL* b)
 {
@@ -230,31 +320,37 @@ esBL get_esBL(esU8** start, const esU8* end, esBL* b)
 
   return result;
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esU16(esU8** start, const esU8* end, esU16* u16)
 {
   return getData(start, end, (esU8*)u16, 2);
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esU32(esU8** start, const esU8* end, esU32* u32)
 {
   return getData(start, end, (esU8*)u32, 4);
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esU64(esU8** start, const esU8* end, esU64* u64)
 {
   return getData(start, end, (esU8*)u64, 8);
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esF(esU8** start, const esU8* end, esF* f)
 {
   return getData(start, end, (esU8*)f, sizeof(esF));
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esD(esU8** start, const esU8* end, esD* d)
 {
   return getData(start, end, (esU8*)d, sizeof(esD));
 }
+//----------------------------------------------------------------------------------------------
 
 esBL get_esBA(esU8** start, const esU8* end, esBA* ba)
 {
@@ -269,6 +365,8 @@ esBL get_esBA(esU8** start, const esU8* end, esBA* ba)
 
   return result;
 }
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
 // data packing to buffer.
 //
@@ -287,6 +385,7 @@ static __inline esBL putData(esU8** start, const esU8* end, const esU8* data, es
 
   return FALSE;
 }
+//----------------------------------------------------------------------------------------------
 
 esBL put_esU8(esU8** start, const esU8* end, esU8 u8)
 {
@@ -300,37 +399,45 @@ esBL put_esU8(esU8** start, const esU8* end, esU8 u8)
 
   return FALSE;  
 }
+//----------------------------------------------------------------------------------------------
 
 esBL put_esU16(esU8** start, const esU8* end, esU16 u16)
 {
   return putData(start, end, (const esU8*)&u16, 2);
 }
+//----------------------------------------------------------------------------------------------
 
 esBL put_esU32(esU8** start, const esU8* end, esU32 u32)
 {
   return putData(start, end, (const esU8*)&u32, 4);
 }
+//----------------------------------------------------------------------------------------------
 
 esBL put_esU64(esU8** start, const esU8* end, esU64 u64)
 {
   return putData(start, end, (const esU8*)&u64, 8);
 }
+//----------------------------------------------------------------------------------------------
 
 esBL put_esF(esU8** start, const esU8* end, esF f)
 {
   return putData(start, end, (const esU8*)&f, sizeof(esF));
 }
+//----------------------------------------------------------------------------------------------
 
 esBL put_esD(esU8** start, const esU8* end, esD d)
 {
   return putData(start, end, (const esU8*)&d, sizeof(esD));
 }
+//----------------------------------------------------------------------------------------------
 
 esBL put_esBA(esU8** start, const esU8* end, esBA ba)
 {
   return put_esU32(start, end, ba.size) &&
          putData(start, end, ba.data, ba.size);
 }
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
 // convert float to formatted string representation
 //

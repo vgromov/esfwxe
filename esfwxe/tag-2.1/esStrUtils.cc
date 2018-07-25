@@ -23,7 +23,7 @@ int utilsStrLenGet(ES_ASCII_CSTR str)
  * written in the buffer (i.e., the first character of the string).
  * The buffer pointed to by `nbuf' must have length >= MAXNBUF.
  */
-static esU8* ksprintn(esU8 *nbuf, esU32 ul, esU8 base, int width, esU8 *lenp)
+static esU8* es_sprintn(esU8 *nbuf, esU32 ul, esU8 base, int width, esU8 *lenp)
 {
 	esU8* p = nbuf;
 	*p = 0;
@@ -73,6 +73,7 @@ int utilsVstrFmtStream(
 	width = 0; extrazeros = 0;
 	lflag = 0; ladjust = 0; sharpflag = 0; neg = 0;
 	sign = 0; dot = 0; uppercase = 0; dwidth = -1;
+  
 reswitch:			 
 	switch(c = FETCH_BYTE(fmt++)) 
 	{
@@ -132,7 +133,7 @@ reswitch:
 		case 'b':
 			ul = va_arg (lst, int);
 			s = va_arg (lst, const unsigned char*);
-			q = ksprintn(nbuf, ul, *s++, -1, 0);
+			q = es_sprintn(nbuf, ul, *s++, -1, 0);
 			while (*q)
 				ES_PUTC (*q--);
 
@@ -310,7 +311,7 @@ number:
 		 extrazeros = dwidth - sizeof(nbuf) + 1;
 		 dwidth = sizeof(nbuf) - 1;
 	 }
-	 s = ksprintn (nbuf, ul, base, dwidth, &size);
+	 s = es_sprintn (nbuf, ul, base, dwidth, &size);
 	 if (sharpflag && ul != 0) {
 		 if (base == 8)
 			 size++;
