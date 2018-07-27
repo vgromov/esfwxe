@@ -1,6 +1,7 @@
 #include <esfwxe/target.h>
 #pragma hdrstop
 
+#include <stdbool.h>
 #include <string.h>
 #include <math.h>
 #include <float.h>
@@ -37,24 +38,24 @@
 #elif defined(__BORLANDC__)
 
 // if we're building escomm package - import implementations from escore
-# if defined(ESCOMM_EXPORTS)
+//# if defined(ESCOMM_EXPORTS)
 extern int es_finitef(float f);
 extern int es_isnanf(float f);
-# else
-
-#    ifndef esFiniteF
-#      define esFiniteF      _finite
-#    endif
-
-#    ifndef esIsInfF
-#      define esIsInfF(x)    (0==_finite(x))
-#    endif
-
-#    ifndef esIsNanF
-#      define esIsNanF        _isnan
-#    endif
-
-# endif
+//# else
+//
+//#    ifndef esFiniteF
+//#      define esFiniteF      _finite
+//#    endif
+//
+//#    ifndef esIsInfF
+//#      define esIsInfF(x)    (0==_finite(x))
+//#    endif
+//
+//#    ifndef esIsNanF
+//#      define esIsNanF        _isnan
+//#    endif
+//
+//# endif
 #endif
 
 // special const for empty string
