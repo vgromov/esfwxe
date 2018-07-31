@@ -291,5 +291,8 @@ enum {
 # define ESE_ANON_UNION
 #endif
 
+/// UTF-8 literals (where supported)
+#define eseU8(str)  u8##str
+
 #endif  // __esfwxe_type_h__
 
