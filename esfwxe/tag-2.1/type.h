@@ -26,9 +26,9 @@
   extern "C" {
 #endif
 
-typedef char                        ES_ASCII_CHAR;
-typedef const ES_ASCII_CHAR*        ES_ASCII_CSTR;
-typedef ES_ASCII_CHAR*              ES_ASCII_STR;
+typedef char                        ESE_CHAR;
+typedef const ESE_CHAR*             ESE_CSTR;
+typedef ESE_CHAR*                   ESE_STR;
 
 // Basic _sized_ typedefs. these _must_ be in one word, without spaces, it's strongly required for
 // the remote reflection engine implementation
@@ -144,29 +144,29 @@ typedef struct {
 /// Misc helper values and masks
 enum {
   /// File attributes
-  FsAttrReadOnly        = 0x01,
-  FsAttrHidden          = 0x02,
-  FsAttrSystem          = 0x04,
+  FsAttrReadOnly         = 0x01,
+  FsAttrHidden           = 0x02,
+  FsAttrSystem           = 0x04,
   FsAttrVolumeLabel      = 0x08,
   FsAttrDirectory        = 0x10,
   FsAttrArchive          = 0x20,
   
   /// Standard HW config info flags
-  HwCfgStdBletooth      = 0x0001,
-  HwCfgStdBletoothLE    = 0x0002,
-  HwCfgStdWIFI          = 0x0004,
-  HwCfgStdUSBslave      = 0x0008,
-  HwCfgStdUSBhost       = 0x0010,
-  HwCfgStdAccumulator   = 0x0020,
+  HwCfgStdBletooth       = 0x0001,
+  HwCfgStdBletoothLE     = 0x0002,
+  HwCfgStdWIFI           = 0x0004,
+  HwCfgStdUSBslave       = 0x0008,
+  HwCfgStdUSBhost        = 0x0010,
+  HwCfgStdAccumulator    = 0x0020,
   
   /// Struct sizes
   PowerStatus_SZE        = sizeof(EsePowerStatus),  
-  FsItem_SZE            = sizeof(FsItem),
-  FsResult_SZE          = sizeof(FsResult),
-  FsItemResult_SZE      = sizeof(FsItemResult),
-  EsMemSpaceInfo_SZE    = sizeof(EsMemSpaceInfo),
+  FsItem_SZE             = sizeof(FsItem),
+  FsResult_SZE           = sizeof(FsResult),
+  FsItemResult_SZE       = sizeof(FsItemResult),
+  EsMemSpaceInfo_SZE     = sizeof(EsMemSpaceInfo),
   FsSpaceInfo_SZE        = sizeof(FsSpaceInfo),
-  FsFileReadRequest_SZE = sizeof(FsFileReadRequest)
+  FsFileReadRequest_SZE  = sizeof(FsFileReadRequest)
 };
 
 // special values
@@ -292,7 +292,8 @@ enum {
 #endif
 
 /// UTF-8 literals (where supported)
-#define eseU8(str)  u8##str
+#define eseU8(str)   str
+//#define eseU8(str)  u8##str
 
 #endif  // __esfwxe_type_h__
 

@@ -6,16 +6,16 @@
 // HUB type ids get prepended with HUB_TYPE_ and appliance ids - with APPL_TYPE_
 //
 DEVICE_ENTRIES_BEGIN
-	HUB_ENTRY(BOI1, "БОИ-01", "Блок отображения информации БОИ-01")
-	APPLIANCE_ENTRY(ECOL1, "ФГ-01", "Фотоголовка ФГ-01")
-	HUB_LIGHT_ENTRY(BOI2L, "БОИ-02Ф", "Блок отображения информации БОИ-02Ф")
-	HUB_LIGHT_ENTRY(BOI2T, "БОИ-02Т", "Блок отображения информации БОИ-02Т")
-	APPLIANCE_ENTRY(ET1, "ЭТ", "Измеритель метеорологических параметров ЭкоТерма")
-	APPLIANCE_ENTRY(EGEM1, "ГЕО-01", "Головка изм. геомагнитного поля ГЕО-01")
-	APPLIANCE_ENTRY(RAD1, "РАД-01", "Измеритель активности радона РАД-01")
-	APPLIANCE_ENTRY(IRA1, "ИКИ-01", "Измеритель ИК излучения ИКИ-01")
-	APPLIANCE_ENTRY(LD1V, "ЛД-01-В", "Головка лазерная дозиметрическая ЛД-01-В")
-	APPLIANCE_ENTRY(OAA, "ПИГО", "Преобразователь ИГ Октава")
+	HUB_ENTRY(BOI1, "Р‘РћР-01", "Р‘Р»РѕРє РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Р‘РћР-01")
+	APPLIANCE_ENTRY(ECOL1, "Р¤Р“-01", "Р¤РѕС‚РѕРіРѕР»РѕРІРєР° Р¤Р“-01")
+	HUB_LIGHT_ENTRY(BOI2L, "Р‘РћР-02Р¤", "Р‘Р»РѕРє РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Р‘РћР-02Р¤")
+	HUB_LIGHT_ENTRY(BOI2T, "Р‘РћР-02Рў", "Р‘Р»РѕРє РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Р‘РћР-02Рў")
+	APPLIANCE_ENTRY(ET1, "Р­Рў", "РР·РјРµСЂРёС‚РµР»СЊ РјРµС‚РµРѕСЂРѕР»РѕРіРёС‡РµСЃРєРёС… РїР°СЂР°РјРµС‚СЂРѕРІ Р­РєРѕРўРµСЂРјР°")
+	APPLIANCE_ENTRY(EGEM1, "Р“Р•Рћ-01", "Р“РѕР»РѕРІРєР° РёР·Рј. РіРµРѕРјР°РіРЅРёС‚РЅРѕРіРѕ РїРѕР»СЏ Р“Р•Рћ-01")
+	APPLIANCE_ENTRY(RAD1, "Р РђР”-01", "РР·РјРµСЂРёС‚РµР»СЊ Р°РєС‚РёРІРЅРѕСЃС‚Рё СЂР°РґРѕРЅР° Р РђР”-01")
+	APPLIANCE_ENTRY(IRA1, "РРљР-01", "РР·РјРµСЂРёС‚РµР»СЊ РРљ РёР·Р»СѓС‡РµРЅРёСЏ РРљР-01")
+	APPLIANCE_ENTRY(LD1V, "Р›Р”-01-Р’", "Р“РѕР»РѕРІРєР° Р»Р°Р·РµСЂРЅР°СЏ РґРѕР·РёРјРµС‚СЂРёС‡РµСЃРєР°СЏ Р›Р”-01-Р’")
+	APPLIANCE_ENTRY(OAA, "РџРР“Рћ", "РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚РµР»СЊ РР“ РћРєС‚Р°РІР°")
 	APPLIANCE_ENTRY(EL3C, "eL-03-C", "eLight-03-C")
 	APPLIANCE_ENTRY(ECLG1, "eCLg-01", "eCoLogger-01")
   APPLIANCE_ENTRY(LUPINX, "Lupin-X", "Lupin-X")
@@ -23,16 +23,16 @@ DEVICE_ENTRIES_END
 
 // octava appliances description storage
 OCTAVA_DEVICE_ENTRIES_BEGIN
-	OCTAVA_APPLIANCE_ENTRY(P380E, "П3-80Е", "Измеритель электростатических полей П3-80Е")
-	OCTAVA_APPLIANCE_ENTRY(P3811, "П3-81-1", "Измеритель магнитной индукции П3-81-1 мТл")
-	OCTAVA_APPLIANCE_ENTRY(P3812, "П3-81-2", "Измеритель магнитной индукции П3-81-2 мкТл")	
+	OCTAVA_APPLIANCE_ENTRY(P380E, "Рџ3-80Р•", "РР·РјРµСЂРёС‚РµР»СЊ СЌР»РµРєС‚СЂРѕСЃС‚Р°С‚РёС‡РµСЃРєРёС… РїРѕР»РµР№ Рџ3-80Р•")
+	OCTAVA_APPLIANCE_ENTRY(P3811, "Рџ3-81-1", "РР·РјРµСЂРёС‚РµР»СЊ РјР°РіРЅРёС‚РЅРѕР№ РёРЅРґСѓРєС†РёРё Рџ3-81-1 РјРўР»")
+	OCTAVA_APPLIANCE_ENTRY(P3812, "Рџ3-81-2", "РР·РјРµСЂРёС‚РµР»СЊ РјР°РіРЅРёС‚РЅРѕР№ РёРЅРґСѓРєС†РёРё Рџ3-81-2 РјРєРўР»")	
 OCTAVA_DEVICE_ENTRIES_END	
 
 // Tenzor appliances|hubs description storage
 TENZOR_DEVICE_ENTRIES_BEGIN
-	TENZOR_APPLIANCE_ENTRY(TECOL1, "ГФ-01", "Головка фотометрическая ГФ-01")
-	TENZOR_HUB_ENTRY(TBOI1, "БОИ-01-T", "Блок отображения информации БОИ-01-T")
-  TENZOR_APPLIANCE_ENTRY(TIRA1, "ИКИ-01-Т", "Измеритель ИК излучения ИКИ-01-Т")
+	TENZOR_APPLIANCE_ENTRY(TECOL1, "Р“Р¤-01", "Р“РѕР»РѕРІРєР° С„РѕС‚РѕРјРµС‚СЂРёС‡РµСЃРєР°СЏ Р“Р¤-01")
+	TENZOR_HUB_ENTRY(TBOI1, "Р‘РћР-01-T", "Р‘Р»РѕРє РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Р‘РћР-01-T")
+  TENZOR_APPLIANCE_ENTRY(TIRA1, "РРљР-01-Рў", "РР·РјРµСЂРёС‚РµР»СЊ РРљ РёР·Р»СѓС‡РµРЅРёСЏ РРљР-01-Рў")
 TENZOR_DEVICE_ENTRIES_END	
 
 // Quarta-Rad appliances|hubs description storage

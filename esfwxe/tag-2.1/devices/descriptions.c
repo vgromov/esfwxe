@@ -19,9 +19,9 @@ static const struct { \
 	ES_ASCII_CSTR descrLong; \
 	esU16 flags; \
 	} c_deviceDescrs[] = {
-#	define HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, Sdcr, Ldcr, DEVICE_FLAG_HUB },
-#	define HUB_LIGHT_ENTRY(CodeName, Sdcr, Ldcr)	{ #CodeName, Sdcr, Ldcr, DEVICE_FLAG_HUB|DEVICE_FLAG_HUB_LIGHT },
-#	define APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr)	{ #CodeName, Sdcr, Ldcr, 0 },
+#	define HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB },
+#	define HUB_LIGHT_ENTRY(CodeName, Sdcr, Ldcr)	{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB|DEVICE_FLAG_HUB_LIGHT },
+#	define APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr)	{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 },
 #define DEVICE_ENTRIES_END };
 
 #define OCTAVA_DEVICE_ENTRIES_BEGIN \
@@ -30,7 +30,7 @@ static const struct { \
 	ES_ASCII_CSTR descrShort;	\
 	ES_ASCII_CSTR descrLong; \
 	} c_octavaDeviceDescrs[] = {
-# define OCTAVA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, Sdcr, Ldcr }, 
+# define OCTAVA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr) }, 
 #define OCTAVA_DEVICE_ENTRIES_END	};
 
 #define TENZOR_DEVICE_ENTRIES_BEGIN \
@@ -40,8 +40,8 @@ static const struct { \
 	ES_ASCII_CSTR descrLong; \
 	esU16 flags; \
 	} c_tenzorDeviceDescrs[] = {
-# define TENZOR_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, Sdcr, Ldcr, 0 }, 
-#	define TENZOR_HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, Sdcr, Ldcr, DEVICE_FLAG_HUB },
+# define TENZOR_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 }, 
+#	define TENZOR_HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB },
 #define TENZOR_DEVICE_ENTRIES_END	};
 
 #define QUARTA_DEVICE_ENTRIES_BEGIN \
@@ -51,8 +51,8 @@ static const struct { \
 	ES_ASCII_CSTR descrLong; \
 	esU16 flags; \
 	} c_quartaDeviceDescrs[] = {
-# define QUARTA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, Sdcr, Ldcr, 0 }, 
-#	define QUARTA_HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, Sdcr, Ldcr, DEVICE_FLAG_HUB },
+# define QUARTA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 }, 
+#	define QUARTA_HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB },
 #define QUARTA_DEVICE_ENTRIES_END	};
 
 #else // ESE_USE_STRING_DEVICES_INFO
