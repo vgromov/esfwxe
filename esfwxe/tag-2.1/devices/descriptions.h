@@ -44,10 +44,10 @@ esBL deviceIsLightHub( esU16 type );
 
 #if defined(ESE_USE_STRING_DEVICES_INFO) && 1 == ESE_USE_STRING_DEVICES_INFO
 
-ES_ASCII_CSTR getDeviceCodeName( esU16 type );
-ES_ASCII_CSTR getDeviceDescrShort( esU16 type );
-ES_ASCII_CSTR getDeviceDescrLong( esU16 type );
-esU16 getDeviceTypeFromCodeName(ES_ASCII_CSTR codeName);
+ESE_CSTR getDeviceCodeName( esU16 type );
+ESE_CSTR getDeviceDescrShort( esU16 type );
+ESE_CSTR getDeviceDescrLong( esU16 type );
+esU16 getDeviceTypeFromCodeName(ESE_CSTR codeName);
 
 #endif
 

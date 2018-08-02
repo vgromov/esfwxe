@@ -14,9 +14,9 @@
 // device types enumeration
 #define DEVICE_ENTRIES_BEGIN \
 static const struct { \
-	ES_ASCII_CSTR codeName; \
-	ES_ASCII_CSTR descrShort;	\
-	ES_ASCII_CSTR descrLong; \
+	ESE_CSTR codeName; \
+	ESE_CSTR descrShort;	\
+	ESE_CSTR descrLong; \
 	esU16 flags; \
 	} c_deviceDescrs[] = {
 #	define HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB },
@@ -26,18 +26,18 @@ static const struct { \
 
 #define OCTAVA_DEVICE_ENTRIES_BEGIN \
 static const struct { \
-	ES_ASCII_CSTR codeName; \
-	ES_ASCII_CSTR descrShort;	\
-	ES_ASCII_CSTR descrLong; \
+	ESE_CSTR codeName; \
+	ESE_CSTR descrShort;	\
+	ESE_CSTR descrLong; \
 	} c_octavaDeviceDescrs[] = {
 # define OCTAVA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr) }, 
 #define OCTAVA_DEVICE_ENTRIES_END	};
 
 #define TENZOR_DEVICE_ENTRIES_BEGIN \
 static const struct { \
-	ES_ASCII_CSTR codeName; \
-	ES_ASCII_CSTR descrShort;	\
-	ES_ASCII_CSTR descrLong; \
+	ESE_CSTR codeName; \
+	ESE_CSTR descrShort;	\
+	ESE_CSTR descrLong; \
 	esU16 flags; \
 	} c_tenzorDeviceDescrs[] = {
 # define TENZOR_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 }, 
@@ -46,9 +46,9 @@ static const struct { \
 
 #define QUARTA_DEVICE_ENTRIES_BEGIN \
 static const struct { \
-	ES_ASCII_CSTR codeName; \
-	ES_ASCII_CSTR descrShort;	\
-	ES_ASCII_CSTR descrLong; \
+	ESE_CSTR codeName; \
+	ESE_CSTR descrShort;	\
+	ESE_CSTR descrLong; \
 	esU16 flags; \
 	} c_quartaDeviceDescrs[] = {
 # define QUARTA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 }, 
@@ -161,7 +161,7 @@ static __inline int octavaTypeToOffs( int type )
 	return type-OCTAVA_DEVICE_ID_BASE-1;
 }
 
-ES_ASCII_CSTR getDeviceCodeName( esU16 type )
+ESE_CSTR getDeviceCodeName( esU16 type )
 {
 	if( type < DEVICE_TYPES_CNT )
 		return c_deviceDescrs[type].codeName;
@@ -175,7 +175,7 @@ ES_ASCII_CSTR getDeviceCodeName( esU16 type )
 		return 0;	
 }
 
-ES_ASCII_CSTR getDeviceDescrShort( esU16 type )
+ESE_CSTR getDeviceDescrShort( esU16 type )
 {
 	if( type < DEVICE_TYPES_CNT )
 		return c_deviceDescrs[type].descrShort;
@@ -189,7 +189,7 @@ ES_ASCII_CSTR getDeviceDescrShort( esU16 type )
 		return 0;
 }
 
-ES_ASCII_CSTR getDeviceDescrLong( esU16 type )
+ESE_CSTR getDeviceDescrLong( esU16 type )
 {
 	if( type < DEVICE_TYPES_CNT )
 		return c_deviceDescrs[type].descrLong;
@@ -203,7 +203,7 @@ ES_ASCII_CSTR getDeviceDescrLong( esU16 type )
 		return 0;	
 }
 
-esU16 getDeviceTypeFromCodeName(ES_ASCII_CSTR codeName)
+esU16 getDeviceTypeFromCodeName(ESE_CSTR codeName)
 {
 	esU16 type = 0;
 	// Ekosfera branch

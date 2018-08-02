@@ -16,7 +16,7 @@ static Logger s_loggers[MAX_LOGGER_COUNT];
 #endif
 
 // log level strings
-ES_ASCII_CSTR c_logLvlStrings[lvlCount] = {
+ESE_CSTR c_logLvlStrings[lvlCount] = {
 	"CRIT",
 	"ERR",
 	"OK",
@@ -110,7 +110,7 @@ esBL logUnregister(Logger logger)
 }
 
 // process log message
-void logPush( LogLvl lvl, ES_ASCII_CSTR msg )
+void logPush( LogLvl lvl, ESE_CSTR msg )
 {
 #ifdef USE_RTOS
 	if( logLock() )

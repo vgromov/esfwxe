@@ -22,7 +22,7 @@ typedef char static_assertion_##MSG[(!!(COND))*2-1]
 #endif
 
 // null string
-extern ES_ASCII_CSTR c_nullString;
+extern ESE_CSTR c_nullString;
 
 // const array items count
 #ifndef CONST_ARRAY_COUNT
@@ -49,7 +49,7 @@ float utilsRoundf(float f);
 // convert lo byte nibble to hex byte representation (single char)
 char loNibbleToHex(esU8 n);
 // return how many bin bytes were converted into hex representation
-esU32 binToHex( const esU8* bin, esU32 binLen, ES_ASCII_STR buff, esU32 buffLen, esBL doZeroTerminate );
+esU32 binToHex( const esU8* bin, esU32 binLen, ESE_STR buff, esU32 buffLen, esBL doZeroTerminate );
 
 // access bytes in word
 //
@@ -115,8 +115,8 @@ void nsDelay(esU32 nseconds);
 #endif
 
 // return true if char corresponds to digit [0..9]
-#define utilsIsDigitChar(ch) (0x30 <= (ES_ASCII_CHAR)(ch) && 0x39 >= (ES_ASCII_CHAR)(ch))
-#define utilsIsLowerCh(ch) ((ES_ASCII_CHAR)(ch) >= 'a' && (ES_ASCII_CHAR)(ch) <= 'z')
+#define utilsIsDigitChar(ch) (0x30 <= (ESE_CHAR)(ch) && 0x39 >= (ESE_CHAR)(ch))
+#define utilsIsLowerCh(ch) ((ESE_CHAR)(ch) >= 'a' && (ESE_CHAR)(ch) <= 'z')
 // try to convert 2 chars from str into bcd 
 esBL str2esBCD(const char *str, esBCD* bcd);
 
@@ -173,11 +173,11 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
 //
 // convert float to formatted string representation.
 // return number of chars put into buffer
-int fmtFloat(ES_ASCII_STR buff, int buffLen, float val, int decimals);
+int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals);
 // format float val with constant relative error
-int fmtFloatConstRelativeError(ES_ASCII_STR buff, int buffLen, float val, int decimalsAt1);
+int fmtFloatConstRelativeError(ESE_STR buff, int buffLen, float val, int decimalsAt1);
 // format float val with constant relative error, return resulting decimals
-int fmtFloatConstRelativeErrorDecimalsGet(ES_ASCII_STR buff, int buffLen, float val, int decimalsAt1, int* decimals);
+int fmtFloatConstRelativeErrorDecimalsGet(ESE_STR buff, int buffLen, float val, int decimalsAt1, int* decimals);
 
 // perform EsMemSpaceInfo calculation by selecting appropriate space unit
 // blockCount is space measured in allocation blocks. blockSize is allocation block size in bytes
@@ -196,14 +196,14 @@ enum {
 typedef int (*utilsPfnChStreamFn)(void* target, esU8 c);
 
 // abstract string formatter and streamer
-int utilsVstrFmtStream(  utilsPfnChStreamFn pfn,  void* target,  ES_ASCII_CSTR fmt, va_list lst);
+int utilsVstrFmtStream(  utilsPfnChStreamFn pfn,  void* target,  ESE_CSTR fmt, va_list lst);
 
 // custom implementations of string formatting routines
-int utilsSprintf(ES_ASCII_STR target, ES_ASCII_CSTR fmt, ...);
-int utilsSnprintf(ES_ASCII_STR target, esU32 maxTargetLen, ES_ASCII_CSTR fmt, ...);
+int utilsSprintf(ESE_STR target, ESE_CSTR fmt, ...);
+int utilsSnprintf(ESE_STR target, esU32 maxTargetLen, ESE_CSTR fmt, ...);
 
 // 0-terminated string length
-int utilsStrLenGet(ES_ASCII_CSTR str);
+int utilsStrLenGet(ESE_CSTR str);
 
 #endif // USE_ES_STRFMT_IMPL
 

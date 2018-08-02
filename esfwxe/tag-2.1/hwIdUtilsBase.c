@@ -31,50 +31,50 @@ int hwIdFwVersionsCompare(const EseVerInfo* ver, int major, int minor)
 #ifdef ES_USE_FWID_FORMATTERS
 
 // Fwd decls
-static void fmtEcoE(ES_ASCII_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
+static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
   const EseVerInfo* fwver, const esU8* month, const esU8* day, const esU16* region, const EseHwConfigInfo* hwInfo);
 
-static void fmtUniversal(ES_ASCII_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
+static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
   const EseVerInfo* fwver, const esU8* month, const esU8* day, const esU16* region, const EseHwConfigInfo* hwInfo);
 
-void fmtEseBasicFirmwareID(ES_ASCII_STR buff, size_t buffLen, const EseBasicFirmwareID* id, esU16 flags)
+void fmtEseBasicFirmwareID(ESE_STR buff, size_t buffLen, const EseBasicFirmwareID* id, esU16 flags)
 {
 	if( buff && 0 < buffLen && id )
     fmtEcoE(buff, buffLen, flags, id->type, id->num.year, id->num.ser, &id->ver, 0, 0, 0, 0);
 }
 
-void fmtEseFwInfo(ES_ASCII_STR buff, size_t buffLen, const EseFwInfo* id, esU16 flags)
+void fmtEseFwInfo(ESE_STR buff, size_t buffLen, const EseFwInfo* id, esU16 flags)
 {
 	if( buff && 0 < buffLen && id )
     fmtEcoE(buff, buffLen, flags, id->type, id->year, id->order, &id->ver, 
       &id->month, &id->day, &id->countryCode, &id->hwConfig);
 }
 
-void fmtUID(ES_ASCII_STR buff, size_t buffLen, const EseUID* key)
+void fmtUID(ESE_STR buff, size_t buffLen, const EseUID* key)
 {
 	if( buff && 0 < buffLen && key )
 	{
 		// format in 4 groups 8 chars each
-		ES_ASCII_CSTR str = (ES_ASCII_CSTR)key->uid;
+		ESE_CSTR str = (ESE_CSTR)key->uid;
 		utilsSnprintf(buff, buffLen, "%.8s-%.4s-%.4s-%.4s-%.12s", str,
 			str+8, str+12, str+16, str+20);
 	}
 }
 
-void fmtIdStringFromEseBasicFirmwareID(ES_ASCII_STR buff, size_t buffLen, const EseBasicFirmwareID* id, esU16 flags)
+void fmtIdStringFromEseBasicFirmwareID(ESE_STR buff, size_t buffLen, const EseBasicFirmwareID* id, esU16 flags)
 {
 	if( buff && 0 < buffLen && id )
     fmtUniversal(buff, buffLen, flags, id->type, id->num.year, id->num.ser, &id->ver, 0, 0, 0, 0);
 }
 
-void fmtIdStringFromEseFwInfo(ES_ASCII_STR buff, size_t buffLen, const EseFwInfo* info, esU16 flags)
+void fmtIdStringFromEseFwInfo(ESE_STR buff, size_t buffLen, const EseFwInfo* info, esU16 flags)
 {
 	if( buff && 0 < buffLen && info )
     fmtUniversal(buff, buffLen, flags, info->type, info->year, info->order, &info->ver, 
       &info->month, &info->day, &info->countryCode, &info->hwConfig);
 }
 
-ES_ASCII_STR fmtUIDtoIdString(ES_ASCII_STR buff, size_t buffLen, ES_ASCII_CSTR uid, size_t uidLen)
+ESE_STR fmtUIDtoIdString(ESE_STR buff, size_t buffLen, ESE_CSTR uid, size_t uidLen)
 {
   int len = 0;
 	if( buff && 0 < buffLen && uid && uidLen <= buffLen )
@@ -83,7 +83,7 @@ ES_ASCII_STR fmtUIDtoIdString(ES_ASCII_STR buff, size_t buffLen, ES_ASCII_CSTR u
   return buff+len;
 }
 
-ES_ASCII_STR fmtFunctionalToIdString(ES_ASCII_STR buff, size_t buffLen, esU32 functional)
+ESE_STR fmtFunctionalToIdString(ESE_STR buff, size_t buffLen, esU32 functional)
 {
   int len = 0;
 	if( buff && 0 < buffLen )
@@ -94,7 +94,7 @@ ES_ASCII_STR fmtFunctionalToIdString(ES_ASCII_STR buff, size_t buffLen, esU32 fu
 
 //--------------------------------------------------------------------------------------------------------------------
 //
-static __inline ES_ASCII_STR fmtBuffInc(ES_ASCII_STR buff, size_t* buffLen, int len)
+static __inline ESE_STR fmtBuffInc(ESE_STR buff, size_t* buffLen, int len)
 {
   if( 0 < len )
   {
@@ -109,7 +109,7 @@ static __inline ES_ASCII_STR fmtBuffInc(ES_ASCII_STR buff, size_t* buffLen, int 
   return buff;
 }
 
-static __inline void fmtBuffTerminate(ES_ASCII_STR buff, ES_ASCII_STR buffEnd)
+static __inline void fmtBuffTerminate(ESE_STR buff, ESE_STR buffEnd)
 {
   if( buffEnd <= buff )
   {
@@ -119,10 +119,10 @@ static __inline void fmtBuffTerminate(ES_ASCII_STR buff, ES_ASCII_STR buffEnd)
 }
 
 // Internal ECE-E formatting helper
-static void fmtEcoE(ES_ASCII_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
+static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
   const EseVerInfo* fwver, const esU8* month, const esU8* day, const esU16* region, const EseHwConfigInfo* hwInfo)
 {
-  ES_ASCII_STR buffEnd = buff+buffLen;
+  ESE_STR buffEnd = buff+buffLen;
   
   int len = 0;
 
@@ -243,7 +243,7 @@ static void fmtEcoE(ES_ASCII_STR buff, size_t buffLen, esU16 flags, esU16 type, 
 }
 
 // Internal Universal ID formatting helper
-static __inline ES_ASCII_STR fmtUniversalCommaAdd(ES_ASCII_STR buff, size_t* buffLen)
+static __inline ESE_STR fmtUniversalCommaAdd(ESE_STR buff, size_t* buffLen)
 {
   if( 0 < *buffLen )
   {
@@ -254,10 +254,10 @@ static __inline ES_ASCII_STR fmtUniversalCommaAdd(ES_ASCII_STR buff, size_t* buf
   return buff;
 }
 
-static void fmtUniversal(ES_ASCII_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
+static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16 year, esU32 order,
   const EseVerInfo* fwver, const esU8* month, const esU8* day, const esU16* region, const EseHwConfigInfo* hwInfo)
 {
-  ES_ASCII_STR buffEnd = buff+buffLen;
+  ESE_STR buffEnd = buff+buffLen;
   
   // Always format type
   int len = utilsSnprintf(buff, buffLen, "T:%u", (unsigned)type);

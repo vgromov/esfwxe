@@ -5,12 +5,12 @@
 #define FETCH_BYTE(pch)					(*((esU8*)(pch)))
 #define mkhex(b)								c_hexChars[(b) & 0x0F]
 
-static ES_ASCII_CSTR c_nullFmt = "(null)\n";
+static ESE_CSTR c_nullFmt = "(null)\n";
 
 // 0-terminated string length
-int utilsStrLenGet(ES_ASCII_CSTR str)
+int utilsStrLenGet(ESE_CSTR str)
 {
-	const ES_ASCII_CHAR* pos = str;
+	const ESE_CHAR* pos = str;
 	while(*pos)
 		++pos;
 
@@ -44,7 +44,7 @@ static esU8* es_sprintn(esU8 *nbuf, esU32 ul, esU8 base, int width, esU8 *lenp)
 int utilsVstrFmtStream(
 	utilsPfnChStreamFn pfn,	// streaming function
 	void* target,					// target stream
-	ES_ASCII_CSTR fmt,
+	ESE_CSTR fmt,
 	va_list lst)
 {
 #define ES_PUTC(c)	if( utilsStreamOk == pfn(target, (esU8)(c)) ) ++retval; else return utilsStreamEnd;
@@ -222,7 +222,7 @@ reswitch:
 				s = (const unsigned char*) "(null)";
 	const_string:
 			if (! dot)
-				n = utilsStrLenGet((ES_ASCII_CSTR)s);
+				n = utilsStrLenGet((ESE_CSTR)s);
 			else
 				for (n=0; n<dwidth && s[n]; n++)
 					continue;
@@ -479,7 +479,7 @@ static int utilsPutcMem(void* target, esU8 c)
 	return utilsStreamEnd;
 }
 
-int utilsSprintf(ES_ASCII_STR target, ES_ASCII_CSTR fmt, ...)
+int utilsSprintf(ESE_STR target, ESE_CSTR fmt, ...)
 {
 	int result = utilsStreamEnd;
 	if(target && fmt)
@@ -498,7 +498,7 @@ int utilsSprintf(ES_ASCII_STR target, ES_ASCII_CSTR fmt, ...)
 	return result;
 }
 
-int utilsSnprintf(ES_ASCII_STR target, esU32 maxTargetLen, ES_ASCII_CSTR fmt, ...)
+int utilsSnprintf(ESE_STR target, esU32 maxTargetLen, ESE_CSTR fmt, ...)
 {
 	int result = utilsStreamEnd;
 	if(target && fmt)

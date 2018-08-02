@@ -46,8 +46,8 @@ RTOS_FUNC void rtosMemStats(size_t* curalloc, size_t* totfree, size_t* maxfree);
 //
 RTOS_FUNC esU32 rtosMAX_PRIORITY(void);
 RTOS_FUNC rtosTASK_HANDLE rtosCurrentTaskGet(void);
-RTOS_FUNC rtosTASK_HANDLE rtosTaskCreate(rtosTASK_FUNCTION worker, ES_ASCII_CSTR name, esU32 stackDepth, void* params, esU32 priority);
-RTOS_FUNC rtosTASK_HANDLE rtosTaskCreateSuspended(rtosTASK_FUNCTION worker, ES_ASCII_CSTR name, esU32 stackDepth, void* params, esU32 priority);
+RTOS_FUNC rtosTASK_HANDLE rtosTaskCreate(rtosTASK_FUNCTION worker, ESE_CSTR name, esU32 stackDepth, void* params, esU32 priority);
+RTOS_FUNC rtosTASK_HANDLE rtosTaskCreateSuspended(rtosTASK_FUNCTION worker, ESE_CSTR name, esU32 stackDepth, void* params, esU32 priority);
 // calling the following services with task = 0, is equivalent to calling them on current task ID 
 RTOS_FUNC void rtosTaskDelete(rtosTASK_HANDLE task);
 RTOS_FUNC void rtosTaskSuspend(rtosTASK_HANDLE task);
@@ -104,7 +104,7 @@ RTOS_FUNC esBL rtosQueuePopFromIsr(rtosQUEUE_HANDLE queue, void* elem, esBL* hig
 // timers concept
 //
 typedef void (*rtosTIMER_CALLBACK)( rtosTIMER_HANDLE );
-RTOS_FUNC rtosTIMER_HANDLE rtosTimerCreate(ES_ASCII_CSTR name, esU32 period, esBL autoRestart, void* timerData, rtosTIMER_CALLBACK callback);
+RTOS_FUNC rtosTIMER_HANDLE rtosTimerCreate(ESE_CSTR name, esU32 period, esBL autoRestart, void* timerData, rtosTIMER_CALLBACK callback);
 RTOS_FUNC esBL rtosTimerStart(rtosTIMER_HANDLE timer, esU32 tmo);
 RTOS_FUNC esBL rtosTimerReset(rtosTIMER_HANDLE timer, esU32 tmo);
 RTOS_FUNC esBL rtosTimerStartFromISR(rtosTIMER_HANDLE timer, esBL* higherPriorityTaskWoken);

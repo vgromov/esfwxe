@@ -20,10 +20,10 @@ typedef enum {
 
 } LogLvl;
 
-extern ES_ASCII_CSTR c_logLvlStrings[lvlCount];
+extern ESE_CSTR c_logLvlStrings[lvlCount];
 
 // logger callback
-typedef void (*Logger)(LogLvl, ES_ASCII_CSTR);
+typedef void (*Logger)(LogLvl, ESE_CSTR);
 
 // log registrar API
 void logInit(void);
@@ -31,7 +31,7 @@ esBL logRegister(Logger logger);
 esBL logUnregister(Logger logger);
 
 // process log message
-void logPush( LogLvl lvl, ES_ASCII_CSTR msg );
+void logPush( LogLvl lvl, ESE_CSTR msg );
 
 #ifdef __cplusplus
 	}

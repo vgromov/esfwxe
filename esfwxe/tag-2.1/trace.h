@@ -18,7 +18,7 @@
 #		define TRACE_FMT_STR "%s"
 #		define TRACE_EOL	"\n\r"
 #	else
-		void TRACE(ES_ASCII_CSTR s, ...);
+		void TRACE(ESE_CSTR s, ...);
 #		define TRACE_EOL
 #		ifdef UNICODE
 #			define TRACE_FMT_STR	"%S"

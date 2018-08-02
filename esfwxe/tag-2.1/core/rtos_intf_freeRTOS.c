@@ -50,7 +50,7 @@ rtosTASK_HANDLE rtosCurrentTaskGet(void)
 	return xTaskGetCurrentTaskHandle();
 }
 
-rtosTASK_HANDLE rtosTaskCreate(rtosTASK_FUNCTION worker, ES_ASCII_CSTR name, esU32 stackDepth, void* params, esU32 priority)
+rtosTASK_HANDLE rtosTaskCreate(rtosTASK_FUNCTION worker, ESE_CSTR name, esU32 stackDepth, void* params, esU32 priority)
 {
 	rtosTASK_HANDLE result = 0;
 	xTaskCreate(worker, name, stackDepth, params, priority, &result);
@@ -58,7 +58,7 @@ rtosTASK_HANDLE rtosTaskCreate(rtosTASK_FUNCTION worker, ES_ASCII_CSTR name, esU
 }
 
 #if 1 == INCLUDE_vTaskSuspend
-rtosTASK_HANDLE rtosTaskCreateSuspended(rtosTASK_FUNCTION worker, ES_ASCII_CSTR name, esU32 stackDepth, void* params, esU32 priority)
+rtosTASK_HANDLE rtosTaskCreateSuspended(rtosTASK_FUNCTION worker, ESE_CSTR name, esU32 stackDepth, void* params, esU32 priority)
 {
 	rtosTASK_HANDLE result = 0;
 	xTaskCreate(worker, name, stackDepth, params, priority, &result);
@@ -302,7 +302,7 @@ esBL rtosQueuePopFromIsr(rtosQUEUE_HANDLE queue, void* elem, esBL* higherPriorit
 // timers
 //
 #if 1 == configUSE_TIMERS
-rtosTIMER_HANDLE rtosTimerCreate(ES_ASCII_CSTR name, esU32 period, esBL autoRestart, void* timerData, rtosTIMER_CALLBACK callback)
+rtosTIMER_HANDLE rtosTimerCreate(ESE_CSTR name, esU32 period, esBL autoRestart, void* timerData, rtosTIMER_CALLBACK callback)
 {
 	return xTimerCreate(name, rtosMsToTimestamp(period), autoRestart, timerData, callback);
 }

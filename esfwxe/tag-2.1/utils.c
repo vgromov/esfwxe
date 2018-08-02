@@ -59,7 +59,7 @@ extern int es_isnanf(float f);
 #endif
 
 // special const for empty string
-ES_ASCII_CSTR c_nullString = "";
+ESE_CSTR c_nullString = "";
 
 #ifndef USE_CUSTOM_DELAY
 // MCU tick ns estimate
@@ -117,14 +117,14 @@ char loNibbleToHex(esU8 n)
 }
 
 // return how many bin bytes were converted into hex representation
-esU32 binToHex( const esU8* bin, esU32 binLen, ES_ASCII_STR buff, esU32 buffLen, esBL doZeroTerminate )
+esU32 binToHex( const esU8* bin, esU32 binLen, ESE_STR buff, esU32 buffLen, esBL doZeroTerminate )
 {
   // check buffers && lengths. hex buffer length must be at least double of bin buffer len
   if( bin && binLen > 0 && buffLen > 0 && buffLen >= binLen*2 )
   {
     const esU8* binEnd = bin+binLen;
     const esU8* binBeg = bin;
-    ES_ASCII_STR buffEnd = buff+buffLen;
+    ESE_STR buffEnd = buff+buffLen;
     while(bin < binEnd)
     {
       *buff++ = loNibbleToHex((*bin) >> 4);
@@ -443,9 +443,9 @@ esBL put_esBA(esU8** start, const esU8* end, esBA ba)
 // convert float to formatted string representation
 //
 // formatting helper
-static void int2buff(ES_ASCII_STR* buff, ES_ASCII_CSTR end, int val, esBL neg, int power)
+static void int2buff(ESE_STR* buff, ESE_CSTR end, int val, esBL neg, int power)
 {
-  ES_ASCII_STR pos = *buff;
+  ESE_STR pos = *buff;
   while(pos < end && power)
   {
     int ival = val / power;
@@ -456,13 +456,13 @@ static void int2buff(ES_ASCII_STR* buff, ES_ASCII_CSTR end, int val, esBL neg, i
   *buff = pos;
 }
 
-int fmtFloat(ES_ASCII_STR buff, int buffLen, float val, int decimals)
+int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals)
 {
   int result = 0;
   if( buff && 0 < buffLen && !esIsNanF(val) && esFiniteF(val))
   {
-    ES_ASCII_CSTR end = buff+buffLen;
-    ES_ASCII_STR pos = buff;
+    ESE_CSTR end = buff+buffLen;
+    ESE_STR pos = buff;
     int ipower = 1;   // integer part power
     int fpower = 1; // fractional part power
     double fi;
@@ -511,7 +511,7 @@ int fmtFloat(ES_ASCII_STR buff, int buffLen, float val, int decimals)
 }
 
 // format float val with constant relative error
-int fmtFloatConstRelativeError(ES_ASCII_STR buff, int buffLen, float val, int decimalsAt1)
+int fmtFloatConstRelativeError(ESE_STR buff, int buffLen, float val, int decimalsAt1)
 {
   int decimals = decimalsAt1;
   float tmp = val;
@@ -526,7 +526,7 @@ int fmtFloatConstRelativeError(ES_ASCII_STR buff, int buffLen, float val, int de
 }
 
 // format float val with constant relative error, return resulting decimals
-int fmtFloatConstRelativeErrorDecimalsGet(ES_ASCII_STR buff, int buffLen, float val, int decimalsAt1, int* decimals)
+int fmtFloatConstRelativeErrorDecimalsGet(ESE_STR buff, int buffLen, float val, int decimalsAt1, int* decimals)
 {
   float tmp = val;
   *decimals = decimalsAt1;

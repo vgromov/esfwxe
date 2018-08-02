@@ -17,20 +17,22 @@
 /// Declare available locale IDs.
 ///
 typedef enum {
-#define ESE_I18N_LANG_ENTRY(langId, nativeName) eseI18nlang_## langId,
+#define ESE_I18N_LANG_ENTRY(langId, nativeName) eseI18nLang_## langId,
 #include "ese_i18n.strings.cc"
 
   eseI18nLangIdsCount //< Special ID, must be the last in enum
 
 } eseI18nId;
 
-/// Declare available I18N'd string IDs.
+/// Declare I18N string IDs
 ///
+#define ESE_I18N_GEN_STRING_IDS
 typedef enum {
-#define ESE_I18N_STDID_ENTRY(strId) strId,
+#define ESE_I18N_STRING_ENTRY(strId, str) strId,
+#define ESE_I18N_STRING_ARR_ENTRY(strId, ...) strId,
 #include "ese_i18n.strings.cc"
 
-  eseI18nStrIdsCount //< Special ID, must be the last in enum
+  eseI18nStrIdsCount  //< Special string ID, must be the last in enum
 
 } eseI18nStrId;
 
