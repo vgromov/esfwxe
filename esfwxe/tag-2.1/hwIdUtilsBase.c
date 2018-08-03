@@ -130,9 +130,25 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
 #if defined(ESE_USE_STRING_DEVICES_INFO) && 1 == ESE_USE_STRING_DEVICES_INFO
 
   if( ES_BIT_IS_SET(flags, APPL_ID_FMT_DESCR_SHORT) )
-    len = utilsSnprintf(buff, buffLen, "%s", getDeviceDescrShort(type));
+    len = utilsSnprintf(
+      buff,
+      buffLen,
+      "%s",
+      getDeviceDescrShort(
+        eseI18nLang_ru,
+        type
+      )
+    );
   else if( ES_BIT_IS_SET(flags, APPL_ID_FMT_DESCR_LONG) )
-    len = utilsSnprintf(buff, buffLen, "%s", getDeviceDescrLong(type));
+    len = utilsSnprintf(
+      buff,
+      buffLen,
+      "%s",
+      getDeviceDescrLong(
+        eseI18nLang_ru,
+        type
+      )
+    );
   
   buff = fmtBuffInc(buff, &buffLen, len);
 
