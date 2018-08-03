@@ -19,38 +19,36 @@
 typedef enum {
 #define ESE_I18N_LANG_ENTRY(langId, nativeName) eseI18nLang_## langId,
 #include "ese_i18n.strings.cc"
-
   eseI18nLangIdsCount //< Special ID, must be the last in enum
 
-} eseI18nId;
+} eseI18nLangId;
 
 /// Declare I18N string IDs
 ///
 #define ESE_I18N_GEN_STRING_IDS
 typedef enum {
-#define ESE_I18N_STRING_ENTRY(strId, str) strId,
-#define ESE_I18N_STRING_ARR_ENTRY(strId, ...) strId,
+#define ESE_I18N_STRING_ENTRY(langId, strId, str) strId,
+#define ESE_I18N_STRING_ARR_ENTRY(langId, strId, ...) strId,
 #include "ese_i18n.strings.cc"
-
   eseI18nStrIdsCount  //< Special string ID, must be the last in enum
 
 } eseI18nStrId;
 
 /// Return native name of the languageID, or NULL, if not found
-ESE_CSTR eseI18nLangNativeNameGet(eseI18nId langId);
+ESE_CSTR eseI18nLangNativeNameGet(eseI18nLangId langId);
 
 /// Return I18N string using eseI18nId (idLang) and string ID (idStr).
 /// If string is not found by non-english idLang, try to find its English counterpart.
 /// If, by any means, string is not found, return NULL.
 ///
-ESE_CSTR eseI18nStrGet(eseI18nId idLang, eseI18nStrId idStr);
+ESE_CSTR eseI18nStrGet(eseI18nLangId idLang, eseI18nStrId idStr);
 
 /// Return I18N string array member using eseI18nId (idLang), array string ID (idStr),
 /// and array member index, id.
 /// If string is not found by non-english idLang, try to find its English counterpart.
 /// If, by any means, string is not found, return NULL.
 ///
-ESE_CSTR eseI18nStrArrayGet(eseI18nId idLang, eseI18nStrId idStr, int idx);
+ESE_CSTR eseI18nStrArrayGet(eseI18nLangId idLang, eseI18nStrId idStr, int idx);
 
 #define eseI(idLang, idStr) eseI18nStrGet((idLang),(idStr))
 #define eseIA(idLang, idStr, idx) eseI18nStrArrayGet((idLang),(idStr),(idx))
