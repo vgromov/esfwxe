@@ -1,4 +1,4 @@
-﻿// ECO-E devices description strings
+// ECO-E devices description strings
 ESE_I18N_STRING_ENTRY(ru,   istrBOI1_DCR_SHORT,       "БОИ-01")
 ESE_I18N_STRING_ENTRY(ru,   istrBOI1_DCR_LONG,        "Блок отображения информации БОИ-01")
 ESE_I18N_STRING_ENTRY(ru,   istrECOL1_DCR_SHORT,      "ФГ-01")

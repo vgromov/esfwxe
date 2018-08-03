@@ -1,4 +1,4 @@
-﻿// ECO-E devices description strings
+// ECO-E devices description strings
 ESE_I18N_STRING_ENTRY(en,   istrBOI1_DCR_SHORT,       "BOI-01")
 ESE_I18N_STRING_ENTRY(en,   istrBOI1_DCR_LONG,        "Measurement Control Hub BOI-01")
 ESE_I18N_STRING_ENTRY(en,   istrECOL1_DCR_SHORT,      "FG-01")

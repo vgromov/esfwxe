@@ -1,4 +1,4 @@
-﻿// Compound I18N string definition file for BOI-01 embedded application.
+// Compound I18N string definition file for BOI-01 embedded application.
 // Do not include directly into the project, it's being implicitly included from 
 // ese_i18n.h/.c files, as appropriate
 //
