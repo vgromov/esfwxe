@@ -2,6 +2,7 @@
 #define _devices_descriptions_h_
 
 #include <esfwxe/type.h>
+#include <esfwxe/ese_i18n.h>
 
 // This header creates compile-time generated symbolic names for known devices
 //
@@ -45,8 +46,8 @@ esBL deviceIsLightHub( esU16 type );
 #if defined(ESE_USE_STRING_DEVICES_INFO) && 1 == ESE_USE_STRING_DEVICES_INFO
 
 ESE_CSTR getDeviceCodeName( esU16 type );
-ESE_CSTR getDeviceDescrShort( esU16 type );
-ESE_CSTR getDeviceDescrLong( esU16 type );
+ESE_CSTR getDeviceDescrShort( eseI18nLangId langId, esU16 type );
+ESE_CSTR getDeviceDescrLong( eseI18nLangId langId, esU16 type );
 esU16 getDeviceTypeFromCodeName(ESE_CSTR codeName);
 
 #endif

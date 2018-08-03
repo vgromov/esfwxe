@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <esfwxe/utils.h>
+#include <esfwxe/ese_i18n.h>
 #include <esfwxe/devices/descriptions.h>
 
 #define DEVICE_FLAG_HUB				0x0001
@@ -15,44 +16,44 @@
 #define DEVICE_ENTRIES_BEGIN \
 static const struct { \
 	ESE_CSTR codeName; \
-	ESE_CSTR descrShort;	\
-	ESE_CSTR descrLong; \
+	int descrShortId;	\
+	int descrLongId; \
 	esU16 flags; \
 	} c_deviceDescrs[] = {
-#	define HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB },
-#	define HUB_LIGHT_ENTRY(CodeName, Sdcr, Ldcr)	{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB|DEVICE_FLAG_HUB_LIGHT },
-#	define APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr)	{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 },
+#	define HUB_ENTRY(CodeName, SdcrId, LdcrId)		    { #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB },
+#	define HUB_LIGHT_ENTRY(CodeName, SdcrId, LdcrId)  { #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB|DEVICE_FLAG_HUB_LIGHT },
+#	define APPLIANCE_ENTRY(CodeName, SdcrId, LdcrId)	{ #CodeName, SdcrId, LdcrId, 0 },
 #define DEVICE_ENTRIES_END };
 
 #define OCTAVA_DEVICE_ENTRIES_BEGIN \
 static const struct { \
 	ESE_CSTR codeName; \
-	ESE_CSTR descrShort;	\
-	ESE_CSTR descrLong; \
+	int descrShortId;	\
+	int descrLongId; \
 	} c_octavaDeviceDescrs[] = {
-# define OCTAVA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr) }, 
+# define OCTAVA_APPLIANCE_ENTRY(CodeName, SdcrId, LdcrId) { #CodeName, SdcrId, LdcrId }, 
 #define OCTAVA_DEVICE_ENTRIES_END	};
 
 #define TENZOR_DEVICE_ENTRIES_BEGIN \
 static const struct { \
 	ESE_CSTR codeName; \
-	ESE_CSTR descrShort;	\
-	ESE_CSTR descrLong; \
+	int descrShortId;	\
+	int descrLongId; \
 	esU16 flags; \
 	} c_tenzorDeviceDescrs[] = {
-# define TENZOR_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 }, 
-#	define TENZOR_HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB },
+# define TENZOR_APPLIANCE_ENTRY(CodeName, SdcrId, LdcrId) { #CodeName, SdcrId, LdcrId, 0 }, 
+#	define TENZOR_HUB_ENTRY(CodeName, SdcrId, LdcrId)				{ #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB },
 #define TENZOR_DEVICE_ENTRIES_END	};
 
 #define QUARTA_DEVICE_ENTRIES_BEGIN \
 static const struct { \
 	ESE_CSTR codeName; \
-	ESE_CSTR descrShort;	\
-	ESE_CSTR descrLong; \
+	int descrShortId;	\
+	int descrLongId; \
 	esU16 flags; \
 	} c_quartaDeviceDescrs[] = {
-# define QUARTA_APPLIANCE_ENTRY(CodeName, Sdcr, Ldcr) { #CodeName, eseU8(Sdcr), eseU8(Ldcr), 0 }, 
-#	define QUARTA_HUB_ENTRY(CodeName, Sdcr, Ldcr)				{ #CodeName, eseU8(Sdcr), eseU8(Ldcr), DEVICE_FLAG_HUB },
+# define QUARTA_APPLIANCE_ENTRY(CodeName, SdcrId, LdcrId) { #CodeName, SdcrId, LdcrId, 0 }, 
+#	define QUARTA_HUB_ENTRY(CodeName, SdcrId, LdcrId)				{ #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB },
 #define QUARTA_DEVICE_ENTRIES_END	};
 
 #else // ESE_USE_STRING_DEVICES_INFO
@@ -172,35 +173,35 @@ ESE_CSTR getDeviceCodeName( esU16 type )
 	else if( isQuartaDevice(type) )
 		return c_quartaDeviceDescrs[quartaTypeToOffs(type)].codeName;
 	else
-		return 0;	
+		return NULL;
 }
 
-ESE_CSTR getDeviceDescrShort( esU16 type )
+ESE_CSTR getDeviceDescrShort( eseI18nLangId langId, esU16 type )
 {
 	if( type < DEVICE_TYPES_CNT )
-		return c_deviceDescrs[type].descrShort;
+		return eseI(langId, c_deviceDescrs[type].descrShortId);
 	else if( isOctavaDevice(type) )
-		return c_octavaDeviceDescrs[octavaTypeToOffs(type)].descrShort;
+		return eseI(langId, c_octavaDeviceDescrs[octavaTypeToOffs(type)].descrShortId);
 	else if( isTenzorDevice(type) )
-		return c_tenzorDeviceDescrs[tenzorTypeToOffs(type)].descrShort;
+		return eseI(langId, c_tenzorDeviceDescrs[tenzorTypeToOffs(type)].descrShortId);
 	else if( isQuartaDevice(type) )
-		return c_quartaDeviceDescrs[quartaTypeToOffs(type)].descrShort;
+		return eseI(langId, c_quartaDeviceDescrs[quartaTypeToOffs(type)].descrShortId);
 	else
-		return 0;
+		return NULL;
 }
 
-ESE_CSTR getDeviceDescrLong( esU16 type )
+ESE_CSTR getDeviceDescrLong( eseI18nLangId langId, esU16 type )
 {
 	if( type < DEVICE_TYPES_CNT )
-		return c_deviceDescrs[type].descrLong;
+		return eseI(langId, c_deviceDescrs[type].descrLongId);
 	else if( isOctavaDevice(type) )
-		return c_octavaDeviceDescrs[octavaTypeToOffs(type)].descrLong;
+		return eseI(langId, c_octavaDeviceDescrs[octavaTypeToOffs(type)].descrLongId);
 	else if( isTenzorDevice(type) )
-		return c_tenzorDeviceDescrs[tenzorTypeToOffs(type)].descrLong;
+		return eseI(langId, c_tenzorDeviceDescrs[tenzorTypeToOffs(type)].descrLongId);
 	else if( isQuartaDevice(type) )
-		return c_quartaDeviceDescrs[quartaTypeToOffs(type)].descrLong;
+		return eseI(langId, c_quartaDeviceDescrs[quartaTypeToOffs(type)].descrLongId);
 	else
-		return 0;	
+		return NULL;
 }
 
 esU16 getDeviceTypeFromCodeName(ESE_CSTR codeName)
