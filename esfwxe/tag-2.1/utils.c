@@ -211,24 +211,7 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
 
     if( b & 0x80 ) //< Either start of the sequence, or continuation
     {
-      if( 0xC0 == (b & 0xC0) ) //< Continuation
-      {
-        if( !sequence || 0 == bytecnt ) //< Continuation without a start, or bytecount is exceeded, reset and skip
-        {
-          bytecnt = 0;
-          out = 0;
-          continue;
-        }
-        else
-        {
-          --bytecnt;
-          out |= (((esU32)(b & 0x3F)) << bytecnt*6);
-
-          if( 0 == bytecnt ) //< Finished, exiting
-            break;
-        }
-      }
-      else //< Starting
+      if( 0xC0 == (b & 0xC0) ) //< Starting
       {
         if( sequence ) //< Already started - reset and skip
         {
@@ -256,9 +239,26 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
             continue;
           }
 
-          // Assign the rest of byte, taking into account that is is already shifted left by bytecnt+1
-          out = ((esU32)b) << (5*bytecnt-7);
+          // Assign the rest of byte, taking into account that is is already shifted left by bytecnt
+          out = ((esU32)b) << (5*bytecnt-6);
           --bytecnt;
+        }
+      }
+      else //< Continuation
+      {
+        if( !sequence || 0 == bytecnt ) //< Continuation without a start, or bytecount is exceeded, reset and skip
+        {
+          bytecnt = 0;
+          out = 0;
+          continue;
+        }
+        else
+        {
+          --bytecnt;
+          out |= (((esU32)(b & 0x3F)) << bytecnt*6);
+
+          if( 0 == bytecnt ) //< Finished, exiting
+            break;
         }
       }
     }
