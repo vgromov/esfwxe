@@ -80,6 +80,15 @@
 # define ES_DEBUG_TRACE5(fmt, _1, _2, _3, _4, _5) printf(fmt, (_1), (_2), (_3), (_4), (_5));
 # define ES_DEBUG_TRACE6(fmt, _1, _2, _3, _4, _5, _6) printf(fmt, (_1), (_2), (_3), (_4), (_5), (_6));
 # define ES_DEBUG_TRACE7(fmt, _1, _2, _3, _4, _5, _6, _7) printf(fmt, (_1), (_2), (_3), (_4), (_5), (_6), (_7));
+#elif USE_EMULATOR
+# define ES_DEBUG_TRACE0(fmt) ES_DEBUG_TRACE_RAW(fmt);
+# define ES_DEBUG_TRACE1(fmt, _1) ES_DEBUG_TRACE_RAW(fmt, _1);
+# define ES_DEBUG_TRACE2(fmt, _1, _2) ES_DEBUG_TRACE_RAW(fmt, _1, _2);
+# define ES_DEBUG_TRACE3(fmt, _1, _2, _3) ES_DEBUG_TRACE_RAW(fmt, _1, _2, _3);
+# define ES_DEBUG_TRACE4(fmt, _1, _2, _3, _4) ES_DEBUG_TRACE_RAW(fmt, _1, _2, _3, _4);
+# define ES_DEBUG_TRACE5(fmt, _1, _2, _3, _4, _5) ES_DEBUG_TRACE_RAW(fmt, _1, _2, _3, _4, _5);
+# define ES_DEBUG_TRACE6(fmt, _1, _2, _3, _4, _5, _6) ES_DEBUG_TRACE_RAW(fmt, _1, _2, _3, _4, _5, _6);
+# define ES_DEBUG_TRACE7(fmt, _1, _2, _3, _4, _5, _6, _7) ES_DEBUG_TRACE_RAW(fmt, _1, _2, _3, _4, _5, _6, _7);
 #else
 # define ES_DEBUG_TRACE0(fmt)
 # define ES_DEBUG_TRACE1(fmt, _1)
