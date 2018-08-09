@@ -30,7 +30,7 @@ void powerResetInit(void)
 ** Returned value:		None
 ** 
 ******************************************************************************/
-__WEAK void gpioResetInit( void )
+__weak void gpioResetInit( void )
 {
   /* Reset all GPIO pins to default: primary function */
   PINSEL0 = 0x00000000;

@@ -50,8 +50,8 @@ ESE_CSTR eseI18nStrGet(eseI18nLangId idLang, eseI18nStrId idStr);
 ///
 ESE_CSTR eseI18nStrArrayGet(eseI18nLangId idLang, eseI18nStrId idStr, int idx);
 
-#define eseI(idLang, idStr) eseI18nStrGet((idLang),(idStr))
-#define eseIA(idLang, idStr, idx) eseI18nStrArrayGet((idLang),(idStr),(idx))
+#define eseI(idLang, idStr) eseI18nStrGet((eseI18nLangId)(idLang),(eseI18nStrId)(idStr))
+#define eseIA(idLang, idStr, idx) eseI18nStrArrayGet((eseI18nLangId)(idLang),(eseI18nStrId)(idStr),(idx))
 
 #ifdef __cplusplus
   }

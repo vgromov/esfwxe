@@ -465,7 +465,7 @@ int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals)
     ESE_STR pos = buff;
     int ipower = 1;   // integer part power
     int fpower = 1; // fractional part power
-    double fi;
+    float fi;
     int fpart;
     int ipart = decimals; // temporarily save decimals
     esBL neg = val < .0f;
@@ -473,7 +473,7 @@ int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals)
     while( 0 < decimals-- )
       fpower *= 10;
     decimals = ipart; // restore decimals
-    fpart = (int)((modf(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
+    fpart = (int)((modff(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
     ipart = (int)fi;
     if( fpart == fpower )
     {
