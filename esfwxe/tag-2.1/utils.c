@@ -41,6 +41,8 @@
 //# if defined(ESCOMM_EXPORTS)
 extern int es_finitef(float f);
 extern int es_isnanf(float f);
+extern float es_modff(float x, float* intpart);
+
 //# else
 //
 //#    ifndef esFiniteF
@@ -473,7 +475,7 @@ int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals)
     while( 0 < decimals-- )
       fpower *= 10;
     decimals = ipart; // restore decimals
-    fpart = (int)((modff(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
+    fpart = (int)((es_modff(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
     ipart = (int)fi;
     if( fpart == fpower )
     {
