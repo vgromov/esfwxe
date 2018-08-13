@@ -17,9 +17,13 @@
 #    define esFiniteF    isfinite
 #  endif
 
-#  ifndef esIsNanF
-#    define esIsNanF      isnan
-#  endif
+# ifndef esIsNanF
+#   define esIsNanF      isnan
+# endif
+
+# ifndef esModfF
+#   define esModfF       modff
+# endif
 
 #elif defined(_MSC_VER)
 
@@ -42,6 +46,10 @@
 extern int es_finitef(float f);
 extern int es_isnanf(float f);
 extern float es_modff(float x, float* intpart);
+
+# ifndef esModfF
+#   define esModfF  es_modff
+# endif
 
 //# else
 //
@@ -475,7 +483,7 @@ int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals)
     while( 0 < decimals-- )
       fpower *= 10;
     decimals = ipart; // restore decimals
-    fpart = (int)((es_modff(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
+    fpart = (int)((esModfF(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
     ipart = (int)fi;
     if( fpart == fpower )
     {
