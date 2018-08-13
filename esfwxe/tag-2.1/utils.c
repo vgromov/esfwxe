@@ -204,7 +204,7 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
 
   bool sequence = false;
   esU8 bytecnt = 0;
-  esU32 out = 0;
+  esU32 out = 0xFFFFFFFF;
 
   while( pos < buffEnd )
   {
@@ -219,7 +219,7 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
         {
           sequence = false;
           bytecnt = 0;
-          out = 0;
+          out = 0xFFFFFFFF;
           continue;
         }
         else
@@ -237,7 +237,7 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
           {
             sequence = false;
             bytecnt = 0;
-            out = 0;
+            out = 0xFFFFFFFF;
             continue;
           }
 
@@ -251,7 +251,7 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
         if( !sequence || 0 == bytecnt ) //< Continuation without a start, or bytecount is exceeded, reset and skip
         {
           bytecnt = 0;
-          out = 0;
+          out = 0xFFFFFFFF;
           continue;
         }
         else
@@ -272,7 +272,7 @@ const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU3
   }
 
   if( 0 != bytecnt ) //< Unfinished multibyte sequence, reset out to 0
-    out = 0;
+    out = 0xFFFFFFFF;
 
   *utf32 = out;
 
