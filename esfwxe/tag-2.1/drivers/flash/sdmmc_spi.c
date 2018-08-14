@@ -13,83 +13,83 @@
 //
 
 // Definitions for MMC/SDC command
-#define CMD0									(0x40+0)	// GO_IDLE_STATE
-#define CMD1									(0x40+1)	// SEND_OP_COND (MMC)
-#define ACMD41								(0xC0+41)	// SEND_OP_COND (SDC)
-#define CMD8									(0x40+8)	// SEND_IF_COND
-#define CMD9									(0x40+9)	// SEND_CSD
-#define CMD10									(0x40+10)	// SEND_CID
-#define CMD12									(0x40+12)	// STOP_TRANSMISSION
-#define CMD13									(0x40+13)	// SD_STATUS
-#define ACMD13								(0xC0+13)	// SD_STATUS (SDC)
-#define CMD16									(0x40+16)	// SET_BLOCKLEN
-#define CMD17									(0x40+17)	// READ_SINGLE_BLOCK
-#define CMD18									(0x40+18)	// READ_MULTIPLE_BLOCK
-#define CMD23									(0x40+23)	// SET_BLOCK_COUNT (MMC)
-#define ACMD23								(0xC0+23)	// SET_WR_BLK_ERASE_COUNT (SDC)
-#define CMD24									(0x40+24)	// WRITE_BLOCK
-#define CMD25									(0x40+25)	// WRITE_MULTIPLE_BLOCK
-#define CMD28									(0x40+28)	// SET_WRITE_PROT
-#define CMD29									(0x40+29)	// CLR_WRITE_PROT
-#define CMD32									(0x40+32)	// ERASE_WR_BLK_START_ADDR
-#define CMD33									(0x40+33)	// ERASE_WR_BLK_END_ADDR
-#define CMD38									(0x40+38)	// ERASE
-#define CMD55									(0x40+55)	// APP_CMD
-#define CMD58									(0x40+58)	// READ_OCR
-#define CMD59									(0x40+59)	// CRC_ON_OFF
+#define CMD0                  (0x40+0)  // GO_IDLE_STATE
+#define CMD1                  (0x40+1)  // SEND_OP_COND (MMC)
+#define ACMD41                (0xC0+41)  // SEND_OP_COND (SDC)
+#define CMD8                  (0x40+8)  // SEND_IF_COND
+#define CMD9                  (0x40+9)  // SEND_CSD
+#define CMD10                  (0x40+10)  // SEND_CID
+#define CMD12                  (0x40+12)  // STOP_TRANSMISSION
+#define CMD13                  (0x40+13)  // SD_STATUS
+#define ACMD13                (0xC0+13)  // SD_STATUS (SDC)
+#define CMD16                  (0x40+16)  // SET_BLOCKLEN
+#define CMD17                  (0x40+17)  // READ_SINGLE_BLOCK
+#define CMD18                  (0x40+18)  // READ_MULTIPLE_BLOCK
+#define CMD23                  (0x40+23)  // SET_BLOCK_COUNT (MMC)
+#define ACMD23                (0xC0+23)  // SET_WR_BLK_ERASE_COUNT (SDC)
+#define CMD24                  (0x40+24)  // WRITE_BLOCK
+#define CMD25                  (0x40+25)  // WRITE_MULTIPLE_BLOCK
+#define CMD28                  (0x40+28)  // SET_WRITE_PROT
+#define CMD29                  (0x40+29)  // CLR_WRITE_PROT
+#define CMD32                  (0x40+32)  // ERASE_WR_BLK_START_ADDR
+#define CMD33                  (0x40+33)  // ERASE_WR_BLK_END_ADDR
+#define CMD38                  (0x40+38)  // ERASE
+#define CMD55                  (0x40+55)  // APP_CMD
+#define CMD58                  (0x40+58)  // READ_OCR
+#define CMD59                  (0x40+59)  // CRC_ON_OFF
 
 // command response masks
 //
 // R1, R2, R3 LSB masks
 //
-#define RM_IN_IDLE 						0x01 		// In Idle State
-#define	RM_ERASE_RST					0x02		// Erase Reset
-#define RM_ILLEGAL_CMD 				0x04 		// Illegal Command
-#define RM_CRC_ERROR					0x08		// CRC Error
-#define RM_ERASE_SEQ_ERR			0x10		// Erase Sequence Error
-#define RM_ADDR_ERR						0x20		// Address Error
-#define RM_PARAM_ERR					0x40		// Parameter Error
+#define RM_IN_IDLE             0x01     // In Idle State
+#define  RM_ERASE_RST          0x02    // Erase Reset
+#define RM_ILLEGAL_CMD         0x04     // Illegal Command
+#define RM_CRC_ERROR          0x08    // CRC Error
+#define RM_ERASE_SEQ_ERR      0x10    // Erase Sequence Error
+#define RM_ADDR_ERR            0x20    // Address Error
+#define RM_PARAM_ERR          0x40    // Parameter Error
 
 // R2, R3 MSB masks
 //
-#define RM_CARD_LOCKED				0x01 	// Card Locked
-#define RM_WRPROT_ERASE_SKIP 	0x02	// Write Protect Erase Skip
-#define RM_LOCK_ULOCK_FAILED	RM_WRPROT_ERASE_SKIP // Lock/Unlock Failed
-#define RM_UNSPECIFIED_ERROR	0x04	// Unspecified Error
-#define RM_CARD_CTLR_ERROR  	0x08	// Card Controller Error
-#define RM_CARD_ECC__FAILED		0x10 	// Card ECC Failed
-#define RM_WRPROT_VIOLATION		0x20	// Write Protect Violation
-#define	RM_ERASE_PARAM				0x40	// Erase Parameter
-#define RM_OUT_OF_RANGE				0x80	// Out of Range
-#define RM_CSD_OVERWRITE			RM_OUT_OF_RANGE // CSD Overwrite
+#define RM_CARD_LOCKED        0x01   // Card Locked
+#define RM_WRPROT_ERASE_SKIP   0x02  // Write Protect Erase Skip
+#define RM_LOCK_ULOCK_FAILED  RM_WRPROT_ERASE_SKIP // Lock/Unlock Failed
+#define RM_UNSPECIFIED_ERROR  0x04  // Unspecified Error
+#define RM_CARD_CTLR_ERROR    0x08  // Card Controller Error
+#define RM_CARD_ECC__FAILED    0x10   // Card ECC Failed
+#define RM_WRPROT_VIOLATION    0x20  // Write Protect Violation
+#define  RM_ERASE_PARAM        0x40  // Erase Parameter
+#define RM_OUT_OF_RANGE        0x80  // Out of Range
+#define RM_CSD_OVERWRITE      RM_OUT_OF_RANGE // CSD Overwrite
 
 // read data error token masks
 //
-#define RET_UNSPECIFIED_ERROR	0x01	// Unspecified Error
-#define RET_CARD_CTLR_ERROR		0x02  // Card Controller Error
-#define RET_CARD_ECC_FAILED		0x04	// Card ECC Failed
-#define RET_OUT_OF_RANGE			0x08	// Out of Range
-#define RET_CARD_LOCKED				0x10	// Card Locked
+#define RET_UNSPECIFIED_ERROR  0x01  // Unspecified Error
+#define RET_CARD_CTLR_ERROR    0x02  // Card Controller Error
+#define RET_CARD_ECC_FAILED    0x04  // Card ECC Failed
+#define RET_OUT_OF_RANGE      0x08  // Out of Range
+#define RET_CARD_LOCKED        0x10  // Card Locked
 
 // block data start|stop tokens
-#define DT_RBLOCK_START 			0xFE
+#define DT_RBLOCK_START       0xFE
 #define DT_RBLOCK_MULTI_START DT_RBLOCK_START
-#define DT_WBLOCK_START				DT_RBLOCK_START
-#define DT_WBLOCK_MULTI_START	0xFC
-#define DT_WBLOCK_MULTI_STOP	0xFD
+#define DT_WBLOCK_START        DT_RBLOCK_START
+#define DT_WBLOCK_MULTI_START  0xFC
+#define DT_WBLOCK_MULTI_STOP  0xFD
 
 // data write result token analysis
 //
-#define DWRT_EXTRACT(r) 			((r) & 0x1F) // extract data write token value from byte response
+#define DWRT_EXTRACT(r)       ((r) & 0x1F) // extract data write token value from byte response
 
 // write token values
 //
-#define DWRT_AOK							0x05 	// data write accepted
-#define DWRT_CRC_ERROR				0x0B	// data write was rejected due to CRC error
-#define DWRT_WRITE_ERROR			0x0D	// data write was rejected due to write error
+#define DWRT_AOK              0x05   // data write accepted
+#define DWRT_CRC_ERROR        0x0B  // data write was rejected due to CRC error
+#define DWRT_WRITE_ERROR      0x0D  // data write was rejected due to write error
 
 // length of command packet
-#define CMD_PACKET_LEN				6
+#define CMD_PACKET_LEN        6
 
 #if defined( ES_USE_SDMMC_DEBUG_TRACE ) && defined( ES_DEBUG_TRACE )
 # define ES_SDMMC_TRACE       ES_DEBUG_TRACE
@@ -112,11 +112,11 @@ typedef enum {
 
 // response data sizes (additional bytes after the first response byte)
 static const esU8 c_sdmmcResponseSize[sdmmcRcnt] = {
-  0,	// r1
-  0, 	// r1b
-  1,	// r2
-  4,	// r3
-  4		// r7
+  0,  // r1
+  0,   // r1b
+  1,  // r2
+  4,  // r3
+  4    // r7
 };
 
 // internal sdmmc io buffer
@@ -149,15 +149,15 @@ esBL sdmmcWaitReady(spiHANDLE h, SdmmcInfo* info)
       ++retries < info->ioRetries );
   
   if( retries < info->ioRetries )
-	{
+  {
     return TRUE;
   }
-	else
+  else
   {
     info->stat |= sdmmcWaitReadyExpired;
-		
+    
     ES_SDMMC_TRACE("...Failed to wait until SDMMC is ready\n");
-		
+    
     return FALSE;
   }
 }
@@ -172,7 +172,7 @@ static esBL sdmmcGetResponse(spiHANDLE h, SdmmcInfo* info, sdmmcResponse r )
   {
     spiGetBytes(h, s_sdmmcBuff, 1);
   
-  }	while( (s_sdmmcBuff[0] & 0x80) && 
+  }  while( (s_sdmmcBuff[0] & 0x80) && 
             ++retries < info->ioRetries );
   // retries not expired and additional bytes needed
   if( retries < info->ioRetries )
@@ -223,81 +223,63 @@ static esBL sdmmcSendCmdInternal(spiHANDLE h, SdmmcInfo* info, esU8 cmd, esU32 a
  
   // wait until card becomes ready
   if( 
-		sdmmcWaitReady(
-			h, 
-			info
-		) 
-	)
-  {
-    // pack command + argument + crc
-    s_sdmmcBuff[0] = cmd;
-    s_sdmmcBuff[1] = *argpos--;
-    s_sdmmcBuff[2] = *argpos--;
-    s_sdmmcBuff[3] = *argpos--;
-    s_sdmmcBuff[4] = *argpos--;
-    // default to single stop bit if no crc support is active
-    s_sdmmcBuff[5] = 1;
-    // finalize packet with left-aligned crc7 + stop bit
-    // use precalculated crcs for CMD0 and CMD8 commands with known contents
-    if( CMD0 == cmd )
-      s_sdmmcBuff[5] = 0x95;
-    else if( CMD8 == cmd ) // for 0x1AA argument
-      s_sdmmcBuff[5] = 0x87;
-    else if( info->flags & sdmmcUseCrc )
-      s_sdmmcBuff[5] = (crc7(0, s_sdmmcBuff, 5) << 1) + 1;
-      
-    // send command packet	
-    spiPutBytes(
-			h, 
-			s_sdmmcBuff, 
-			CMD_PACKET_LEN
-		);
+    !sdmmcWaitReady(
+      h, 
+      info
+    ) 
+  )
+    return FALSE;
 
-    // if stop reading command issued, skip one dummy byte
-    if(CMD12 == cmd) 
-      spiGetBytes(
-				h, 
-				s_sdmmcBuff, 
-				1
-			);
+  // pack command + argument + crc
+  s_sdmmcBuff[0] = cmd;
+  s_sdmmcBuff[1] = *argpos--;
+  s_sdmmcBuff[2] = *argpos--;
+  s_sdmmcBuff[3] = *argpos--;
+  s_sdmmcBuff[4] = *argpos--;
+  // default to single stop bit if no crc support is active
+  s_sdmmcBuff[5] = 1;
+  // finalize packet with left-aligned crc7 + stop bit
+  // use precalculated crcs for CMD0 and CMD8 commands with known contents
+  if( CMD0 == cmd )
+    s_sdmmcBuff[5] = 0x95;
+  else if( CMD8 == cmd ) // for 0x1AA argument
+    s_sdmmcBuff[5] = 0x87;
+  else if( info->flags & sdmmcUseCrc )
+    s_sdmmcBuff[5] = (crc7(0, s_sdmmcBuff, 5) << 1) + 1;
+    
+  // send command packet  
+  if( 
+    CMD_PACKET_LEN != spiPutBytes(
+      h, 
+      s_sdmmcBuff, 
+      CMD_PACKET_LEN
+    )
+  )
+    return FALSE;
 
-#ifdef DEBUG
-    if( 
-			!sdmmcGetResponse(
-				h, 
-				info, 
-				sdmmcGetResponseTypeForCmd(cmd)
-			) 
-		)
-    {
-      ES_SDMMC_TRACE("...Failed to get response to command\n");
-      
-      return FALSE;
-    }
-				
-    ES_SDMMC_TRACE("...OK\n");
-		
-		return TRUE;
-#else
-    return sdmmcGetResponse(
-			h, 
-			info, 
-			sdmmcGetResponseTypeForCmd(cmd)
-		);
-#endif
-  }
+  // if stop reading command issued, skip one dummy byte
+  if(CMD12 == cmd) 
+    spiGetBytes(
+      h, 
+      s_sdmmcBuff, 
+      1
+    );
 
-  return FALSE;
+  return sdmmcGetResponse(
+    h, 
+    info, 
+    sdmmcGetResponseTypeForCmd(cmd)
+  );
 }
 
 static __inline esBL sdmmcSendCmd(spiHANDLE h, SdmmcInfo* info, esU8 cmd, esU32 arg)
 {
-  esBL result;
+  esBL result = FALSE;
 
   sdmmcSELECT;
 
   if( cmd & 0x80 ) // handle ACMDs
-    result = sdmmcSendCmdInternal(h, info, CMD55, 0) &&	
+    result = sdmmcSendCmdInternal(h, info, CMD55, 0) &&  
       sdmmcSendCmdInternal(h, info, cmd & 0x7F, arg);
   else
     result = sdmmcSendCmdInternal(h, info, cmd, arg);
@@ -333,7 +315,7 @@ static esBL sdmmcEnterIdle(spiHANDLE h, SdmmcInfo* info, esBL useCrc)
     )
       info->flags |= sdmmcUseCrc;
 
-    return TRUE;	
+    return TRUE;  
   }
 
   return FALSE;
@@ -344,12 +326,12 @@ static esBL sdmmcCheckVoltageMask(spiHANDLE h, SdmmcInfo* info, esU32 mask)
 {
   // read OCR 
   if( sdmmcSendCmd(h, info, CMD58, 0) &&
-      (	sdmmcStatAOK == info->stat ||
+      (  sdmmcStatAOK == info->stat ||
         sdmmcStatIdle == info->stat ) )
   {
     if( (s_sdmmcBuff[2] & ((mask >> 16) & 0xFF)) ||
         (s_sdmmcBuff[3] & ((mask >> 8) & 0xFF)) )
-      return TRUE;			
+      return TRUE;      
     else
       info->flags |= sdmmcVoltageMismatch;
   }
@@ -457,7 +439,7 @@ static __inline esU32 sdmmcMakeVoltageMask(esU16 v)
       v <= 3600 )
     result |= (1 << 23);
   
-  return result;	
+  return result;  
 }
 
 static esBL sdmmcCheckCardSupport(spiHANDLE h, SdmmcInfo* info, esU16 v)
@@ -489,32 +471,32 @@ static esBL sdmmcReadDataPacket(spiHANDLE h, SdmmcInfo* info, esU8 dataToken, es
   {
     spiGetBytes(h, data, 1);
 
-  }	while( 0xFF == *data &&
+  }  while( 0xFF == *data &&
           ++retries < info->ioRetries );
 
   // read actual data, if retries not expired, 
   // read data block crc at the end of operation
   if( retries < info->ioRetries )
   {
-    if(	DT_RBLOCK_START == *data )
+    if(  DT_RBLOCK_START == *data )
     {
       esU16 crc;
-      result = 	len == spiGetBytes(h, data, len) &&
+      result =   len == spiGetBytes(h, data, len) &&
                 2 == spiGetBytes(h, (esU8*)&crc, 2);
       if( result && (info->flags & sdmmcUseCrc) )
       {
         result = SWAPB_WORD(crc) == crc16ccitt(0, data, len);
         if( !result ) // set status bit specifying we get corrupt data read
-          info->stat |= sdmmcReadCrcError;					
+          info->stat |= sdmmcReadCrcError;          
       }
     }
     else // set data error token bits to universal status format
-      info->stat = ((esU16)*data) << 7;		
+      info->stat = ((esU16)*data) << 7;    
   }
 
   sdmmcDESELECT;
   
-  return result;		
+  return result;    
 }
 
 static esBL sdmmcConfigureAddressing(spiHANDLE h, SdmmcInfo* info)
@@ -577,8 +559,12 @@ esBL sdmmcInit(spiHANDLE h, SdmmcInfo* info, esU16 v, esBL useCrc)
 
   // initialize sdmmc structure to all 0s
   memset(info, 0, SdmmcInfo_SZE);
-  // set some initial retries	for 1s expected timeout
-  sdmmcCalcIoTimings(h, info, 1000);
+  // set some initial retries  for 1s expected timeout
+  sdmmcCalcIoTimings(
+    h, 
+    info, 
+    sdmmcInitialTmo
+  );
 
   if( INVALID_HANDLE == h )
     return FALSE;
@@ -591,7 +577,7 @@ esBL sdmmcInit(spiHANDLE h, SdmmcInfo* info, esU16 v, esBL useCrc)
 // sd card block io. returned is count of blocks actually read|written
 esU32 sdmmcBlocksRead(spiHANDLE h, SdmmcInfo* info, esU32 startBlock, esU8* blocks, esU32 count)
 {
-  esU32	result = 0;
+  esU32  result = 0;
   
   if( spiIsOpen(h) &&
       info &&
@@ -627,7 +613,7 @@ esU32 sdmmcBlocksRead(spiHANDLE h, SdmmcInfo* info, esU32 startBlock, esU8* bloc
   return result;
 }
 
-static esBL sdmmcWriteDataPacket(	spiHANDLE h, SdmmcInfo* info, esU8 token, const esU8 *buff, esU32 len )
+static esBL sdmmcWriteDataPacket(  spiHANDLE h, SdmmcInfo* info, esU8 token, const esU8 *buff, esU32 len )
 {
   esBL result = FALSE;
 
@@ -673,13 +659,15 @@ static esBL sdmmcWriteDataPacket(	spiHANDLE h, SdmmcInfo* info, esU8 token, cons
 
 esU32 sdmmcBlocksWrite(spiHANDLE h, SdmmcInfo* info, esU32 startBlock, const esU8* blocks, esU32 count)
 {
-  esU32	result = 0;
+  esU32  result = 0;
 
-  if( spiIsOpen(h) &&
+  if( 
+    spiIsOpen(h) &&
     info &&
     sdmmcUnknown != info->type &&
     blocks &&
-    count )
+    count 
+  )
   {
     // if 1 == count issue single block write command
     // else, write multiple blocks, terminated with CMD21
@@ -694,9 +682,11 @@ esU32 sdmmcBlocksWrite(spiHANDLE h, SdmmcInfo* info, esU32 startBlock, const esU
         ok = sdmmcSendCmd(h, info, ACMD23, count) &&
           sdmmcStatAOK == info->stat;
 
-      if( ok &&
-          sdmmcSendCmd(h, info, CMD25, (info->flags & sdmmcBlockAddr) ? startBlock : startBlock*info->userBlockSize ) &&
-          sdmmcStatAOK == info->stat )
+      if( 
+        ok &&
+        sdmmcSendCmd(h, info, CMD25, (info->flags & sdmmcBlockAddr) ? startBlock : startBlock*info->userBlockSize ) &&
+        sdmmcStatAOK == info->stat 
+      )
       {
         while( result < count ) 
         {
@@ -705,21 +695,43 @@ esU32 sdmmcBlocksWrite(spiHANDLE h, SdmmcInfo* info, esU32 startBlock, const esU
           blocks += info->userBlockSize;
           ++result;
         }
-        sdmmcWriteDataPacket(	h, info, DT_WBLOCK_MULTI_STOP, 0, 0 ); // break multiwrite
+        sdmmcWriteDataPacket(  h, info, DT_WBLOCK_MULTI_STOP, 0, 0 ); // break multiwrite
       }
     }
-    else if( sdmmcSendCmd(h, info, CMD24, (info->flags & sdmmcBlockAddr) ? startBlock : startBlock*info->userBlockSize ) &&
-             sdmmcStatAOK == info->stat &&
-             sdmmcWriteDataPacket(h, info, DT_WBLOCK_START, blocks, info->userBlockSize) )
+    else if( 
+      sdmmcSendCmd(
+        h, 
+        info, 
+        CMD24, 
+        (info->flags & sdmmcBlockAddr) ? 
+          startBlock : 
+          startBlock*info->userBlockSize 
+      ) &&
+      sdmmcStatAOK == info->stat &&
+      sdmmcWriteDataPacket(
+        h, 
+        info, 
+        DT_WBLOCK_START, 
+        blocks, 
+        info->userBlockSize
+      ) 
+    )
       result = 1;
 
     // release spi bus as well as add stuff byte (needed) after write operations
     sdmmcReleaseSpiBus(h);
     // analyse card status if something gone wrong, and we cannot deduce the reason from existing status info
     // R2 will be automatically parsed into universal sdmmc status during this request
-    if( result != count &&
-        !(info->stat & (sdmmcWaitReadyExpired|sdmmcStatWriteCrcError|sdmmcStatWriteError)) ) 
-      sdmmcSendCmd(h, info, CMD13, 0);
+    if( 
+      result != count &&
+      !(info->stat & (sdmmcWaitReadyExpired|sdmmcStatWriteCrcError|sdmmcStatWriteError)) 
+    ) 
+      sdmmcSendCmd(
+        h, 
+        info, 
+        CMD13, 
+        0
+      );
   }
 
   return result;
@@ -779,8 +791,16 @@ void sdmmcCardIdGet(spiHANDLE h, SdmmcInfo* info, SdmmcCID cid)
       info && 
       sdmmcUnknown != info->type )
   {
-    if( sdmmcSendCmd(h, info, CMD10, 0) &&
-        sdmmcStatAOK == info->stat )
-      sdmmcReadDataPacket(h, info, DT_RBLOCK_START, cid, sizeof(SdmmcCID));
+    if( 
+      sdmmcSendCmd(h, info, CMD10, 0) &&
+      sdmmcStatAOK == info->stat 
+    )
+      sdmmcReadDataPacket(
+        h, 
+        info, 
+        DT_RBLOCK_START, 
+        cid, 
+        sizeof(SdmmcCID)
+      );
   }
 }
