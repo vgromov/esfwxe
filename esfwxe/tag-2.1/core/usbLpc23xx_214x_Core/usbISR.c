@@ -17,11 +17,11 @@ static TFnFrameHandler  *s_pfnFrameHandler = NULL;   /** Installed frame interru
 //
 
 #if LPC23XX == 1
-	#include <esfwxe/core/lpc23xx/usb_hw.cc>
+    #include <esfwxe/core/lpc23xx/usb_hw.cc>
 #endif
 
 #if LPC214X == 1
-	#include <esfwxe/core/lpc214x/usb_hw.cc>
+    #include <esfwxe/core/lpc214x/usb_hw.cc>
 #endif
 
 //
@@ -106,6 +106,6 @@ void usbHardwareConfigDevice (esBL fConfigured)
 
 void usbSetupInterruptHandler(void)
 {
-	irqInstall( USB_INT, (void*)&usbISRHandler, USB_INTERRUPT_PRIORITY );
+    irqInstall( USB_INT, (void*)&usbISRHandler, USB_INTERRUPT_PRIORITY );
 }
 

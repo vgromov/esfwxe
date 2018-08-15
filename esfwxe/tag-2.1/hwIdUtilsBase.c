@@ -10,22 +10,22 @@
 // compare firmware versions
 int hwIdFwVersionsCompare(const EseVerInfo* ver, int major, int minor)
 {
-	if(ver)
-	{
-		if(ver->major > major)
-			return 1;
-		else if( ver->major == major )
-		{
-			if( ver->minor > minor )
-				return 1;
-			else if( ver->minor == minor )
-				return 0;
-			else
-				return -1;
-		}
-	}
+    if(ver)
+    {
+        if(ver->major > major)
+            return 1;
+        else if( ver->major == major )
+        {
+            if( ver->minor > minor )
+                return 1;
+            else if( ver->minor == minor )
+                return 0;
+            else
+                return -1;
+        }
+    }
 
-	return -1;
+    return -1;
 }
 
 #ifdef ES_USE_FWID_FORMATTERS
@@ -39,37 +39,37 @@ static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, 
 
 void fmtEseBasicFirmwareID(ESE_STR buff, size_t buffLen, const EseBasicFirmwareID* id, esU16 flags)
 {
-	if( buff && 0 < buffLen && id )
+    if( buff && 0 < buffLen && id )
     fmtEcoE(buff, buffLen, flags, id->type, id->num.year, id->num.ser, &id->ver, 0, 0, 0, 0);
 }
 
 void fmtEseFwInfo(ESE_STR buff, size_t buffLen, const EseFwInfo* id, esU16 flags)
 {
-	if( buff && 0 < buffLen && id )
+    if( buff && 0 < buffLen && id )
     fmtEcoE(buff, buffLen, flags, id->type, id->year, id->order, &id->ver, 
       &id->month, &id->day, &id->countryCode, &id->hwConfig);
 }
 
 void fmtUID(ESE_STR buff, size_t buffLen, const EseUID* key)
 {
-	if( buff && 0 < buffLen && key )
-	{
-		// format in 4 groups 8 chars each
-		ESE_CSTR str = (ESE_CSTR)key->uid;
-		utilsSnprintf(buff, buffLen, "%.8s-%.4s-%.4s-%.4s-%.12s", str,
-			str+8, str+12, str+16, str+20);
-	}
+    if( buff && 0 < buffLen && key )
+    {
+        // format in 4 groups 8 chars each
+        ESE_CSTR str = (ESE_CSTR)key->uid;
+        utilsSnprintf(buff, buffLen, "%.8s-%.4s-%.4s-%.4s-%.12s", str,
+            str+8, str+12, str+16, str+20);
+    }
 }
 
 void fmtIdStringFromEseBasicFirmwareID(ESE_STR buff, size_t buffLen, const EseBasicFirmwareID* id, esU16 flags)
 {
-	if( buff && 0 < buffLen && id )
+    if( buff && 0 < buffLen && id )
     fmtUniversal(buff, buffLen, flags, id->type, id->num.year, id->num.ser, &id->ver, 0, 0, 0, 0);
 }
 
 void fmtIdStringFromEseFwInfo(ESE_STR buff, size_t buffLen, const EseFwInfo* info, esU16 flags)
 {
-	if( buff && 0 < buffLen && info )
+    if( buff && 0 < buffLen && info )
     fmtUniversal(buff, buffLen, flags, info->type, info->year, info->order, &info->ver, 
       &info->month, &info->day, &info->countryCode, &info->hwConfig);
 }
@@ -77,8 +77,8 @@ void fmtIdStringFromEseFwInfo(ESE_STR buff, size_t buffLen, const EseFwInfo* inf
 ESE_STR fmtUIDtoIdString(ESE_STR buff, size_t buffLen, ESE_CSTR uid, size_t uidLen)
 {
   int len = 0;
-	if( buff && 0 < buffLen && uid && uidLen <= buffLen )
-		len = utilsSnprintf(buff, buffLen, "U:%.*s", uidLen, uid);
+    if( buff && 0 < buffLen && uid && uidLen <= buffLen )
+        len = utilsSnprintf(buff, buffLen, "U:%.*s", uidLen, uid);
   
   return buff+len;
 }
@@ -86,8 +86,8 @@ ESE_STR fmtUIDtoIdString(ESE_STR buff, size_t buffLen, ESE_CSTR uid, size_t uidL
 ESE_STR fmtFunctionalToIdString(ESE_STR buff, size_t buffLen, esU32 functional)
 {
   int len = 0;
-	if( buff && 0 < buffLen )
-		len = utilsSnprintf(buff, buffLen, "F:0x%08X", (unsigned)functional);
+    if( buff && 0 < buffLen )
+        len = utilsSnprintf(buff, buffLen, "F:0x%08X", (unsigned)functional);
   
   return buff+len;
 }

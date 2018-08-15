@@ -2,7 +2,7 @@
 #define _indication_intf_h_
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 // indication subsystem interface
@@ -25,8 +25,8 @@ void beepStop(void);
 
 #ifdef USE_LED_INDICATION
 typedef enum {
-	blinkRed,
-	blinkGreen
+    blinkRed,
+    blinkGreen
 
 } BlinkColor;
 
@@ -39,7 +39,7 @@ esBL isBlinking(void);
 #endif // USE_LED_INDICATION
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif // _indication_intf_h_

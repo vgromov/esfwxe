@@ -5,96 +5,96 @@
 #include <i2cConfig.h>
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 typedef enum {
 #ifdef USE_I2C_PORT0
-	i2c0,
+    i2c0,
 #endif
 #ifdef USE_I2C_PORT1
-	i2c1,
+    i2c1,
 #endif
 #ifdef USE_I2C_PORT2
-	i2c2,
+    i2c2,
 #endif
 #ifdef USE_I2C_PORT3
-	i2c3,
+    i2c3,
 #endif
-	i2cPortCnt
+    i2cPortCnt
 
 } i2cPort;
 
 // i2c common protocol constants
-#define TWI_READ						0x01 // read mark bit (set in client address to read from it)
+#define TWI_READ                        0x01 // read mark bit (set in client address to read from it)
 // TWSR values (not bits)
 // (taken from avr-libc twi.h - thank you Marek Michalkiewicz)
 // Master
-#define TW_START						0x08
-#define TW_REP_START				0x10
+#define TW_START                        0x08
+#define TW_REP_START                0x10
 // Master Transmitter
-#define TW_MT_SLA_ACK				0x18
-#define TW_MT_SLA_NACK			0x20
-#define TW_MT_DATA_ACK			0x28
-#define TW_MT_DATA_NACK			0x30
-#define TW_MT_ARB_LOST			0x38
+#define TW_MT_SLA_ACK                0x18
+#define TW_MT_SLA_NACK            0x20
+#define TW_MT_DATA_ACK            0x28
+#define TW_MT_DATA_NACK            0x30
+#define TW_MT_ARB_LOST            0x38
 // Master Receiver
-#define TW_MR_ARB_LOST			0x38
-#define TW_MR_SLA_ACK				0x40
-#define TW_MR_SLA_NACK			0x48
-#define TW_MR_DATA_ACK			0x50
-#define TW_MR_DATA_NACK			0x58
+#define TW_MR_ARB_LOST            0x38
+#define TW_MR_SLA_ACK                0x40
+#define TW_MR_SLA_NACK            0x48
+#define TW_MR_DATA_ACK            0x50
+#define TW_MR_DATA_NACK            0x58
 // Slave Transmitter
-#define TW_ST_SLA_ACK				0xA8
-#define TW_ST_ARB_LOST_SLA_ACK		0xB0
-#define TW_ST_DATA_ACK			0xB8
-#define TW_ST_DATA_NACK			0xC0
-#define TW_ST_LAST_DATA			0xC8
+#define TW_ST_SLA_ACK                0xA8
+#define TW_ST_ARB_LOST_SLA_ACK        0xB0
+#define TW_ST_DATA_ACK            0xB8
+#define TW_ST_DATA_NACK            0xC0
+#define TW_ST_LAST_DATA            0xC8
 // Slave Receiver
-#define TW_SR_SLA_ACK				0x60
-#define TW_SR_ARB_LOST_SLA_ACK		0x68
-#define TW_SR_GCALL_ACK			0x70
-#define TW_SR_ARB_LOST_GCALL_ACK	0x78
-#define TW_SR_DATA_ACK			0x80
-#define TW_SR_DATA_NACK			0x88
-#define TW_SR_GCALL_DATA_ACK		0x90
-#define TW_SR_GCALL_DATA_NACK		0x98
-#define TW_SR_STOP					0xA0
+#define TW_SR_SLA_ACK                0x60
+#define TW_SR_ARB_LOST_SLA_ACK        0x68
+#define TW_SR_GCALL_ACK            0x70
+#define TW_SR_ARB_LOST_GCALL_ACK  0x78
+#define TW_SR_DATA_ACK            0x80
+#define TW_SR_DATA_NACK            0x88
+#define TW_SR_GCALL_DATA_ACK        0x90
+#define TW_SR_GCALL_DATA_NACK        0x98
+#define TW_SR_STOP                    0xA0
 // Misc
-#define TW_NO_INFO					0xF8
-#define TW_BUS_ERROR				0x00
+#define TW_NO_INFO                    0xF8
+#define TW_BUS_ERROR                0x00
 
 // defines and constants
-#define TWCR_CMD_MASK				0x0F
-#define TWSR_STATUS_MASK		0xF8
+#define TWCR_CMD_MASK                0x0F
+#define TWSR_STATUS_MASK        0xF8
 
 // i2c port mode
 typedef enum
 { 
-	i2cMaster,
-	i2cSlave
+    i2cMaster,
+    i2cSlave
 
 } i2cMode;
 
 // i2c device control block
 typedef struct
 {
-	esU32			baud;  			// when initializing i2c port, this value is considered as
-													// desirable speed in Hz. Actually set value may vary. 
-	i2cMode			mode;
-	esU32			slaveAddr;	// address this device will use when in slave i2c mode
-		
+    esU32            baud;              // when initializing i2c port, this value is considered as
+                                                    // desirable speed in Hz. Actually set value may vary. 
+    i2cMode            mode;
+    esU32            slaveAddr;    // address this device will use when in slave i2c mode
+        
 } i2cDCB;
 
 // i2c line error codes
 typedef enum 
 {
-	i2cInvalidHandle = -1,
-	i2cOK,
-	i2cNoDev,
-	i2cBufferOverflow,
-	i2cArbtLost,
-	i2cBusError
+    i2cInvalidHandle = -1,
+    i2cOK,
+    i2cNoDev,
+    i2cBufferOverflow,
+    i2cArbtLost,
+    i2cBusError
 
 } i2cErrorCode; 
 
@@ -121,7 +121,7 @@ esU32 i2cGetBytes(i2cHANDLE handle, esU8 addr, esU8* pBytes, esU32 count);
 esU32 i2cPutBytes(i2cHANDLE handle, esU8 addr, const esU8* pBytes, esU32 count); 
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif

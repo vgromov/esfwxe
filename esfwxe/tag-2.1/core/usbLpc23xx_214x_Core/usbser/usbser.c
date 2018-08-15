@@ -24,7 +24,7 @@
 #define BULK_IN_EP    0x82
 
 #define MAX_PACKET_SIZE 64
-#define BULKBUF_SIZE 	 	MAX_PACKET_SIZE
+#define BULKBUF_SIZE          MAX_PACKET_SIZE
 
 #define LE_WORD(x)    ((x)&0xFF),((x)>>8)
 
@@ -41,19 +41,19 @@
 
 // state flags
 enum {
-	flagsInitialized 	= 0x0001,
-	flagsConnected 		= 0x0002,
+    flagsInitialized     = 0x0001,
+    flagsConnected         = 0x0002,
 };
 
 typedef struct {
-	esU16 controlLines;
-	esU8 abBulkBuf[BULKBUF_SIZE];
-	esU8 abClassReqData[8];
-	rtosQUEUE_HANDLE rx;
-	rtosQUEUE_HANDLE tx;
-	rtosMUTEX_HANDLE mutex; 					// mutex for port sharing between tasks
-	volatile esU16 flags;
-	usbserDCB dcb;
+    esU16 controlLines;
+    esU8 abBulkBuf[BULKBUF_SIZE];
+    esU8 abClassReqData[8];
+    rtosQUEUE_HANDLE rx;
+    rtosQUEUE_HANDLE tx;
+    rtosMUTEX_HANDLE mutex;                     // mutex for port sharing between tasks
+    volatile esU16 flags;
+    usbserDCB dcb;
 
 } UsbSer;
 static UsbSer s_usbser;
@@ -67,7 +67,7 @@ static esU8 s_descriptors[256] =
   0x12,
   DESC_DEVICE,
   LE_WORD(0x0101),      // bcdUSB
-  0x02,                 // bDeviceClass			- Communication Interface Class
+  0x02,                 // bDeviceClass            - Communication Interface Class
   0x00,                 // bDeviceSubClass
   0x00,                 // bDeviceProtocol
   MAX_PACKET_SIZE0,     // bMaxPacketSize
@@ -99,8 +99,8 @@ static esU8 s_descriptors[256] =
   0x00,                 // bInterfaceNumber
   0x00,                 // bAlternateSetting
   0x01,                 // bNumEndPoints
-  0x02,                 // bInterfaceClass		- Communication Interface Class
-  0x02,                 // bInterfaceSubClass	- Abstract Control Model
+  0x02,                 // bInterfaceClass        - Communication Interface Class
+  0x02,                 // bInterfaceSubClass    - Abstract Control Model
   0x01,                 // bInterfaceProtocol - Common AT commands (also known as “Hayes™ compatible”) linux requires value of 1 for the cdc_acm module
   0x00,                 // iInterface
 
@@ -283,17 +283,17 @@ static esBL usbserPutByte(esU8 b, esU32 tmo)
 
 esU32 usbserPutBytes(EseChannelIo* chnl, const esU8* data, esU32 len, esU32 tmo)
 {
-	const esU8* beg = data;
-	const esU8* end = data+len;
+    const esU8* beg = data;
+    const esU8* end = data+len;
 
   if( (s_usbser.flags & flagsConnected) && 
-			(s_usbser.controlLines & CONTROLLINE_DTR) )
-	{
-	  while(!chnlIsBreaking(chnl) &&
-					data < end && 
-					usbserPutByte(*data, tmo) )
-			++data;
-	}
+            (s_usbser.controlLines & CONTROLLINE_DTR) )
+    {
+      while(!chnlIsBreaking(chnl) &&
+                    data < end && 
+                    usbserPutByte(*data, tmo) )
+            ++data;
+    }
 
   return data-beg;
 }
@@ -314,18 +314,18 @@ esU32 usbserGetBytes(EseChannelIo* chnl, esU8* data, esU32 len, esU32 tmo)
 {
   if( !(s_usbser.flags & flagsConnected) )
     return 0;
-	else
-	{
-		esU8* beg = data;
-		esU8* end = data+len;
-	
-	  while( !chnlIsBreaking(chnl) &&
-						data < end && 
-						usbserGetByte(data, tmo) )
-			++data;
-	
-	  return data-beg;
-	}
+    else
+    {
+        esU8* beg = data;
+        esU8* end = data+len;
+    
+      while( !chnlIsBreaking(chnl) &&
+                        data < end && 
+                        usbserGetByte(data, tmo) )
+            ++data;
+    
+      return data-beg;
+    }
 }
 
 //
@@ -336,147 +336,147 @@ esU32 usbserGetBytes(EseChannelIo* chnl, esU8* data, esU32 len, esU32 tmo)
 //
 static int usbHandleDevStatus(esU8 bDevStatus)
 {
-	int result = 0;
- 	s_usbser.controlLines = 0;
+    int result = 0;
+     s_usbser.controlLines = 0;
 
-	if( DEV_STATUS_CONNECT != (bDevStatus & DEV_STATUS_CONNECT) && flagsConnected == (s_usbser.flags & flagsConnected) )
-	{
-		s_usbser.flags &=	~flagsConnected;
-		result = usbserOnDisconnect();
-	}
-	else if( DEV_STATUS_CONNECT == (bDevStatus & DEV_STATUS_CONNECT) && flagsConnected != (s_usbser.flags & flagsConnected) )
-	{
-		s_usbser.flags |=	flagsConnected;
-		result = usbserOnConnect();
-	}
+    if( DEV_STATUS_CONNECT != (bDevStatus & DEV_STATUS_CONNECT) && flagsConnected == (s_usbser.flags & flagsConnected) )
+    {
+        s_usbser.flags &=    ~flagsConnected;
+        result = usbserOnDisconnect();
+    }
+    else if( DEV_STATUS_CONNECT == (bDevStatus & DEV_STATUS_CONNECT) && flagsConnected != (s_usbser.flags & flagsConnected) )
+    {
+        s_usbser.flags |=    flagsConnected;
+        result = usbserOnConnect();
+    }
 
-	return result;
+    return result;
 }
 
 // init serial usb device, providing identification information
 //
 usbserHANDLE usbserInit(const usbserDCB* dcb, esU16 vendorId, esU16 productId, 
-	const esU8* mfgUstr, esU8 mfgLen,
-	const esU8* productUstr, esU8 productLen,
-	const esU8* serialUstr, esU8 serialLen)
+    const esU8* mfgUstr, esU8 mfgLen,
+    const esU8* productUstr, esU8 productLen,
+    const esU8* serialUstr, esU8 serialLen)
 {
-	if( !(s_usbser.flags & flagsInitialized) )
-	{
-		esU8* descrPos = s_descriptors;
-	  usbInit();
-		// pre populate dcb and descriptors
-		s_usbser.dcb = *dcb;
-		// vendorId
-		descrPos += 8;
-		memcpy(descrPos, &vendorId, 2);
-		descrPos += 2;
-		memcpy(descrPos, &productId, 2);
-		// mfg unicode string
-		descrPos = s_descriptors+89;
-		*descrPos++ = mfgLen+2;
-		*descrPos++ = DESC_STRING;
-		memcpy(descrPos, mfgUstr, mfgLen);
-		descrPos += mfgLen;
-		// product unicode string
-		*descrPos++ = productLen+2;
-		*descrPos++ = DESC_STRING;
- 		memcpy(descrPos, productUstr, productLen);
-		descrPos += productLen;
-		// serial unicode string
-		*descrPos++ = serialLen+2;
-		*descrPos++ = DESC_STRING;
- 		memcpy(descrPos, serialUstr, serialLen);
-		descrPos += serialLen;
-		// finally, terminate descriptor with 0
-		*descrPos = 0;
-		// init usb request handlers
-	  usbHardwareRegisterDevIntHandler(usbHandleDevStatus);
-	  usbRegisterDescriptors(s_descriptors);
-	  usbRegisterRequestHandler(REQTYPE_TYPE_CLASS, usbserHandleClassRequest, s_usbser.abClassReqData);
-	  usbHardwareRegisterEPIntHandler(INT_IN_EP, NULL);
-	  usbHardwareRegisterEPIntHandler(BULK_IN_EP, usbserBulkIn);
-	  usbHardwareRegisterEPIntHandler(BULK_OUT_EP, usbserBulkOut);
-	  usbHardwareRegisterFrameHandler(usbHardwareFrameIntHandler);
-	  usbHardwareNakIntEnable(INACK_BI);
-		
-		// finalize init
-	  s_usbser.rx = rtosQueueCreate(USBSER_RX_QUEUE_LEN, sizeof(esU8));
-	  s_usbser.tx = rtosQueueCreate(USBSER_TX_QUEUE_LEN, sizeof(esU8));
-		s_usbser.mutex = rtosMutexCreate();
- 	  s_usbser.flags = flagsInitialized;
-		usbSetupInterruptHandler();
-	  usbHardwareConnect(TRUE);
-	}
+    if( !(s_usbser.flags & flagsInitialized) )
+    {
+        esU8* descrPos = s_descriptors;
+      usbInit();
+        // pre populate dcb and descriptors
+        s_usbser.dcb = *dcb;
+        // vendorId
+        descrPos += 8;
+        memcpy(descrPos, &vendorId, 2);
+        descrPos += 2;
+        memcpy(descrPos, &productId, 2);
+        // mfg unicode string
+        descrPos = s_descriptors+89;
+        *descrPos++ = mfgLen+2;
+        *descrPos++ = DESC_STRING;
+        memcpy(descrPos, mfgUstr, mfgLen);
+        descrPos += mfgLen;
+        // product unicode string
+        *descrPos++ = productLen+2;
+        *descrPos++ = DESC_STRING;
+         memcpy(descrPos, productUstr, productLen);
+        descrPos += productLen;
+        // serial unicode string
+        *descrPos++ = serialLen+2;
+        *descrPos++ = DESC_STRING;
+         memcpy(descrPos, serialUstr, serialLen);
+        descrPos += serialLen;
+        // finally, terminate descriptor with 0
+        *descrPos = 0;
+        // init usb request handlers
+      usbHardwareRegisterDevIntHandler(usbHandleDevStatus);
+      usbRegisterDescriptors(s_descriptors);
+      usbRegisterRequestHandler(REQTYPE_TYPE_CLASS, usbserHandleClassRequest, s_usbser.abClassReqData);
+      usbHardwareRegisterEPIntHandler(INT_IN_EP, NULL);
+      usbHardwareRegisterEPIntHandler(BULK_IN_EP, usbserBulkIn);
+      usbHardwareRegisterEPIntHandler(BULK_OUT_EP, usbserBulkOut);
+      usbHardwareRegisterFrameHandler(usbHardwareFrameIntHandler);
+      usbHardwareNakIntEnable(INACK_BI);
+        
+        // finalize init
+      s_usbser.rx = rtosQueueCreate(USBSER_RX_QUEUE_LEN, sizeof(esU8));
+      s_usbser.tx = rtosQueueCreate(USBSER_TX_QUEUE_LEN, sizeof(esU8));
+        s_usbser.mutex = rtosMutexCreate();
+       s_usbser.flags = flagsInitialized;
+        usbSetupInterruptHandler();
+      usbHardwareConnect(TRUE);
+    }
 
-	return &s_usbser;
+    return &s_usbser;
 }
 
 // try to mutually exclusive acquire port resource
 esBL usbserLockPort(EseChannelIo* chnl, esU32 tmo)
 {
-	if( chnl && chnl->m_bus != INVALID_HANDLE &&
-			rtosSchedulerIsRunning() )
-		return rtosMutexLock(((UsbSer*)chnl->m_bus)->mutex, tmo);
+    if( chnl && chnl->m_bus != INVALID_HANDLE &&
+            rtosSchedulerIsRunning() )
+        return rtosMutexLock(((UsbSer*)chnl->m_bus)->mutex, tmo);
 
-	return FALSE;
+    return FALSE;
 }
 
 void usbserUnlockPort(EseChannelIo* chnl)
 {
-	if( chnl && chnl->m_bus != INVALID_HANDLE && 
-			rtosSchedulerIsRunning() )
-		rtosMutexUnlock( ((UsbSer*)chnl->m_bus)->mutex );
+    if( chnl && chnl->m_bus != INVALID_HANDLE && 
+            rtosSchedulerIsRunning() )
+        rtosMutexUnlock( ((UsbSer*)chnl->m_bus)->mutex );
 }
 
 // access dcb
 void usbserGetDCB(EseChannelIo* chnl, usbserDCB* dcb)
 {
-	if( chnl && chnl->m_bus != INVALID_HANDLE && dcb != NULL )
-		*dcb = ((UsbSer*)chnl->m_bus)->dcb;
+    if( chnl && chnl->m_bus != INVALID_HANDLE && dcb != NULL )
+        *dcb = ((UsbSer*)chnl->m_bus)->dcb;
 }
 
 esBL usbserOpen(EseChannelIo* chnl)
 {
-	if( chnl && chnl->m_bus )
-		return flagsInitialized == (((UsbSer*)chnl->m_bus)->flags & flagsInitialized);	
+    if( chnl && chnl->m_bus )
+        return flagsInitialized == (((UsbSer*)chnl->m_bus)->flags & flagsInitialized);    
 
-	return FALSE;
+    return FALSE;
 }
 
 void usbserClose(EseChannelIo* chnl)
 {
-	// do nothing
+    // do nothing
 }
 
 esBL usbserIsOpen(EseChannelIo* chnl)
 {
-	if( chnl && chnl->m_bus )
-		return flagsInitialized == (((UsbSer*)chnl->m_bus)->flags & flagsInitialized);
+    if( chnl && chnl->m_bus )
+        return flagsInitialized == (((UsbSer*)chnl->m_bus)->flags & flagsInitialized);
 
-	return FALSE;
+    return FALSE;
 }
 
 static esU32 usbserPutBytesFixedTmo(EseChannelIo* chnl, const esU8* data, esU32 len)
 {
-	return usbserPutBytes(chnl, data, len, 1000);
+    return usbserPutBytes(chnl, data, len, 1000);
 }
 
 // usbserial channel initializer
 void usbserChannelInit(EseChannelIo* chnl, usbserHANDLE usbser)
 {
-	// perform basic initialization first
-	chnlInit(chnl, (busHANDLE)usbser);
-	chnl->m_type = CHNL_UART;
-	
-	// assign interface implementation
-	chnl->lock = usbserLockPort;
-	chnl->unlock = usbserUnlockPort;
-	chnl->connect = usbserOpen;
-	chnl->disconnect = usbserClose;
-	chnl->isConnected = usbserIsOpen;
-	chnl->bytesPut = usbserPutBytesFixedTmo;
-	chnl->bytesGet = usbserGetBytes;
-//	chnl->resetIo = uartFlushRx;
-//	chnl->waitTxEmpty = uartWaitTxEmpty;
-//	chnl->getError = uartGetErrorCode;
+    // perform basic initialization first
+    chnlInit(chnl, (busHANDLE)usbser);
+    chnl->m_type = CHNL_UART;
+    
+    // assign interface implementation
+    chnl->lock = usbserLockPort;
+    chnl->unlock = usbserUnlockPort;
+    chnl->connect = usbserOpen;
+    chnl->disconnect = usbserClose;
+    chnl->isConnected = usbserIsOpen;
+    chnl->bytesPut = usbserPutBytesFixedTmo;
+    chnl->bytesGet = usbserGetBytes;
+//    chnl->resetIo = uartFlushRx;
+//    chnl->waitTxEmpty = uartWaitTxEmpty;
+//    chnl->getError = uartGetErrorCode;
 }

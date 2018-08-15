@@ -1,14 +1,14 @@
 #ifndef _hardware_id_utils_base_h_
 #define _hardware_id_utils_base_h_
 
-// types and utility methods augmenting	hardware and firmware
+// types and utility methods augmenting  hardware and firmware
 // identification and hardware-user verification
 //
 
 #include "hwIdBase.h"
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 // compare firmware versions return -1 if ver < major.minor; 0 if ver == major.minor, 1 id ver > major.minor
@@ -19,10 +19,10 @@ int hwIdFwVersionsCompare(const EseVerInfo* ver, int major, int minor);
 /// ApplianceFwID standard formatting flags
 ///
 enum {
-	APPL_ID_FMT_DESCR_SHORT = 0x0001,
-	APPL_ID_FMT_DESCR_LONG	= 0x0002,
-	APPL_ID_FMT_SERIAL			= 0x0004,
-	APPL_ID_FMT_FW					= 0x0008,
+    APPL_ID_FMT_DESCR_SHORT = 0x0001,
+    APPL_ID_FMT_DESCR_LONG    = 0x0002,
+    APPL_ID_FMT_SERIAL            = 0x0004,
+    APPL_ID_FMT_FW                    = 0x0008,
   APPL_ID_FMT_REGION      = 0x0010,
   APPL_ID_FMT_HWINFO      = 0x0020,
   APPL_ID_FMT_SERIAL_SHORT= 0x0040, ///< Shortened serial number version OOOOO-YYMMDD
@@ -88,7 +88,7 @@ ESE_STR fmtFunctionalToIdString(ESE_STR buff, size_t buffLen, esU32 functional);
 #endif
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif // _hardware_id_utils_base_h_

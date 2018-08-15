@@ -21,7 +21,7 @@ static esU8 abStdReqData [8];
 //
 static int usbDefaultHandleReset(esU8 bDevStatus __attribute__ ((unused)))
 {
-	return FALSE;
+    return FALSE;
 }
 
 //

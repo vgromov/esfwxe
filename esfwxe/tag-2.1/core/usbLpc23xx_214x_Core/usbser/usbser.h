@@ -10,7 +10,7 @@
 #define _USBSER_H_
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 DEF_VOLATILE_HANDLE(usbserHANDLE);
@@ -22,7 +22,7 @@ typedef struct
   esU8    stopBit;
   esU8    parity;
   esU8    dataBits;
-	
+    
 } usbserDCB;
 #pragma pack(pop)
 
@@ -31,10 +31,10 @@ typedef struct
 esU32 usbserPutBytes(EseChannelIo* chnl, const esU8* data, esU32 len, esU32 tmo);
 esU32 usbserGetBytes(EseChannelIo* chnl, esU8* data, esU32 len, esU32 tmo);
 usbserHANDLE usbserInit(const usbserDCB* dcb, 
-	esU16 vendorId, esU16 productId, 
-	const esU8* mfgUstr, esU8 mfgLen,
-	const esU8* productUstr, esU8 productLen,
-	const esU8* serialUstr, esU8 serialLen);
+    esU16 vendorId, esU16 productId, 
+    const esU8* mfgUstr, esU8 mfgLen,
+    const esU8* productUstr, esU8 productLen,
+    const esU8* serialUstr, esU8 serialLen);
 // try to mutually exclusive acquire port resource
 esBL usbserLockPort(EseChannelIo* chnl, esU32 tmo);
 void usbserUnlockPort(EseChannelIo* chnl);
@@ -53,7 +53,7 @@ int usbserOnDisconnect(void);
 void usbserChannelInit(EseChannelIo* chnl, usbserHANDLE usbser);
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif

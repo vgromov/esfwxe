@@ -8,7 +8,7 @@
 ;*   2006.09.01  ver 1.00    Prelimnary version, first Release
 ;*
 ;*****************************************************************************/
-								PRESERVE8
+                                PRESERVE8
 
 ;/*
 ; *  The STARTUP.S code is executed after CPU Reset. This file may be 
@@ -38,7 +38,7 @@ Mode_SYS        EQU     0x1F
 I_Bit           EQU     0x80            ; when I bit is set, IRQ is disabled
 F_Bit           EQU     0x40            ; when F bit is set, FIQ is disabled
 
-								INCLUDE	startupConfig.s
+                                INCLUDE  startupConfig.s
 
 ISR_Stack_Size  EQU     (UND_Stack_Size + SVC_Stack_Size + ABT_Stack_Size + \
                          FIQ_Stack_Size + IRQ_Stack_Size)
@@ -73,48 +73,48 @@ Vectors         LDR     PC, Reset_Addr
                 LDR     PC, DAbt_Addr
                 NOP                            ; Reserved Vector 
 ;               LDR     PC, IRQ_Addr
-                LDR     PC, [PC, #-0x0FF0] 	   ; Vector from VicVectAddr
+                LDR     PC, [PC, #-0x0FF0]        ; Vector from VicVectAddr
                 LDR     PC, FIQ_Addr
 
 Reset_Addr      DCD     Reset_Handler
 Undef_Addr      DCD     Undef_Handler
 
-								IF      :DEF:USE_FREE_RTOS
+                                IF      :DEF:USE_FREE_RTOS
 
-								IMPORT  vPortYieldProcessor	
+                                IMPORT  vPortYieldProcessor    
 SWI_Addr        DCD     vPortYieldProcessor
 
-								ELIF    :DEF:__RTX
+                                ELIF    :DEF:__RTX
 
-								IMPORT	SWI_Handler
-SWI_Addr				DCD			SWI_Handler
+                                IMPORT  SWI_Handler
+SWI_Addr                DCD            SWI_Handler
 
-								ELIF		:DEF:USE_USER_SWI
+                                ELIF        :DEF:USE_USER_SWI
 
-								IMPORT  SWI_Handler
-SWI_Addr				DCD			SWI_Handler
-								
-								ELSE
+                                IMPORT  SWI_Handler
+SWI_Addr                DCD            SWI_Handler
+                                
+                                ELSE
 
-SWI_Addr				DCD			SWI_Addr
+SWI_Addr                DCD            SWI_Addr
 
-								ENDIF
+                                ENDIF
 
 PAbt_Addr       DCD     PAbt_Handler
 DAbt_Addr       DCD     DAbt_Handler
-                DCD		0 				; Reserved Address 
+                DCD        0                 ; Reserved Address 
 IRQ_Addr        DCD     IRQ_Handler
 FIQ_Addr        DCD     FIQ_Handler
-								
+                                
 ;Undef_Handler   B       Undef_Handler
 ;PAbt_Handler    B       PAbt_Handler
 ;DAbt_Handler    B       DAbt_Handler
 IRQ_Handler     B       IRQ_Handler
 FIQ_Handler     B       FIQ_Handler
 
-								IMPORT	Undef_Handler
-								IMPORT	DAbt_Handler
-								IMPORT	PAbt_Handler
+                                IMPORT  Undef_Handler
+                                IMPORT  DAbt_Handler
+                                IMPORT  PAbt_Handler
 ; Reset Handler
                 EXPORT  Reset_Handler
 Reset_Handler   
@@ -159,16 +159,16 @@ Reset_Handler
 
                 ENDIF
 
-								IF      :DEF:USE_FREE_RTOS
+                                IF      :DEF:USE_FREE_RTOS
 ; Start in supervisor mode
                 MSR     CPSR_c, #Mode_SVC :OR: I_Bit :OR: F_Bit
-								
-								ELSE
+                                
+                                ELSE
 
 ; Start in user mode
-								MSR     CPSR_c, #Mode_USR	;|I_Bit|F_Bit
-								
-								ENDIF
+                                MSR     CPSR_c, #Mode_USR    ;|I_Bit|F_Bit
+                                
+                                ENDIF
 ; Enter the C code -------------------------------------------------------------
 
                 IMPORT  __main
@@ -177,8 +177,8 @@ Reset_Handler
 
                 IF      :DEF:__MICROLIB
                 
-								EXPORT  __heap_base
-								EXPORT  __heap_limit
+                                EXPORT  __heap_base
+                                EXPORT  __heap_limit
 
                 ELSE
 

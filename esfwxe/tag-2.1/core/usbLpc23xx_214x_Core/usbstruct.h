@@ -42,7 +42,7 @@
 #define _USBSTRUCT_H_
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 //
@@ -135,7 +135,7 @@ typedef struct
 #define GET_DESC_INDEX(x)   ((x)&0xFF)
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif

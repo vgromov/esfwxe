@@ -5,7 +5,7 @@
 //
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 // driver api
@@ -19,7 +19,7 @@ esBL pca9555OutSet(i2cHANDLE i2c, esU8 cfgAddr, esU16 state);
 esBL pca9555InputGet(i2cHANDLE i2c, esU8 cfgAddr, esU16* input);
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif

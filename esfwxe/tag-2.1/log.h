@@ -1,7 +1,7 @@
 // information log engine
 //
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif 
 
 // max count of logger entries available
@@ -9,14 +9,14 @@
 
 // log level
 typedef enum {
-	lvlCrit,
-	lvlErr,
-	lvlOk,
-	lvlWarn,
-	lvlInfo,
+    lvlCrit,
+    lvlErr,
+    lvlOk,
+    lvlWarn,
+    lvlInfo,
 
-	// special - log levels count
-	lvlCount
+    // special - log levels count
+    lvlCount
 
 } LogLvl;
 
@@ -34,5 +34,5 @@ esBL logUnregister(Logger logger);
 void logPush( LogLvl lvl, ESE_CSTR msg );
 
 #ifdef __cplusplus
-	}
+    }
 #endif

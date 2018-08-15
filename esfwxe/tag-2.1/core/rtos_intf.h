@@ -4,14 +4,14 @@
 #include <stddef.h>
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
-#define rtosMAX_DELAY	((esU32)0xFFFFFFFF)
+#define rtosMAX_DELAY    ((esU32)0xFFFFFFFF)
 
 // stub definition for rtos functions modifier. allow to link them from external dll
 #ifndef RTOS_FUNC
-#	define RTOS_FUNC
+#    define RTOS_FUNC
 #endif
 
 // MT object handles
@@ -24,10 +24,10 @@ typedef void* rtosTIMER_HANDLE;
 
 // task worker function type
 #ifdef USE_EMULATOR
-	// pointer to thread worker object (EsThread::Worker) is passed as second parameter
-	typedef void (*rtosTASK_FUNCTION)(void*,void*);
+    // pointer to thread worker object (EsThread::Worker) is passed as second parameter
+    typedef void (*rtosTASK_FUNCTION)(void*,void*);
 #else
-	typedef void (*rtosTASK_FUNCTION)(void*);
+    typedef void (*rtosTASK_FUNCTION)(void*);
 #endif
 
 // ticks|ms conversions
@@ -117,7 +117,7 @@ RTOS_FUNC esBL rtosTimerIsActive(rtosTIMER_HANDLE timer);
 RTOS_FUNC void* rtosTimerDataGet(rtosTIMER_HANDLE timer);
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 // task definition and implementation helper defines
@@ -126,44 +126,44 @@ rtosTASK_HANDLE task ## Name ## Create( void* pParams )
 
 // task worker function implementation
 #ifdef USE_EMULATOR
-#	define IMPL_TASK_BEGIN( Name, StackDepth, Priority ) \
-	static void task ## Name( void* params, void* threadWorkerObj ); \
-	rtosTASK_HANDLE task ## Name ## Create( void* params ) \
-	{ \
-		return rtosTaskCreate(task ## Name, #Name, (StackDepth), params, (Priority)); \
-	} \
-	static void task ## Name( void* params, void* threadWorkerObj ) \
-	{ 
+#    define IMPL_TASK_BEGIN( Name, StackDepth, Priority ) \
+    static void task ## Name( void* params, void* threadWorkerObj ); \
+    rtosTASK_HANDLE task ## Name ## Create( void* params ) \
+    { \
+        return rtosTaskCreate(task ## Name, #Name, (StackDepth), params, (Priority)); \
+    } \
+    static void task ## Name( void* params, void* threadWorkerObj ) \
+    { 
 
-#	define IMPL_TASK_BEGIN_SUSPENDED( Name, StackDepth, Priority ) \
-	static void task ## Name( void* params, void* threadWorkerObj ); \
-	rtosTASK_HANDLE task ## Name ## Create( void* params ) \
-	{ \
-		return rtosTaskCreateSuspended(task ## Name, #Name, (StackDepth), params, (Priority)); \
-	} \
-	static void task ## Name( void* params, void* threadWorkerObj ) \
-	{ 
-	
-#else	// #ifdef USE_EMULATOR
+#    define IMPL_TASK_BEGIN_SUSPENDED( Name, StackDepth, Priority ) \
+    static void task ## Name( void* params, void* threadWorkerObj ); \
+    rtosTASK_HANDLE task ## Name ## Create( void* params ) \
+    { \
+        return rtosTaskCreateSuspended(task ## Name, #Name, (StackDepth), params, (Priority)); \
+    } \
+    static void task ## Name( void* params, void* threadWorkerObj ) \
+    { 
+    
+#else    // #ifdef USE_EMULATOR
 
-#	define IMPL_TASK_BEGIN( Name, StackDepth, Priority ) \
-	static void task ## Name( void* params ); \
-	rtosTASK_HANDLE task ## Name ## Create( void* params ) \
-	{ \
-		return rtosTaskCreate(task ## Name, #Name, (StackDepth), params, (Priority)); \
-	} \
-	static void task ## Name( void* params ) \
-	{
-	 
-#	define IMPL_TASK_BEGIN_SUSPENDED( Name, StackDepth, Priority ) \
-	static void task ## Name( void* params ); \
-	rtosTASK_HANDLE task ## Name ## Create( void* params ) \
-	{ \
-		return rtosTaskCreateSuspended(task ## Name, #Name, (StackDepth), params, (Priority)); \
-	} \
-	static void task ## Name( void* params ) \
-	{	
-	
+#    define IMPL_TASK_BEGIN( Name, StackDepth, Priority ) \
+    static void task ## Name( void* params ); \
+    rtosTASK_HANDLE task ## Name ## Create( void* params ) \
+    { \
+        return rtosTaskCreate(task ## Name, #Name, (StackDepth), params, (Priority)); \
+    } \
+    static void task ## Name( void* params ) \
+    {
+     
+#    define IMPL_TASK_BEGIN_SUSPENDED( Name, StackDepth, Priority ) \
+    static void task ## Name( void* params ); \
+    rtosTASK_HANDLE task ## Name ## Create( void* params ) \
+    { \
+        return rtosTaskCreateSuspended(task ## Name, #Name, (StackDepth), params, (Priority)); \
+    } \
+    static void task ## Name( void* params ) \
+    {    
+    
 #endif // #ifdef USE_EMULATOR
 
 #define IMPL_TASK_END }

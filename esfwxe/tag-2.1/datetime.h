@@ -4,12 +4,12 @@
 #include <time.h>
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 // date time utility functions. esDT type granularity is 1ms.
 //
-#define DT_YEAR0	2000
+#define DT_YEAR0  2000
 
 // calendar constants & helpers
 //
@@ -25,22 +25,22 @@ int dtGetDaysInYear(int year);
 int dtGetDayOfWeek(int year, int month, int dayOfMonth);
 // check datetime components validity
 esBL dtIsValid(int year, int month, int dayOfMonth,
-	int hr, int mins, int sec, int ms);
+    int hr, int mins, int sec, int ms);
 
 // date time manipulation
 //
 // extract just time part. sec and ms are optional, if set to 0
 void dtExtractTime(const esDT* dt,
-	int* hr, int* mins, int* sec,	int* ms);
+    int* hr, int* mins, int* sec,    int* ms);
 // decompose datetime. dayOfYear, ms, sec are optional, if set to 0
 void dtDecomposeDateTime(const esDT* dt,
-	int* year, int* dayOfYear, int* month, int* dayOfMonth,
-	int* hr, int* mins, int* sec,
-	int* ms);
+    int* year, int* dayOfYear, int* month, int* dayOfMonth,
+    int* hr, int* mins, int* sec,
+    int* ms);
 // compose datetime, perform range checks
 esBL dtComposeDateTime(esDT* dt,
-	int year, int month, int dayOfMonth,
-	int hr, int mins, int sec, int ms);
+    int year, int month, int dayOfMonth,
+    int hr, int mins, int sec, int ms);
 // compose esDT consisting only of time component
 esBL dtComposeTime(esDT* dt, int hr, int mins, int sec, int ms);
 // compose esDT consisting only of date component 
@@ -53,7 +53,7 @@ void esDT2tm(const esDT* dt, struct tm *val);
 void tm2esDT(const struct tm *val, esDT* dt);
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif // _date_time_h_

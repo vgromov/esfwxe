@@ -2,56 +2,56 @@
 #define _spi_h_
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 // SPI control enums
 //
 typedef enum
 {
-	spiMaster,
-	spiSlave
+    spiMaster,
+    spiSlave
 
 } spiMode;
 
 typedef enum
 {
-	spi8_BITS,
-	spi9_BITS,
-	spi10_BITS,
-	spi11_BITS,
-	spi12_BITS,
-	spi13_BITS,
-	spi14_BITS,
-	spi15_BITS,
-	spi16_BITS 
+    spi8_BITS,
+    spi9_BITS,
+    spi10_BITS,
+    spi11_BITS,
+    spi12_BITS,
+    spi13_BITS,
+    spi14_BITS,
+    spi15_BITS,
+    spi16_BITS 
 
 } spiDataBits;
 
 typedef enum
 {
-	spiMSB,
-	spiLSB
+    spiMSB,
+    spiLSB
 
 } spiOrder;
 
 typedef enum
 {
-	spiCPOL0_CPHA0,
-	spiCPOL0_CPHA1,
-	spiCPOL1_CPHA0,
-	spiCPOL1_CPHA1
-	 
+    spiCPOL0_CPHA0,
+    spiCPOL0_CPHA1,
+    spiCPOL1_CPHA0,
+    spiCPOL1_CPHA1
+     
 } spiLatchMode;
 
 typedef enum
 {
-	spiInvalidHandle = -1,
-	spiOK,
-	spiSlaveAbort,
-	spiModeFault,
-	spiReadOverrun,
-	spiWriteCollision	
+    spiInvalidHandle = -1,
+    spiOK,
+    spiSlaveAbort,
+    spiModeFault,
+    spiReadOverrun,
+    spiWriteCollision    
 
 } spiErrorCode;
 
@@ -59,11 +59,11 @@ typedef enum
 //
 typedef struct
 {
-	spiMode				mode;
-	spiDataBits 	bits;
-	spiOrder			order;
-	spiLatchMode	latchMode;
-	esU32					freqHz;
+    spiMode                mode;
+    spiDataBits     bits;
+    spiOrder            order;
+    spiLatchMode  latchMode;
+    esU32                    freqHz;
 
 } spiDCB;
 
@@ -73,14 +73,14 @@ typedef volatile void* spiHANDLE;
 
 typedef enum {
 #ifdef USE_SPI_PORT0
-	spi0,
+    spi0,
 #endif
 
 #ifdef USE_SPI_PORT1
-	spi1,
+    spi1,
 #endif
 
-	spiPortCnt
+    spiPortCnt
 
 } spiPort;
 
@@ -106,7 +106,7 @@ esU32 spiPutBytes( spiHANDLE hport, const esU8* Bytes, esU32 length );
 esU32 spiGetBytes( spiHANDLE hport, esU8* Bytes, esU32 length );
 
 #ifdef __cplusplus
-	};
+    };
 #endif
 
-#endif //	_spi_h_
+#endif //    _spi_h_

@@ -2,7 +2,7 @@
 #define _usb_api_h_
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 //
@@ -109,7 +109,7 @@ void usbRegisterDescriptors (const esU8 *pabDescriptors);
 esBL usbGetDescriptor (esU16 wTypeIndex, esU16 wLangID, int *piLen, esU8 **ppbData);
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif

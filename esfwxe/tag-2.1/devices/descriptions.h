@@ -8,30 +8,30 @@
 //
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 // device types enumeration
-#define DEVICE_ENTRIES_BEGIN 													                        enum {	
-#	define HUB_ENTRY(               CodeName, Sdcr, Ldcr)			                  HUB_TYPE_ ## CodeName,
-#	define HUB_LIGHT_ENTRY(         CodeName, Sdcr, Ldcr)			                  HUB_TYPE_ ## CodeName,
-#	define APPLIANCE_ENTRY(         CodeName, Sdcr, Ldcr)			                  APPL_TYPE_ ## CodeName,
-#define DEVICE_ENTRIES_END 														                        DEVICE_TYPES_CNT };
+#define DEVICE_ENTRIES_BEGIN                                                                             enum {    
+#    define HUB_ENTRY(               CodeName, Sdcr, Ldcr)                              HUB_TYPE_ ## CodeName,
+#    define HUB_LIGHT_ENTRY(         CodeName, Sdcr, Ldcr)                              HUB_TYPE_ ## CodeName,
+#    define APPLIANCE_ENTRY(         CodeName, Sdcr, Ldcr)                              APPL_TYPE_ ## CodeName,
+#define DEVICE_ENTRIES_END                                                                                 DEVICE_TYPES_CNT };
                             
-#define OCTAVA_DEVICE_ENTRIES_BEGIN 									                        enum { OCTAVA_DEVICE_ID_BASE = 32000,
+#define OCTAVA_DEVICE_ENTRIES_BEGIN                                                             enum { OCTAVA_DEVICE_ID_BASE = 32000,
 # define OCTAVA_APPLIANCE_ENTRY(  CodeName, Sdcr, Ldcr)                       APPL_TYPE_ ## CodeName,
-#define OCTAVA_DEVICE_ENTRIES_END											                        OCTAVA_DEVICE_ID_END };
+#define OCTAVA_DEVICE_ENTRIES_END                                                                    OCTAVA_DEVICE_ID_END };
                         
-#define TENZOR_DEVICE_ENTRIES_BEGIN 									                        enum { TENZOR_DEVICE_ID_BASE = 40000,
+#define TENZOR_DEVICE_ENTRIES_BEGIN                                                             enum { TENZOR_DEVICE_ID_BASE = 40000,
 # define TENZOR_APPLIANCE_ENTRY(  CodeName, Sdcr, Ldcr)                       APPL_TYPE_ ## CodeName,
-#	define TENZOR_HUB_ENTRY(        CodeName, Sdcr, Ldcr)				                HUB_TYPE_ ## CodeName,
-#define TENZOR_DEVICE_ENTRIES_END											                        TENZOR_DEVICE_ID_END };
+#    define TENZOR_HUB_ENTRY(        CodeName, Sdcr, Ldcr)                                HUB_TYPE_ ## CodeName,
+#define TENZOR_DEVICE_ENTRIES_END                                                                    TENZOR_DEVICE_ID_END };
                             
-#define QUARTA_DEVICE_ENTRIES_BEGIN 									                        enum { QUARTA_DEVICE_ID_BASE = 42000,
+#define QUARTA_DEVICE_ENTRIES_BEGIN                                                             enum { QUARTA_DEVICE_ID_BASE = 42000,
 # define QUARTA_APPLIANCE_ENTRY(  CodeName, Sdcr, Ldcr)                       APPL_TYPE_ ## CodeName,
-#	define QUARTA_HUB_ENTRY(        CodeName, Sdcr, Ldcr)				                HUB_TYPE_ ## CodeName,
-#define QUARTA_DEVICE_ENTRIES_END											                        QUARTA_DEVICE_ID_END };		
-		
+#    define QUARTA_HUB_ENTRY(        CodeName, Sdcr, Ldcr)                                HUB_TYPE_ ## CodeName,
+#define QUARTA_DEVICE_ENTRIES_END                                                                    QUARTA_DEVICE_ID_END };        
+        
 #include "devices.cc"
 
 // Optional type characterization API
@@ -53,7 +53,7 @@ esU16 getDeviceTypeFromCodeName(ESE_CSTR codeName);
 #endif
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif // _devices_descriptions_h_

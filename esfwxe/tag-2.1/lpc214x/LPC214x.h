@@ -11,7 +11,7 @@
 #define __LPC214x_H
 
 /* Vectored Interrupt Controller (VIC) */
-#define VIC_BASE_ADDR		0xFFFFF000
+#define VIC_BASE_ADDR        0xFFFFF000
 #define VICIRQStatus    (*((volatile unsigned long *) 0xFFFFF000))
 #define VICFIQStatus    (*((volatile unsigned long *) 0xFFFFF004))
 #define VICRawIntr      (*((volatile unsigned long *) 0xFFFFF008))
@@ -88,8 +88,8 @@
 #define FIO1PIN         (*((volatile unsigned long *) 0x3FFFC034))
 #define FIO1SET         (*((volatile unsigned long *) 0x3FFFC038))
 #define FIO1CLR         (*((volatile unsigned long *) 0x3FFFC03C))
-				
-#define SCB_BASE_ADDR		0xE01FC000
+                
+#define SCB_BASE_ADDR        0xE01FC000
 /* Memory Accelerator Module (MAM) */
 #define MAMCR           (*((volatile unsigned char *) 0xE01FC000))
 #define MAMTIM          (*((volatile unsigned char *) 0xE01FC004))
@@ -116,22 +116,22 @@
 
 // PCONP bits definitions (last value is OTP state)
 //0 - Unused, always 0 0
-#define PCTIM0 					0x00000002 	// PCTIM0 Timer/Counter 0 power/clock control bit. 1
-#define PCTIM1					0x00000004 	// PCTIM1 Timer/Counter 1 power/clock control bit. 1
-#define PCUART0					0x00000008 	// PCUART0 UART0 power/clock control bit. 1
-#define PCUART1					0x00000010 	// PCUART1 UART1 power/clock control bit. 1
-#define PCPWM0					0x00000020	// PCPWM0 PWM0 power/clock control bit. 1
-#define PCI2C0					0x00000080	// PCI2C0 The I2C0 interface power/clock control bit. 1
-#define PCSPI0					0x00000100	// PCSPI The SPI interface power/clock control bit. 1
-#define PCSPI						PCSPI0
-#define PCRTC						0x00000200	// PCRTC The RTC power/clock control bit. 1
-#define PCSSP						0x00000400 	// PCSSP The SSP interface power/clock control bit. 1
-#define PCAD0						0x00001000	// PCAD A/D converter (ADC) power/clock control bit.
-																		// Note: Clear the PDN bit in the AD0CR before clearing this bit, and set
-																		// this bit before setting PDN.
-#define PCI2C1					0x00080000	// PCI2C1 The I2C1 interface power/clock control bit. 1
-#define PCAD1 					0x00100000	
-#define	PCUSB						0x80000000	// PCUSB USB interface power/clock control bit. 0
+#define PCTIM0                     0x00000002     // PCTIM0 Timer/Counter 0 power/clock control bit. 1
+#define PCTIM1                    0x00000004     // PCTIM1 Timer/Counter 1 power/clock control bit. 1
+#define PCUART0                    0x00000008     // PCUART0 UART0 power/clock control bit. 1
+#define PCUART1                    0x00000010     // PCUART1 UART1 power/clock control bit. 1
+#define PCPWM0                    0x00000020    // PCPWM0 PWM0 power/clock control bit. 1
+#define PCI2C0                    0x00000080    // PCI2C0 The I2C0 interface power/clock control bit. 1
+#define PCSPI0                    0x00000100    // PCSPI The SPI interface power/clock control bit. 1
+#define PCSPI                        PCSPI0
+#define PCRTC                        0x00000200    // PCRTC The RTC power/clock control bit. 1
+#define PCSSP                        0x00000400     // PCSSP The SSP interface power/clock control bit. 1
+#define PCAD0                        0x00001000    // PCAD A/D converter (ADC) power/clock control bit.
+                                                                        // Note: Clear the PDN bit in the AD0CR before clearing this bit, and set
+                                                                        // this bit before setting PDN.
+#define PCI2C1                    0x00080000    // PCI2C1 The I2C1 interface power/clock control bit. 1
+#define PCAD1                     0x00100000    
+#define  PCUSB                        0x80000000    // PCUSB USB interface power/clock control bit. 0
 
 /* External Interrupts */
 #define EXTINT          (*((volatile unsigned char *) 0xE01FC140))
@@ -340,8 +340,8 @@
 #define WDTC            (*((volatile unsigned long *) 0xE0000004))
 #define WDFEED          (*((volatile unsigned char *) 0xE0000008))
 #define WDTV            (*((volatile unsigned long *) 0xE000000C))
-#define WDEN						(0x01)
-#define WDRESET					(0x02)
+#define WDEN                        (0x01)
+#define WDRESET                    (0x02)
 
 /* USB Controller */
 #define USBIntSt        (*((volatile unsigned long *) 0xE01FC1C0))

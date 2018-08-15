@@ -28,7 +28,7 @@
 #include "usbstruct.h"
 #include "usbapi.h"
 
-#define MAX_DESC_HANDLERS 		4   /**< device, interface, endpoint, other */
+#define MAX_DESC_HANDLERS         4   /**< device, interface, endpoint, other */
 
 
 //
@@ -57,7 +57,7 @@
 
 
 static esU8 bConfiguration = 0;                       /** Currently selected configuration */
-static TFnHandleRequest *pfnHandleCustomReq = NULL; 	/** Installed custom request handler */
+static TFnHandleRequest *pfnHandleCustomReq = NULL;     /** Installed custom request handler */
 static const esU8 *pabDescrip = NULL;                 /** Pointer to registered descriptors */
 
 

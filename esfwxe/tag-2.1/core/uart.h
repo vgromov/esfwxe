@@ -4,79 +4,79 @@
 #define SERIAL_COMMS_H
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 typedef enum 
 { 
-	uartNO_PARITY = -1, 
-	uartODD_PARITY, 
-	uartEVEN_PARITY, 
-	uartMARK_PARITY, 
-	uartSPACE_PARITY 
+    uartNO_PARITY = -1, 
+    uartODD_PARITY, 
+    uartEVEN_PARITY, 
+    uartMARK_PARITY, 
+    uartSPACE_PARITY 
 } uartParity;
 
 typedef enum 
 { 
-	uartSTOP_1, 
-	uartSTOP_2 
+    uartSTOP_1, 
+    uartSTOP_2 
 } uartStopBits;
 
 typedef enum 
 { 
-	uartBITS_5, 
-	uartBITS_6, 
-	uartBITS_7, 
-	uartBITS_8 
+    uartBITS_5, 
+    uartBITS_6, 
+    uartBITS_7, 
+    uartBITS_8 
 } uartDataBits;
 
 typedef enum 
 { 
-	uart50 		= 50,		
-	uart75 		= 75,		
-	uart110		= 110,		
-	uart134		= 134,		
-	uart150		= 150,    
-	uart200		= 200,
-	uart300		= 300,		
-	uart600		= 600,		
-	uart1200	= 1200,	
-	uart1800	= 1800,	
-	uart2400	= 2400,   
-	uart4800	= 4800,
-	uart9600	= 9600,		
-	uart19200	= 19200,	
-	uart38400	= 38400,	
-	uart57600	= 57600,	
-	uart115200= 115200,
-	uart128000= 128000,
-	uart153600= 153600,
-	uart230400= 230400,
-	uart256000= 256000,
-	uart460800= 460800,
-	uart921600= 921600
+    uart50         = 50,        
+    uart75         = 75,        
+    uart110        = 110,        
+    uart134        = 134,        
+    uart150        = 150,    
+    uart200        = 200,
+    uart300        = 300,        
+    uart600        = 600,        
+    uart1200    = 1200,    
+    uart1800    = 1800,    
+    uart2400    = 2400,   
+    uart4800    = 4800,
+    uart9600    = 9600,        
+    uart19200    = 19200,    
+    uart38400    = 38400,    
+    uart57600    = 57600,    
+    uart115200= 115200,
+    uart128000= 128000,
+    uart153600= 153600,
+    uart230400= 230400,
+    uart256000= 256000,
+    uart460800= 460800,
+    uart921600= 921600
 
 } uartBaud;
 
 // uart DCB structure
 typedef struct
 {
-	uartBaud			baud;
-	uartParity		parity;
-	uartDataBits	bits;
-	uartStopBits 	stopBits;
-	esU32				txTimeout;
-	esU32				rxTimeout;				
+    uartBaud            baud;
+    uartParity        parity;
+    uartDataBits  bits;
+    uartStopBits     stopBits;
+    esU32                txTimeout;
+    esU32                rxTimeout;                
 
 } uartDCB;
 
 // uart status bits
 typedef enum {
-	uartInvalidHandle 	= -1,
-	uartOK,
-	uartRXOverflow,
-	uartLineError,
-	uartTimeout	
+    uartInvalidHandle     = -1,
+    uartOK,
+    uartRXOverflow,
+    uartLineError,
+    uartTimeout    
 
 } uartErrorCode;
 
@@ -87,13 +87,13 @@ DEF_VOLATILE_HANDLE(uartHANDLE);
 
 typedef enum {
 #ifdef USE_UART_PORT0
-	uart0,
+    uart0,
 #endif
 #ifdef USE_UART_PORT1
-	uart1,
+    uart1,
 #endif
 
-	uartPortCnt
+    uartPortCnt
 
 } uartPort;
 
@@ -147,7 +147,7 @@ esU32 uartSendTimeEstimateGet(EseChannelIo*, esU32 len);
 void uartChannelInit(EseChannelIo* chnl, uartHANDLE bus);
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif

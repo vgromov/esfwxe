@@ -6,7 +6,7 @@
 #include "devices/descriptions.h"
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 #pragma pack(push, 1)
@@ -29,8 +29,8 @@ typedef union {
 ///
 typedef struct 
 {
-	esU16 year;		        ///< Year of production
-	esU16 ser;			      ///< Device production (serial) number within year
+    esU16 year;                ///< Year of production
+    esU16 ser;                  ///< Device production (serial) number within year
 
 } EseDeviceNum;
 
@@ -38,9 +38,9 @@ typedef struct
 ///
 typedef struct
 {
-	esU16 		type;		    ///< Device type (model) id
- 	EseDeviceNum num;		  ///< Device production number
-	EseVerInfo ver;		    ///< Firmware major|minor version
+    esU16         type;            ///< Device type (model) id
+     EseDeviceNum num;          ///< Device production number
+    EseVerInfo ver;            ///< Firmware major|minor version
 
 } EseBasicFirmwareID;
 
@@ -57,31 +57,31 @@ typedef struct {
 ///
 typedef struct
 {
-	EseBasicFirmwareID id;
-	EseUID key;
-	esU32 funcMask;
+    EseBasicFirmwareID id;
+    EseUID key;
+    esU32 funcMask;
 
-}	EseHubFirmwareID;
+}    EseHubFirmwareID;
 
 /// Firmware integrity information struct
 ///
 typedef struct
 {
-	esU32 crcPrev;	      ///< CRC32 of the previous block contents. 0, if this is the first version of block
-	esU32 crcCur;		      ///< Current CRC32 (as calculated by CRC32 IEEE 802.3)
-	esDT  ts;	            ///< Recent block update timestamp
-	
+    esU32 crcPrev;          ///< CRC32 of the previous block contents. 0, if this is the first version of block
+    esU32 crcCur;              ///< Current CRC32 (as calculated by CRC32 IEEE 802.3)
+    esDT  ts;                ///< Recent block update timestamp
+    
 } EseBlockIntegrity;
 
 /// Firmware file && integrity check
 ///
 typedef struct
 {
-	char name[64];        ///< Readable name of the firmware
-	char file[32];        ///< Firmware file used for flashing
+    char name[64];        ///< Readable name of the firmware
+    char file[32];        ///< Firmware file used for flashing
   
   /// Firmware integrity information
-	EseBlockIntegrity integrity;
+    EseBlockIntegrity integrity;
 
 } EseFwSwInfo;
 
@@ -125,10 +125,10 @@ typedef struct {
 ///
 typedef struct
 {
-	EseFwSwInfo         fwSwInfo;       ///< Firmware file info
-	EseBlockIntegrity   calIntegrity;   ///< Calibration integrity check block, if applicable
-	EseFwInfo           fwInfo;         ///< Universal 64 byte firmware information
-	
+    EseFwSwInfo         fwSwInfo;       ///< Firmware file info
+    EseBlockIntegrity   calIntegrity;   ///< Calibration integrity check block, if applicable
+    EseFwInfo           fwInfo;         ///< Universal 64 byte firmware information
+    
 } EseSoftwareInfo;
 
 #pragma pack(pop)
@@ -137,22 +137,22 @@ typedef struct
 #define ApplianceFirmwareID EseBasicFirmwareID
 
 enum { 
-	Type_SZE = sizeof(esU16),
-	EseDevNum_SZE = sizeof(EseDeviceNum),
-	EseVerInfo_SZE = sizeof(EseVerInfo),
-	ApplianceFirmwareID_NoFw_SZE = EseDevNum_SZE+Type_SZE,
-	EseBasicFirmwareID_SZE = sizeof(EseBasicFirmwareID),
+    Type_SZE = sizeof(esU16),
+    EseDevNum_SZE = sizeof(EseDeviceNum),
+    EseVerInfo_SZE = sizeof(EseVerInfo),
+    ApplianceFirmwareID_NoFw_SZE = EseDevNum_SZE+Type_SZE,
+    EseBasicFirmwareID_SZE = sizeof(EseBasicFirmwareID),
   ApplianceFirmwareID_SZE = EseBasicFirmwareID_SZE,
-	EseUID_SZE = sizeof(EseUID),
-	EseHubFirmwareID_SZE = sizeof(EseHubFirmwareID),
-	EseBlockIntegrity_SZE = sizeof(EseBlockIntegrity),
-	EseFwSwInfo_SZE = sizeof(EseFwSwInfo),
-	EseSoftwareInfo_SZE = sizeof(EseSoftwareInfo),
+    EseUID_SZE = sizeof(EseUID),
+    EseHubFirmwareID_SZE = sizeof(EseHubFirmwareID),
+    EseBlockIntegrity_SZE = sizeof(EseBlockIntegrity),
+    EseFwSwInfo_SZE = sizeof(EseFwSwInfo),
+    EseSoftwareInfo_SZE = sizeof(EseSoftwareInfo),
   EseFwInfo_SZE = sizeof(EseFwInfo),
 };
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif // _hw_id_base_h_

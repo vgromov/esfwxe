@@ -2,25 +2,25 @@
 #define _ds_1337_h_
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 enum {
-	// control byte bits 
-	//
-	DS1337_CTL_OSC_STOP					= 0x80,
-	DS1337_CTL_FREQ_OUT_1HZ			=	0x00,
-	DS1337_CTL_FREQ_OUT_4096HZ	= 0x08,
-	DS1337_CTL_FREQ_OUT_8192HZ	= 0x10,
-	DS1337_CTL_FREQ_OUT_32768HZ	= 0x18,
-	DS1337_CTL_FREQ_INTCN				= 0x04,
-	DS1337_CTL_ALM2_ENABLE			= 0x02,
-	DS1337_CTL_ALM1_ENABLE			= 0x01,
-	// status byte bits
-	//
-	DS1337_STAT_OSC_STOPPED			= 0x80,
-	DS1337_STAT_ALM2						= 0x02,
-	DS1337_STAT_ALM1						= 0x01,
+    // control byte bits 
+    //
+    DS1337_CTL_OSC_STOP                    = 0x80,
+    DS1337_CTL_FREQ_OUT_1HZ            =    0x00,
+    DS1337_CTL_FREQ_OUT_4096HZ    = 0x08,
+    DS1337_CTL_FREQ_OUT_8192HZ    = 0x10,
+    DS1337_CTL_FREQ_OUT_32768HZ    = 0x18,
+    DS1337_CTL_FREQ_INTCN                = 0x04,
+    DS1337_CTL_ALM2_ENABLE            = 0x02,
+    DS1337_CTL_ALM1_ENABLE            = 0x01,
+    // status byte bits
+    //
+    DS1337_STAT_OSC_STOPPED            = 0x80,
+    DS1337_STAT_ALM2                        = 0x02,
+    DS1337_STAT_ALM1                        = 0x01,
 };
 
 // services build on top of spi driver code
@@ -50,7 +50,7 @@ esBL ds1337SetAlarm1(i2cHANDLE handle, const esDT* dt, esBL useDayOfWeek, esU8 i
 esBL ds1337SetAlarm2(i2cHANDLE handle, const esDT* dt, esBL useDayOfWeek, esU8 ignoreMatchMask);
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif //_ds_1337_h_
