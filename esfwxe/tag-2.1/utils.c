@@ -48,24 +48,20 @@ extern int es_isnanf(float f);
 extern float es_modff(float x, float* intpart);
 
 # ifndef esModfF
-#   define esModfF  es_modff
+#   define esModfF      es_modff
 # endif
 
-//# else
-//
-//#    ifndef esFiniteF
-//#      define esFiniteF      _finite
-//#    endif
-//
-//#    ifndef esIsInfF
-//#      define esIsInfF(x)    (0==_finite(x))
-//#    endif
-//
-//#    ifndef esIsNanF
-//#      define esIsNanF        _isnan
-//#    endif
-//
-//# endif
+# ifndef esFiniteF
+#   define esFiniteF    es_finitef
+# endif
+
+# ifndef esIsInfF
+#   define esIsInfF(x)  (0 == es_finitef(x))
+# endif
+
+# ifndef esIsNanF
+#   define esIsNanF     es_isnanf
+# endif
 #endif
 
 // special const for empty string

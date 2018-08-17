@@ -48,7 +48,6 @@ typedef float                       esF;
 typedef double                      esD;
 
 // more human - friendly types
-#define VOID                        void
 typedef unsigned int                esBL;
 
 typedef esU8                        esBCD;
