@@ -45,20 +45,39 @@ void fmtEseBasicFirmwareID(ESE_STR buff, size_t buffLen, const EseBasicFirmwareI
 
 void fmtEseFwInfo(ESE_STR buff, size_t buffLen, const EseFwInfo* id, esU16 flags)
 {
-    if( buff && 0 < buffLen && id )
-    fmtEcoE(buff, buffLen, flags, id->type, id->year, id->order, &id->ver, 
-      &id->month, &id->day, &id->countryCode, &id->hwConfig);
+  if( buff && 0 < buffLen && id )
+    fmtEcoE(
+      buff, 
+      buffLen, 
+      flags, 
+      id->type, 
+      id->year, 
+      id->order, 
+      &id->ver, 
+      &id->month, 
+      &id->day, 
+      &id->countryCode, 
+      &id->hwConfig
+    );
 }
 
 void fmtUID(ESE_STR buff, size_t buffLen, const EseUID* key)
 {
-    if( buff && 0 < buffLen && key )
-    {
-        // format in 4 groups 8 chars each
-        ESE_CSTR str = (ESE_CSTR)key->uid;
-        utilsSnprintf(buff, buffLen, "%.8s-%.4s-%.4s-%.4s-%.12s", str,
-            str+8, str+12, str+16, str+20);
-    }
+  if( buff && 0 < buffLen && key )
+  {
+    // format in 4 groups 8 chars each
+    ESE_CSTR str = (ESE_CSTR)key->uid;
+    utilsSnprintf(
+      buff, 
+      buffLen, 
+      "%.8s-%.4s-%.4s-%.4s-%.12s", 
+      str,
+      str+8, 
+      str+12, 
+      str+16, 
+      str+20
+    );
+  }
 }
 
 void fmtIdStringFromEseBasicFirmwareID(ESE_STR buff, size_t buffLen, const EseBasicFirmwareID* id, esU16 flags)
