@@ -85,27 +85,27 @@ public:
   EseRingBuffer() ESE_NOTHROW { flush(); }
 
   /// Check if buffer is is empty
-  bool isEmpty() const ESE_NOTHROW { return 0 == m_count; }
+  inline bool isEmpty() const ESE_NOTHROW { return 0 == m_count; }
 
   /// Chack if buffer is full
-  bool isFull() const ESE_NOTHROW { return c_mask+1 == m_count; }
+  inline bool isFull() const ESE_NOTHROW { return c_mask+1 == m_count; }
 
   /// Get input position
-  esU32 inGet() const ESE_NOTHROW { return m_in; }
+  inline esU32 inGet() const ESE_NOTHROW { return m_in; }
 
   /// Get output position
-  esU32 outGet() const ESE_NOTHROW { return m_out; }
+  inline esU32 outGet() const ESE_NOTHROW { return m_out; }
 
   /// Return buffer elements count
-  esU32 countGet() const ESE_NOTHROW { return m_count; }
+  inline esU32 countGet() const ESE_NOTHROW { return m_count; }
 
   /// Flush entire buffer
-  void flush() ESE_NOTHROW { m_in = m_out = m_count = 0; }   
+  inline void flush() ESE_NOTHROW { m_in = m_out = m_count = 0; }   
 
 #define __RB_IS_NOT_FULL ((c_mask+1) != m_count)
 
   /// Push data item into buffer's back, return true, if push was successful, false otherwise
-  bool pushBack(DataT val) ESE_NOTHROW
+  inline bool pushBack(DataT val) ESE_NOTHROW
   {
     if( __RB_IS_NOT_FULL ) // Check, if we have room in buffer
     {
@@ -119,7 +119,7 @@ public:
   }  
   
   /// Pop data item from buffer's front, return true, if pop was successful, false otherwise
-  bool popFront(DataT& val) ESE_NOTHROW
+  inline bool popFront(DataT& val) ESE_NOTHROW
   {
     if( m_count )
     {
@@ -133,7 +133,7 @@ public:
   }
   
   /// Just pop front item, if we're not interested in return value
-  void popFront() ESE_NOTHROW
+  inline void popFront() ESE_NOTHROW
   {
     if( m_count )
     {
@@ -143,7 +143,7 @@ public:
   }
   
   /// Peek data at buffer's back
-  bool peekBack(DataT& val) const ESE_NOTHROW
+  inline bool peekBack(DataT& val) const ESE_NOTHROW
   {
     if( m_count )
     {
@@ -156,7 +156,7 @@ public:
   }
 
   /// Peek data at buffer's front
-  bool peekFront(DataT& val) const ESE_NOTHROW
+  inline bool peekFront(DataT& val) const ESE_NOTHROW
   {
     if( m_count )
     {
@@ -169,7 +169,7 @@ public:
   }
 
   /// Peek data at specified index
-  bool peekIdx(esU32 idx, DataT& val) const ESE_NOTHROW
+  inline bool peekIdx(esU32 idx, DataT& val) const ESE_NOTHROW
   {
     if( idx < m_count )
     {
@@ -182,13 +182,13 @@ public:
   }
 
   /// Return forward-only const iterator initialized with beginning of the sequence
-  ConstForwardIterator begin() const ESE_NOTHROW
+  inline ConstForwardIterator begin() const ESE_NOTHROW
   {
     return ConstForwardIterator(*this);
   }
 
   /// Return forward-only const iterator initialized with ending of the sequence
-  ConstForwardIterator end() const ESE_NOTHROW
+  inline ConstForwardIterator end() const ESE_NOTHROW
   {
     ConstForwardIterator result(*this);
     result.m_pos = m_out;
@@ -197,10 +197,10 @@ public:
   }
 
 protected:
-	DataT m_data[BuffSize];	///< Data buffer
-	esU32	m_in;		          ///< First index of data in buffer
-	esU32	m_out;	          ///< Last index of data in buffer
-	esU32 m_count;          ///< Count of occupied data slots in buffer
+  DataT m_data[BuffSize];   ///< Data buffer
+  esU32  m_in;              ///< First index of data in buffer
+  esU32  m_out;             ///< Last index of data in buffer
+  esU32 m_count;            ///< Count of occupied data slots in buffer
 
 private:
   EseRingBuffer(const EseRingBuffer&) ESE_NOTHROW ESE_REMOVE_DECL;

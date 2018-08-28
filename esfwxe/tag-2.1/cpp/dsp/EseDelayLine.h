@@ -20,23 +20,23 @@ public:
   {}
 
   /// Return true if delay line is empty
-  bool inline isEmpty() const ESE_NOTHROW { return m_buff.isEmpty(); }
+  inline bool isEmpty() const ESE_NOTHROW { return m_buff.isEmpty(); }
 
   /// Return true if delay line is saturated
-  bool inline isSaturated() const ESE_NOTHROW { return m_buff.isFull(); }
+  inline bool isSaturated() const ESE_NOTHROW { return m_buff.isFull(); }
 
   /// Return count of elements in delay line
-  esU32 inline countGet() const ESE_NOTHROW { return m_buff.countGet(); }
+  inline esU32 countGet() const ESE_NOTHROW { return m_buff.countGet(); }
 
   /// Reset delay line state data
-  void flush() ESE_NOTHROW
+  inline void flush() ESE_NOTHROW
   {
     m_accum = static_cast<AccumDataT>(0);
     m_buff.flush();
   }
   
   /// Push data to the delay line
-  void pushBack(DataT val) ESE_NOTHROW
+  inline void pushBack(DataT val) ESE_NOTHROW
   {
     if( m_buff.isFull() )
     {
@@ -50,7 +50,7 @@ public:
   }
   
   /// Get result value from the delay line
-  DataT valueGet() const ESE_NOTHROW
+  inline DataT valueGet() const ESE_NOTHROW
   {
     AccumDataT n = static_cast<AccumDataT>(m_buff.countGet());
     if( static_cast<AccumDataT>(0) == n )
@@ -58,9 +58,19 @@ public:
 
     return static_cast<DataT>(m_accum / n);
   }
+  
+  /// Peek data at specified index
+  inline DataT operator[](esU32 idx) const ESE_NOTHROW
+  {
+    DataT result;
+    if( m_buff.peekIdx(idx, &result) )
+      return result;
+
+    return static_cast<DataT>(0);
+  }
 
   /// Return accumulated data value
-  AccumDataT accumGet() const ESE_NOTHROW
+  inline AccumDataT accumGet() const ESE_NOTHROW
   {
     return m_accum;
   }
@@ -94,13 +104,16 @@ public:
   {}
 
   /// Return true if delay line is empty
-  bool inline isEmpty() const ESE_NOTHROW { return m_buff.isEmpty(); }
+  inline bool isEmpty() const ESE_NOTHROW { return m_buff.isEmpty(); }
 
   /// Return true if delay line is saturated
-  bool inline isSaturated() const ESE_NOTHROW { return m_buff.isFull(); }
+  inline bool isSaturated() const ESE_NOTHROW { return m_buff.isFull(); }
+  
+  /// Return count of elements in delay line
+  inline esU32 countGet() const ESE_NOTHROW { return m_buff.countGet(); }
 
   /// Reset delay line state data
-  void flush() ESE_NOTHROW
+  inline void flush() ESE_NOTHROW
   {
     m_buff.flush();
     m_accum = static_cast<AccumDataT>(0);
@@ -108,7 +121,7 @@ public:
   }
   
   /// Push data to the delay line, calculate accumulated minimax
-  void pushBack(DataT val) ESE_NOTHROW
+  inline void pushBack(DataT val) ESE_NOTHROW
   {
     // Automatic minimax reset
     if( m_minimaxResetThreshold <= m_minimaxCnt )
@@ -144,7 +157,7 @@ public:
   }
   
   /// Get result value from the delay line
-  DataT valueGet() const ESE_NOTHROW
+  inline DataT valueGet() const ESE_NOTHROW
   {
     AccumDataT n = static_cast<AccumDataT>(m_buff.countGet());
     if( static_cast<AccumDataT>(0) == n )
@@ -152,33 +165,43 @@ public:
 
     return static_cast<DataT>(m_accum / n);
   }
+  
+  /// Peek data at specified index
+  inline DataT operator[](esU32 idx) const ESE_NOTHROW
+  {
+    DataT result;
+    if( m_buff.peekIdx(idx, &result) )
+      return result;
+
+    return static_cast<DataT>(0);
+  }
 
   /// Return accumulated data value
-  AccumDataT accumGet() const ESE_NOTHROW
+  inline AccumDataT accumGet() const ESE_NOTHROW
   {
     return m_accum;
   }
 
   /// Return calculated data minimum
-  DataT minGet() const ESE_NOTHROW
+  inline DataT minGet() const ESE_NOTHROW
   { 
     return m_min;
   }
   
   /// Return calculated data maximum
-  DataT maxGet() const ESE_NOTHROW
+  inline DataT maxGet() const ESE_NOTHROW
   { 
     return m_max; 
   }
 
   /// Return count of nodes over which minimax values were accumulated
-  esU32 minimaxCntGet() const ESE_NOTHROW
+  inline esU32 minimaxCntGet() const ESE_NOTHROW
   {
     return m_minimaxCnt;
   }
 
   /// Reset minimax accumulator
-  void minimaxReset() ESE_NOTHROW
+  inline void minimaxReset() ESE_NOTHROW
   {
     m_minimaxReset = true;
     m_minimaxCnt = 0;
@@ -187,7 +210,7 @@ public:
   }
 
   /// Set minimax autoreset threshold
-  void minimaxResetThresholdSet(esU32 threshold) ESE_NOTHROW
+  inline void minimaxResetThresholdSet(esU32 threshold) ESE_NOTHROW
   {
     if( 0 == threshold )
       threshold = 0xFFFFFFFF;
@@ -200,14 +223,14 @@ public:
   }
 
   /// Return current minimax reset threshold
-  esU32 minimaxResetThresholdGet() const ESE_NOTHROW
+  inline esU32 minimaxResetThresholdGet() const ESE_NOTHROW
   {
     return m_minimaxResetThreshold;
   }
 
 protected:
   // Run minimax once on existing nodes
-  void calcMinimaxIfReset() ESE_NOTHROW
+  inline void calcMinimaxIfReset() ESE_NOTHROW
   {
     if( m_minimaxReset )
     {
