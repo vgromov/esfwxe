@@ -592,6 +592,6 @@ void memSpaceCalc(esU32 blockCnt, esU32 blockSize, EsMemSpaceInfo* space)
 }
 
 #ifdef ES_USE_STRUTILS_IMPL
-#  include "esStrUtils.cc"
+#  include "ese_strUtils.cc"
 #endif
 
