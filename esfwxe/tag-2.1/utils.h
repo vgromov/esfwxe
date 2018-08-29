@@ -205,13 +205,15 @@ int utilsSnprintf(ESE_STR target, esU32 maxTargetLen, ESE_CSTR fmt, ...);
 // 0-terminated string length
 int utilsStrLenGet(ESE_CSTR str);
 
-#endif // USE_ES_STRFMT_IMPL
+#else
 
-#ifndef ES_USE_STRUTILS_IMPL
+# include <string.h>
+
 // Re-route to standard implementation
 # define utilsStrLenGet  strlen
 # define utilsSprintf    sprintf
 # define utilsSnprintf   snprintf
+
 #endif
 
 #ifdef __cplusplus
