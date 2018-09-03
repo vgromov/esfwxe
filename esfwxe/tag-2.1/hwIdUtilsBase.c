@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
+#include "utils_str.h"
 #include "hwIdUtilsBase.h"
 #include "devices/descriptions.h"
 
@@ -67,7 +68,7 @@ void fmtUID(ESE_STR buff, size_t buffLen, const EseUID* key)
   {
     // format in 4 groups 8 chars each
     ESE_CSTR str = (ESE_CSTR)key->uid;
-    utilsSnprintf(
+    eseUtilsStrSnprintf(
       buff, 
       buffLen, 
       "%.8s-%.4s-%.4s-%.4s-%.12s", 
@@ -97,7 +98,7 @@ ESE_STR fmtUIDtoIdString(ESE_STR buff, size_t buffLen, ESE_CSTR uid, size_t uidL
 {
   int len = 0;
     if( buff && 0 < buffLen && uid && uidLen <= buffLen )
-        len = utilsSnprintf(buff, buffLen, "U:%.*s", uidLen, uid);
+        len = eseUtilsStrSnprintf(buff, buffLen, "U:%.*s", uidLen, uid);
   
   return buff+len;
 }
@@ -106,7 +107,7 @@ ESE_STR fmtFunctionalToIdString(ESE_STR buff, size_t buffLen, esU32 functional)
 {
   int len = 0;
     if( buff && 0 < buffLen )
-        len = utilsSnprintf(buff, buffLen, "F:0x%08X", (unsigned)functional);
+        len = eseUtilsStrSnprintf(buff, buffLen, "F:0x%08X", (unsigned)functional);
   
   return buff+len;
 }
@@ -149,7 +150,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
 #if defined(ESE_USE_STRING_DEVICES_INFO) && 1 == ESE_USE_STRING_DEVICES_INFO
 
   if( ES_BIT_IS_SET(flags, APPL_ID_FMT_DESCR_SHORT) )
-    len = utilsSnprintf(
+    len = eseUtilsStrSnprintf(
       buff,
       buffLen,
       "%s",
@@ -159,7 +160,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
       )
     );
   else if( ES_BIT_IS_SET(flags, APPL_ID_FMT_DESCR_LONG) )
-    len = utilsSnprintf(
+    len = eseUtilsStrSnprintf(
       buff,
       buffLen,
       "%s",
@@ -182,7 +183,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
       buff = fmtBuffInc(buff, &buffLen, 1);
     }
     
-    len = utilsSnprintf(
+    len = eseUtilsStrSnprintf(
       buff, 
       buffLen, 
       (month && day) ? 
@@ -198,7 +199,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
    
     if( month && day )
     {
-      len = utilsSnprintf(buff, buffLen, "-%0.2u-%0.2u", (unsigned)*month, (unsigned)*day);
+      len = eseUtilsStrSnprintf(buff, buffLen, "-%0.2u-%0.2u", (unsigned)*month, (unsigned)*day);
       buff = fmtBuffInc(buff, &buffLen, len);
     }
   }
@@ -210,7 +211,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
       buff = fmtBuffInc(buff, &buffLen, 1);
     }
     
-    len = utilsSnprintf(
+    len = eseUtilsStrSnprintf(
       buff, 
       buffLen, 
       "%0.5u-%0.2u", 
@@ -222,7 +223,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
    
     if( month && day )
     {
-      len = utilsSnprintf(buff, buffLen, "%0.2u%0.2u", (unsigned)*month, (unsigned)*day);
+      len = eseUtilsStrSnprintf(buff, buffLen, "%0.2u%0.2u", (unsigned)*month, (unsigned)*day);
       buff = fmtBuffInc(buff, &buffLen, len);
     }
   }
@@ -235,7 +236,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
       *buff = ' ';
       buff = fmtBuffInc(buff, &buffLen, 1);
     }
-    len = utilsSnprintf(buff, buffLen, "v%d.%d", (int)fwver->major, (int)fwver->minor);
+    len = eseUtilsStrSnprintf(buff, buffLen, "v%d.%d", (int)fwver->major, (int)fwver->minor);
     
     buff = fmtBuffInc(buff, &buffLen, len);
   }
@@ -254,7 +255,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
       buff = fmtBuffInc(buff, &buffLen, 1);
     }
 
-    len = utilsSnprintf(buff, buffLen, "%u", (unsigned)*region);
+    len = eseUtilsStrSnprintf(buff, buffLen, "%u", (unsigned)*region);
 
     buff = fmtBuffInc(buff, &buffLen, len);
   }  
@@ -269,7 +270,7 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
       buff = fmtBuffInc(buff, &buffLen, 1);
     }
     
-    len = utilsSnprintf(buff, buffLen, "0x%08X", (unsigned)hwInfo->raw);
+    len = eseUtilsStrSnprintf(buff, buffLen, "0x%08X", (unsigned)hwInfo->raw);
     
     buff = fmtBuffInc(buff, &buffLen, len);
   }
@@ -295,7 +296,7 @@ static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, 
   ESE_STR buffEnd = buff+buffLen;
   
   // Always format type
-  int len = utilsSnprintf(buff, buffLen, "T:%u", (unsigned)type);
+  int len = eseUtilsStrSnprintf(buff, buffLen, "T:%u", (unsigned)type);
   buff = fmtBuffInc(buff, &buffLen, len);
   
   // Format serial
@@ -303,14 +304,14 @@ static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, 
   {
     // Year
     buff = fmtUniversalCommaAdd(buff, &buffLen);
-    len = utilsSnprintf(buff, buffLen, "Y:%u", (unsigned)year);
+    len = eseUtilsStrSnprintf(buff, buffLen, "Y:%u", (unsigned)year);
     buff = fmtBuffInc(buff, &buffLen, len);    
 
     // Month
     if( month )
     {
       buff = fmtUniversalCommaAdd(buff, &buffLen);
-      len = utilsSnprintf(buff, buffLen, "M:%u", (unsigned)(*month));
+      len = eseUtilsStrSnprintf(buff, buffLen, "M:%u", (unsigned)(*month));
       buff = fmtBuffInc(buff, &buffLen, len);
     }
     
@@ -318,13 +319,13 @@ static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, 
     if( day )
     {
       buff = fmtUniversalCommaAdd(buff, &buffLen);
-      len = utilsSnprintf(buff, buffLen, "D:%u", (unsigned)(*day));
+      len = eseUtilsStrSnprintf(buff, buffLen, "D:%u", (unsigned)(*day));
       buff = fmtBuffInc(buff, &buffLen, len);
     }
     
     // Order
     buff = fmtUniversalCommaAdd(buff, &buffLen);
-    len = utilsSnprintf(buff, buffLen, "O:%u", (unsigned)order);
+    len = eseUtilsStrSnprintf(buff, buffLen, "O:%u", (unsigned)order);
     buff = fmtBuffInc(buff, &buffLen, len);
   }
   
@@ -332,7 +333,7 @@ static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, 
   if( ES_BIT_IS_SET(flags, APPL_ID_FMT_FW) && fwver )
   {
     buff = fmtUniversalCommaAdd(buff, &buffLen);
-    len = utilsSnprintf(buff, buffLen, "V:%d.%d", (int)fwver->major, (int)fwver->minor);
+    len = eseUtilsStrSnprintf(buff, buffLen, "V:%d.%d", (int)fwver->major, (int)fwver->minor);
     buff = fmtBuffInc(buff, &buffLen, len);
   }
   
@@ -340,7 +341,7 @@ static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, 
   if( ES_BIT_IS_SET(flags, APPL_ID_FMT_REGION) && region )
   {
     buff = fmtUniversalCommaAdd(buff, &buffLen);
-    len = utilsSnprintf(buff, buffLen, "R:%u", (unsigned)(*region));
+    len = eseUtilsStrSnprintf(buff, buffLen, "R:%u", (unsigned)(*region));
     buff = fmtBuffInc(buff, &buffLen, len);
   }  
   
@@ -348,7 +349,7 @@ static void fmtUniversal(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, 
   if( ES_BIT_IS_SET(flags, APPL_ID_FMT_HWINFO) && hwInfo )
   {
     buff = fmtUniversalCommaAdd(buff, &buffLen);
-    len = utilsSnprintf(buff, buffLen, "H:0x%08X", (unsigned)*((esU32*)hwInfo));
+    len = eseUtilsStrSnprintf(buff, buffLen, "H:0x%08X", (unsigned)*((esU32*)hwInfo));
     buff = fmtBuffInc(buff, &buffLen, len);
   }
   

@@ -2,70 +2,8 @@
 #pragma hdrstop
 
 #include <stdbool.h>
-#include <string.h>
-#include <math.h>
-#include <float.h>
 #include <esfwxe/utils.h>
-
-#ifdef __arm__
-
-#  ifndef esIsInfF
-#    define esIsInfF      isinf
-#  endif
-
-#  ifndef esFiniteF
-#    define esFiniteF    isfinite
-#  endif
-
-# ifndef esIsNanF
-#   define esIsNanF      isnan
-# endif
-
-# ifndef esModfF
-#   define esModfF       modff
-# endif
-
-#elif defined(_MSC_VER)
-
-#  ifndef esIsInfF
-#    define esIsInfF(x)  (0==_finite(x))
-#  endif
-
-#  ifndef esFiniteF
-#    define esFiniteF    _finite
-#  endif
-
-#  ifndef esIsNanF
-#    define esIsNanF    _isnan
-#  endif
-
-#elif defined(__BORLANDC__)
-
-// if we're building escomm package - import implementations from escore
-//# if defined(ESCOMM_EXPORTS)
-extern int es_finitef(float f);
-extern int es_isnanf(float f);
-extern float es_modff(float x, float* intpart);
-
-# ifndef esModfF
-#   define esModfF      es_modff
-# endif
-
-# ifndef esFiniteF
-#   define esFiniteF    es_finitef
-# endif
-
-# ifndef esIsInfF
-#   define esIsInfF(x)  (0 == es_finitef(x))
-# endif
-
-# ifndef esIsNanF
-#   define esIsNanF     es_isnanf
-# endif
-#endif
-
-// special const for empty string
-ESE_CSTR c_nullString = "";
+#include <esfwxe/utils_float_defs.h>
 
 #ifndef USE_CUSTOM_DELAY
 // MCU tick ns estimate
@@ -198,93 +136,6 @@ void eseUtilsSwapB(esU8* pb, int count)
 }
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
-
-const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU32* utf32)
-{
-  if( !buff || !buffEnd || !utf32 || buffEnd <= buff )
-    return NULL;
-
-  const char* pos = buff;
-
-  bool sequence = false;
-  esU8 bytecnt = 0;
-  esU32 out = 0xFFFFFFFF;
-
-  while( pos < buffEnd )
-  {
-    // Check if symbol at pos is stand-alone, or part of combined utf-8 sequence
-    esU8 b = *((const esU8*)pos++);
-
-    if( b & 0x80 ) //< Either start of the sequence, or continuation
-    {
-      if( 0xC0 == (b & 0xC0) ) //< Starting
-      {
-        if( sequence ) //< Already started - reset and skip
-        {
-          sequence = false;
-          bytecnt = 0;
-          out = 0xFFFFFFFF;
-          continue;
-        }
-        else
-        {
-          sequence = true; //< Start sequence, calculate amount of trailing bytes
-          bytecnt = 0;
-          while( b & 0x80 )
-          {
-            ++bytecnt;
-            b <<= 1;
-          }
-
-          // Check the resulting byte count. If invalid - reset and skip
-          if( bytecnt > 4 )
-          {
-            sequence = false;
-            bytecnt = 0;
-            out = 0xFFFFFFFF;
-            continue;
-          }
-
-          // Assign the rest of byte, taking into account that is is already shifted left by bytecnt
-          out = ((esU32)b) << (5*bytecnt-6);
-          --bytecnt;
-        }
-      }
-      else //< Continuation
-      {
-        if( !sequence || 0 == bytecnt ) //< Continuation without a start, or bytecount is exceeded, reset and skip
-        {
-          bytecnt = 0;
-          out = 0xFFFFFFFF;
-          continue;
-        }
-        else
-        {
-          --bytecnt;
-          out |= (((esU32)(b & 0x3F)) << bytecnt*6);
-
-          if( 0 == bytecnt ) //< Finished, exiting
-            break;
-        }
-      }
-    }
-    else //< Stand-alone char, exit immediately
-    {
-      out = b;
-      break;
-    }
-  }
-
-  if( 0 != bytecnt ) //< Unfinished multibyte sequence, reset out to 0
-    out = 0xFFFFFFFF;
-
-  *utf32 = out;
-
-  return pos;
-}
-
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
 
 // data unpacking from buffer, should be ok with unaligned data in buffer
 //
@@ -446,106 +297,6 @@ esBL put_esBA(esU8** start, const esU8* end, esBA ba)
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
 
-// convert float to formatted string representation
-//
-// formatting helper
-static void int2buff(ESE_STR* buff, ESE_CSTR end, int val, esBL neg, int power)
-{
-  ESE_STR pos = *buff;
-  while(pos < end && power)
-  {
-    int ival = val / power;
-    *pos++ = (char)(0x30 + (neg ? -ival : ival));
-    val -= ival * power;
-    power /= 10;
-  }
-  *buff = pos;
-}
-
-int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals)
-{
-  int result = 0;
-  if( buff && 0 < buffLen && !esIsNanF(val) && esFiniteF(val))
-  {
-    ESE_CSTR end = buff+buffLen;
-    ESE_STR pos = buff;
-    int ipower = 1;   // integer part power
-    int fpower = 1; // fractional part power
-    float fi;
-    int fpart;
-    int ipart = decimals; // temporarily save decimals
-    esBL neg = val < .0f;
-    // find fractional part as integer
-    while( 0 < decimals-- )
-      fpower *= 10;
-    decimals = ipart; // restore decimals
-    fpart = (int)((esModfF(val, &fi) * (float)fpower) + (neg ? 0.0f : 0.5f));
-    ipart = (int)fi;
-    if( fpart == fpower )
-    {
-      fpart = 0;
-      ++ipart;
-    }
-    fpower /= 10; // correct fpower after rounding of extra digit in prev statement
-    if( fpart == fpower*10 )
-    {
-      ++ipart;
-      fpart = 0;
-    }
-    // find power of ten in integer part
-    while( ipart / (10*ipower) )
-      ipower *= 10;
-    // put sign
-    if( neg )
-      *pos++ = '-';
-    // put integer part
-    int2buff(&pos, end, ipart, neg, ipower);
-    // put decimals
-    if( 0 < decimals )
-    {
-      *pos++ = '.';
-      int2buff(&pos, end, fpart, neg, fpower);
-    }
-    // terminate with 0 if there is place
-    if( pos < end )
-      *pos = 0;
-
-    result = pos-buff;
-  }
-
-  return result;
-}
-
-// format float val with constant relative error
-int fmtFloatConstRelativeError(ESE_STR buff, int buffLen, float val, int decimalsAt1)
-{
-  int decimals = decimalsAt1;
-  float tmp = val;
-
-  while( tmp >= 10.f && decimals > 0 )
-  {
-    --decimals;
-    tmp /= 10.f;
-  }
-
-  return fmtFloat(buff, buffLen, val, decimals);
-}
-
-// format float val with constant relative error, return resulting decimals
-int fmtFloatConstRelativeErrorDecimalsGet(ESE_STR buff, int buffLen, float val, int decimalsAt1, int* decimals)
-{
-  float tmp = val;
-  *decimals = decimalsAt1;
-
-  while( tmp >= 10.f && *decimals > 0 )
-  {
-    --(*decimals);
-    tmp /= 10.f;
-  }
-
-  return fmtFloat(buff, buffLen, val, *decimals);
-}
-
 // perform EsMemSpaceInfo calculation by selecting appropriate space unit 
 // blockCount is space measured in allocation blocks. blockSize is allocation block size in bytes
 void memSpaceCalc(esU32 blockCnt, esU32 blockSize, EsMemSpaceInfo* space)
@@ -590,8 +341,5 @@ void memSpaceCalc(esU32 blockCnt, esU32 blockSize, EsMemSpaceInfo* space)
   }
   space->count = (esU16)blockCnt;
 }
-
-#ifdef ES_USE_STRUTILS_IMPL
-#  include "ese_strUtils.cc"
-#endif
+//----------------------------------------------------------------------------------------------
 

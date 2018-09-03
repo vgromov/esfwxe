@@ -156,65 +156,9 @@ esBL put_esF(esU8** start, const esU8* end, esF f);
 esBL put_esD(esU8** start, const esU8* end, esD d);
 esBL put_esBA(esU8** start, const esU8* end, esBA ba);
 
-// UTF-8 string traversal support
-//
-
-/// Try to extract one utf32 character from utf8 buffer.
-/// @param [IN] buff      - input UTF-8 buffer
-/// @param [IN] buffEnd   - an end of input UTF-8 buffer
-/// @param [OUT] utf32    - an extracted utf32 symbol goes there. If either 0 termination occurred,
-///                         or something went wrong, a 0 is returned
-/// @return               - a pointer to the position in input buffer after
-///                         character extraction attempt
-///
-const char* eseUtilsUtf32FromUtf8Get(const char* buff, const char* buffEnd, esU32* utf32);
-
-// Custom string formatters
-//
-// convert float to formatted string representation.
-// return number of chars put into buffer
-int fmtFloat(ESE_STR buff, int buffLen, float val, int decimals);
-// format float val with constant relative error
-int fmtFloatConstRelativeError(ESE_STR buff, int buffLen, float val, int decimalsAt1);
-// format float val with constant relative error, return resulting decimals
-int fmtFloatConstRelativeErrorDecimalsGet(ESE_STR buff, int buffLen, float val, int decimalsAt1, int* decimals);
-
 // perform EsMemSpaceInfo calculation by selecting appropriate space unit
 // blockCount is space measured in allocation blocks. blockSize is allocation block size in bytes
 void memSpaceCalc(esU32 blockCnt, esU32 blockSize, EsMemSpaceInfo* space);
-
-#ifdef ES_USE_STRUTILS_IMPL
-#  include <stdarg.h>
-
-// streaming pfn return codes
-enum {
-  utilsStreamOk    = 0,
-  utilsStreamEnd  = -1,
-};
-
-// abstract byte streaming function
-typedef int (*utilsPfnChStreamFn)(void* target, esU8 c);
-
-// abstract string formatter and streamer
-int utilsVstrFmtStream(  utilsPfnChStreamFn pfn,  void* target,  ESE_CSTR fmt, va_list lst);
-
-// custom implementations of string formatting routines
-int utilsSprintf(ESE_STR target, ESE_CSTR fmt, ...);
-int utilsSnprintf(ESE_STR target, esU32 maxTargetLen, ESE_CSTR fmt, ...);
-
-// 0-terminated string length
-int utilsStrLenGet(ESE_CSTR str);
-
-#else
-
-# include <string.h>
-
-// Re-route to standard implementation
-# define utilsStrLenGet  strlen
-# define utilsSprintf    sprintf
-# define utilsSnprintf   snprintf
-
-#endif
 
 #ifdef __cplusplus
   }
