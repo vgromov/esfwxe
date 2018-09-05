@@ -12,29 +12,32 @@
 //
 typedef struct
 {
-    esU16     id;                // the procedure identifier
-    esU16  sig;            // the procedure call signature
-    void* proc;            // procedure that should be called
+  esU16 id;             // the procedure identifier
+  esU16 sig;            // the procedure call signature
+  void* proc;           // procedure that should be called
 
 } RemoteProcMoniker;
 
 // helper defines to implement the basic service for available remote services query 
 #define RPC_MAP_BEGIN \
-    static const esU16 c_rpcIds[] = { RPID_STD_CAPS_GET, RPID_STD_FWID_GET,
+  static const esU16 c_rpcIds[] = { \
+    RPID_STD_CAPS_GET, \
+    RPID_STD_FWID_GET,
 
-#define RPC_MAP_ENTRY( id, sig, proc )    (id),
+#define RPC_MAP_ENTRY( id, sig, proc ) \
+  (id),
 
-#define RPC_MAP_ENTRY_STD                        RPC_MAP_ENTRY
-#define RPC_MAP_ENTRY_CUSTOM                RPC_MAP_ENTRY
+#define RPC_MAP_ENTRY_STD     RPC_MAP_ENTRY
+#define RPC_MAP_ENTRY_CUSTOM  RPC_MAP_ENTRY
 
 #define RPC_MAP_END \
-    RPID_NOID }; \
-    static esBA rpcGetCaps(RpcStatus* stat) { \
-        esBA ba; \
-        ba.size = sizeof(c_rpcIds)-2; \
-        ba.data = (esU8*)c_rpcIds; return ba; \
-    } \
-    esBA rpcGetFwId(RpcStatus*);
+  RPID_NOID }; \
+  static esBA rpcGetCaps(RpcStatus* stat) { \
+    esBA ba; \
+    ba.size = sizeof(c_rpcIds)-2; \
+    ba.data = (esU8*)c_rpcIds; return ba; \
+  } \
+  esBA rpcGetFwId(RpcStatus*);
 
 // include either dummy rpc map definition file, or actual one,
 // depending on which one is first found in the project include list.
@@ -44,19 +47,19 @@ typedef struct
 #include <rpcMap/rpcMap.cc>
 
 // helper defines to declare and register RemoteProcMoniker(s)
-#define RPC_MAP_ENTRY( id, sig, proc )    \
-    {(id), (sig), (void*)(proc)},
+#define RPC_MAP_ENTRY( id, sig, proc ) \
+  {(id), (sig), (void*)(proc)},
 
-#define RPC_MAP_ENTRY_STD                        RPC_MAP_ENTRY
-#define RPC_MAP_ENTRY_CUSTOM                RPC_MAP_ENTRY
+#define RPC_MAP_ENTRY_STD     RPC_MAP_ENTRY
+#define RPC_MAP_ENTRY_CUSTOM  RPC_MAP_ENTRY
 
 #define RPC_MAP_BEGIN \
-    static const RemoteProcMoniker c_rpcMap[] = {    \
-        RPC_MAP_ENTRY_STD(RPID_STD_CAPS_GET, esBA_RpcSig, rpcGetCaps) \
-        RPC_MAP_ENTRY_STD(RPID_STD_FWID_GET, esBA_RpcSig, rpcGetFwId)
+  static const RemoteProcMoniker c_rpcMap[] = { \
+    RPC_MAP_ENTRY_STD(RPID_STD_CAPS_GET, esBA_RpcSig, rpcGetCaps) \
+    RPC_MAP_ENTRY_STD(RPID_STD_FWID_GET, esBA_RpcSig, rpcGetFwId)
 
 #define RPC_MAP_END \
-    RPC_MAP_ENTRY( RPID_NOID, RpcSig_NULL, NULL ) };
+  RPC_MAP_ENTRY( RPID_NOID, RpcSig_NULL, NULL ) };
 
 // include either dummy rpc map definition file, or actual one,
 // depending on which one is first found in the project include list.
@@ -68,46 +71,46 @@ typedef struct
 // find procedure moniker by its id, return its pointer if found, 0 otherwise
 static const RemoteProcMoniker* rpcFindById(esU16 id)
 {
-    int idx = 0;
-    for( ; idx < CONST_ARRAY_COUNT(c_rpcMap); ++idx )
-    {
-        if( id == c_rpcMap[idx].id )
-            return &c_rpcMap[idx];
-    } 
+  int idx = 0;
+  for( ; idx < CONST_ARRAY_COUNT(c_rpcMap); ++idx )
+  {
+    if( id == c_rpcMap[idx].id )
+      return &c_rpcMap[idx];
+  } 
 
-    return NULL;
+  return NULL;
 }
 
 // generate rpc reflection procedure types
 #define RPC_REFLECTION_BEGIN
 #define  RPC_DEF_HANDLER0(ReturnType) \
-    typedef ReturnType (*ReturnType ## _RpcProc)(RpcStatus*);
+  typedef ReturnType (*ReturnType ## _RpcProc)(RpcStatus*);
 #define RPC_DEF_HANDLER1(ReturnType, Param0Type) \
-    typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type)(RpcStatus*, Param0Type);
+  typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type)(RpcStatus*, Param0Type);
 #define RPC_DEF_HANDLER2(ReturnType, Param0Type, Param1Type) \
-    typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type)(RpcStatus*, Param0Type, Param1Type);
+  typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type)(RpcStatus*, Param0Type, Param1Type);
 #define RPC_DEF_HANDLER3(ReturnType, Param0Type, Param1Type, Param2Type) \
-    typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type)(RpcStatus*, Param0Type, Param1Type, Param2Type);
+  typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type)(RpcStatus*, Param0Type, Param1Type, Param2Type);
 #define RPC_DEF_HANDLER4(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type) \
-    typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type);
+  typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type);
 #define RPC_DEF_HANDLER5(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type) \
-    typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type);
+  typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type);
 #define RPC_DEF_HANDLER6(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type) \
-    typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type);
+  typedef ReturnType (*ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type);
 #define  RPC_DEF_HANDLER0_NORETURN() \
-    typedef void (*VOID_RpcProc)(RpcStatus*);
+  typedef void (*VOID_RpcProc)(RpcStatus*);
 #define RPC_DEF_HANDLER1_NORETURN(Param0Type) \
-    typedef void (*VOID_RpcProc_ ## Param0Type)(RpcStatus*, Param0Type);
+  typedef void (*VOID_RpcProc_ ## Param0Type)(RpcStatus*, Param0Type);
 #define RPC_DEF_HANDLER2_NORETURN(Param0Type, Param1Type) \
-    typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type)(RpcStatus*, Param0Type, Param1Type);
+  typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type)(RpcStatus*, Param0Type, Param1Type);
 #define RPC_DEF_HANDLER3_NORETURN(Param0Type, Param1Type, Param2Type) \
-    typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type)(RpcStatus*, Param0Type, Param1Type, Param2Type);
+  typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type)(RpcStatus*, Param0Type, Param1Type, Param2Type);
 #define RPC_DEF_HANDLER4_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type) \
-    typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type);
+  typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type);
 #define RPC_DEF_HANDLER5_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type, Param4Type) \
-    typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type);
+  typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type);
 #define RPC_DEF_HANDLER6_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type) \
-    typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type);
+  typedef void (*VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type)(RpcStatus*, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type);
 #define RPC_REFLECTION_END
 
 #include <esfwxe/rpcMap/rpcReflection.cc>
@@ -117,283 +120,283 @@ static const RemoteProcMoniker* rpcFindById(esU16 id)
 #define RPC_REFLECTION_BEGIN
 #define  RPC_DEF_HANDLER0(ReturnType) \
 static RpcStatus ReturnType ## _RpcWrp(esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
-{    \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    ReturnType ret = ((ReturnType ## _RpcProc)(pfn))(&result); \
-    if( RpcOK == result ) { \
-        pos = stack; \
-        if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
-            result = RpcStackOverflow; \
-        else \
-            *stackLen = pos-stack; } \
-    return result; \
+{ \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  ReturnType ret = ((ReturnType ## _RpcProc)(pfn))(&result); \
+  if( RpcOK == result ) { \
+    pos = stack; \
+    if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
+        result = RpcStackOverflow; \
+    else \
+        *stackLen = pos-stack; } \
+  return result; \
 }
 #define RPC_DEF_HANDLER1(ReturnType, Param0Type) \
 static RpcStatus ReturnType ## _RpcWrp_ ## Param0Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    if( !get_ ## Param0Type (&pos, end, &p0) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type )(pfn))(&result, p0); \
-        if( RpcOK == result ) { \
-            pos = stack; \
-            if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
-                result = RpcStackOverflow; \
-            else \
-                 *stackLen = pos-stack; } } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  if( !get_ ## Param0Type (&pos, end, &p0) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type )(pfn))(&result, p0); \
+    if( RpcOK == result ) { \
+      pos = stack; \
+      if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
+        result = RpcStackOverflow; \
+      else \
+        *stackLen = pos-stack; } } \
+  return result; \
 }
 #define RPC_DEF_HANDLER2(ReturnType, Param0Type, Param1Type) \
 static RpcStatus ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type )(pfn))(&result, p0, p1); \
-        if( RpcOK == result ) { \
-            pos = stack; \
-            if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
-                result = RpcStackOverflow; \
-            else \
-                 *stackLen = pos-stack; } } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type )(pfn))(&result, p0, p1); \
+    if( RpcOK == result ) { \
+      pos = stack; \
+      if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
+        result = RpcStackOverflow; \
+      else \
+        *stackLen = pos-stack; } } \
+  return result; \
 }
 #define RPC_DEF_HANDLER3(ReturnType, Param0Type, Param1Type, Param2Type) \
 static RpcStatus ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type )(pfn))(&result, p0, p1, p2); \
-        if( RpcOK == result ) { \
-            pos = stack; \
-            if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
-                result = RpcStackOverflow; \
-            else \
-                 *stackLen = pos-stack; } } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type )(pfn))(&result, p0, p1, p2); \
+    if( RpcOK == result ) { \
+      pos = stack; \
+      if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
+        result = RpcStackOverflow; \
+      else \
+        *stackLen = pos-stack; } } \
+  return result; \
 }
 #define RPC_DEF_HANDLER4(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type) \
 static RpcStatus ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    Param3Type p3; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2) && \
-                get_ ## Param3Type (&pos, end, &p3)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type )(pfn))(&result, p0, p1, p2, p3); \
-        if( RpcOK == result ) { \
-            pos = stack; \
-            if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
-                result = RpcStackOverflow; \
-            else \
-                 *stackLen = pos-stack; } } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  Param3Type p3; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2) && \
+      get_ ## Param3Type (&pos, end, &p3)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type )(pfn))(&result, p0, p1, p2, p3); \
+    if( RpcOK == result ) { \
+      pos = stack; \
+      if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
+        result = RpcStackOverflow; \
+      else \
+        *stackLen = pos-stack; } } \
+  return result; \
 }
 #define RPC_DEF_HANDLER5(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type) \
 static RpcStatus ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    Param3Type p3; \
-    Param4Type p4; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2) && \
-                get_ ## Param3Type (&pos, end, &p3) && \
-                get_ ## Param4Type (&pos, end, &p4)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type )(pfn))(&result, p0, p1, p2, p3, p4); \
-        if( RpcOK == result ) { \
-            pos = stack; \
-            if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
-                result = RpcStackOverflow; \
-            else \
-                 *stackLen = pos-stack; } } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  Param3Type p3; \
+  Param4Type p4; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2) && \
+      get_ ## Param3Type (&pos, end, &p3) && \
+      get_ ## Param4Type (&pos, end, &p4)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type )(pfn))(&result, p0, p1, p2, p3, p4); \
+    if( RpcOK == result ) { \
+      pos = stack; \
+      if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
+        result = RpcStackOverflow; \
+      else \
+        *stackLen = pos-stack; } } \
+  return result; \
 }
 #define RPC_DEF_HANDLER6(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type) \
 static RpcStatus ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    Param3Type p3; \
-    Param4Type p4; \
-    Param5Type p5; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2) && \
-                get_ ## Param3Type (&pos, end, &p3) && \
-                get_ ## Param4Type (&pos, end, &p4) && \
-                get_ ## Param5Type (&pos, end, &p5)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type )(pfn))(&result, p0, p1, p2, p3, p4, p5); \
-        if( RpcOK == result ) { \
-            pos = stack; \
-            if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
-                result = RpcStackOverflow; \
-            else \
-                 *stackLen = pos-stack; } } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  Param3Type p3; \
+  Param4Type p4; \
+  Param5Type p5; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2) && \
+      get_ ## Param3Type (&pos, end, &p3) && \
+      get_ ## Param4Type (&pos, end, &p4) && \
+      get_ ## Param5Type (&pos, end, &p5)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ReturnType ret = ((ReturnType ## _RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type )(pfn))(&result, p0, p1, p2, p3, p4, p5); \
+    if( RpcOK == result ) { \
+      pos = stack; \
+      if( !put_ ## ReturnType (&pos, stack+stackMaxLen, ret) ) \
+        result = RpcStackOverflow; \
+      else \
+        *stackLen = pos-stack; } } \
+  return result; \
 }
 #define  RPC_DEF_HANDLER0_NORETURN() \
 static RpcStatus VOID_RpcWrp(esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 {    \
-    RpcStatus result = RpcOK; \
-    ((VOID_RpcProc)(pfn))(&result); \
-    *stackLen = 0; \
-    return result; \
+  RpcStatus result = RpcOK; \
+  ((VOID_RpcProc)(pfn))(&result); \
+  *stackLen = 0; \
+  return result; \
 }
 #define RPC_DEF_HANDLER1_NORETURN(Param0Type) \
 static RpcStatus VOID_RpcWrp_ ## Param0Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    if( !get_ ## Param0Type (&pos, end, &p0) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ((VOID_RpcProc_ ## Param0Type)(pfn))(&result, p0); \
-        *stackLen = 0; } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  if( !get_ ## Param0Type (&pos, end, &p0) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ((VOID_RpcProc_ ## Param0Type)(pfn))(&result, p0); \
+    *stackLen = 0; } \
+  return result; \
 }
 #define RPC_DEF_HANDLER2_NORETURN(Param0Type, Param1Type) \
 static RpcStatus VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type)(pfn))(&result, p0, p1); \
-        *stackLen = 0; } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type)(pfn))(&result, p0, p1); \
+    *stackLen = 0; } \
+  return result; \
 }
 #define RPC_DEF_HANDLER3_NORETURN(Param0Type, Param1Type, Param2Type) \
 static RpcStatus VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type )(pfn))(&result, p0, p1, p2); \
-        *stackLen = 0; } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type )(pfn))(&result, p0, p1, p2); \
+    *stackLen = 0; } \
+  return result; \
 }
 #define RPC_DEF_HANDLER4_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type) \
 static RpcStatus VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    Param3Type p3; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2) && \
-                get_ ## Param3Type (&pos, end, &p3)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type)(pfn))(&result, p0, p1, p2, p3); \
-        *stackLen = 0; } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  Param3Type p3; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2) && \
+      get_ ## Param3Type (&pos, end, &p3)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type)(pfn))(&result, p0, p1, p2, p3); \
+    *stackLen = 0; } \
+  return result; \
 }
 #define RPC_DEF_HANDLER5_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type, Param4Type) \
 static RpcStatus VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    Param3Type p3; \
-    Param4Type p4; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2) && \
-                get_ ## Param3Type (&pos, end, &p3) && \
-                get_ ## Param4Type (&pos, end, &p4)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type)(pfn))(&result, p0, p1, p2, p3, p4); \
-        *stackLen = 0; } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  Param3Type p3; \
+  Param4Type p4; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2) && \
+      get_ ## Param3Type (&pos, end, &p3) && \
+      get_ ## Param4Type (&pos, end, &p4)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type)(pfn))(&result, p0, p1, p2, p3, p4); \
+    *stackLen = 0; } \
+  return result; \
 }
 #define RPC_DEF_HANDLER6_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type) \
 static RpcStatus VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type (esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn) \
 { \
-    RpcStatus result = RpcOK; \
-    esU8* pos = stack; \
-    esU8* end = stack+(*stackLen); \
-    Param0Type p0; \
-    Param1Type p1; \
-    Param2Type p2; \
-    Param3Type p3; \
-    Param4Type p4; \
-    Param5Type p5; \
-    if( !(get_ ## Param0Type (&pos, end, &p0) && \
-                get_ ## Param1Type (&pos, end, &p1) &&    \
-                get_ ## Param2Type (&pos, end, &p2) && \
-                get_ ## Param3Type (&pos, end, &p3) && \
-                get_ ## Param4Type (&pos, end, &p4) && \
-                get_ ## Param5Type (&pos, end, &p5)) ) \
-        result = RpcStackCorrupt; \
-    else { \
-        ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type)(pfn))(&result, p0, p1, p2, p3, p4, p5); \
-        *stackLen = 0; } \
-    return result; \
+  RpcStatus result = RpcOK; \
+  esU8* pos = stack; \
+  esU8* end = stack+(*stackLen); \
+  Param0Type p0; \
+  Param1Type p1; \
+  Param2Type p2; \
+  Param3Type p3; \
+  Param4Type p4; \
+  Param5Type p5; \
+  if( !(get_ ## Param0Type (&pos, end, &p0) && \
+      get_ ## Param1Type (&pos, end, &p1) &&    \
+      get_ ## Param2Type (&pos, end, &p2) && \
+      get_ ## Param3Type (&pos, end, &p3) && \
+      get_ ## Param4Type (&pos, end, &p4) && \
+      get_ ## Param5Type (&pos, end, &p5)) ) \
+    result = RpcStackCorrupt; \
+  else { \
+    ((VOID_RpcProc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type)(pfn))(&result, p0, p1, p2, p3, p4, p5); \
+    *stackLen = 0; } \
+  return result; \
 }
 #define RPC_REFLECTION_END
 
@@ -403,26 +406,26 @@ static RpcStatus VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Typ
 #define RPC_REFLECTION_BEGIN \
 typedef RpcStatus (*RpcWrpT)(esU8* stack, esU32* stackLen, esU32 stackMaxLen, void* pfn); \
 static const RpcWrpT c_rpcSigWrapperMap[RpcReflectionSignatureCnt] = { NULL ,
-#define  RPC_DEF_HANDLER0(ReturnType)                                                                                 ReturnType ## _RpcWrp ,
-#define RPC_DEF_HANDLER1(ReturnType, Param0Type)                                                         ReturnType ## _RpcWrp_ ## Param0Type ,
-#define RPC_DEF_HANDLER2(ReturnType, Param0Type, Param1Type)                                 ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ,
-#define RPC_DEF_HANDLER3(ReturnType, Param0Type, Param1Type, Param2Type)         ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ,
+#define  RPC_DEF_HANDLER0(ReturnType)                                                                     ReturnType ## _RpcWrp ,
+#define RPC_DEF_HANDLER1(ReturnType, Param0Type)                                                          ReturnType ## _RpcWrp_ ## Param0Type ,
+#define RPC_DEF_HANDLER2(ReturnType, Param0Type, Param1Type)                                              ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ,
+#define RPC_DEF_HANDLER3(ReturnType, Param0Type, Param1Type, Param2Type)                                  ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ,
 #define RPC_DEF_HANDLER4(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type) \
-                                                                                                                                ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ,
+                                                                                                          ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ,
 #define RPC_DEF_HANDLER5(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type) \
-                                                                                                                                ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ,
+                                                                                                          ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ,
 #define RPC_DEF_HANDLER6(ReturnType, Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type) \
-                                                                                                                                ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type ,
-#define  RPC_DEF_HANDLER0_NORETURN()                                                                                 VOID_RpcWrp ,
-#define RPC_DEF_HANDLER1_NORETURN(Param0Type)                                                                 VOID_RpcWrp_ ## Param0Type ,
-#define RPC_DEF_HANDLER2_NORETURN(Param0Type, Param1Type)                                     VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ,
-#define RPC_DEF_HANDLER3_NORETURN(Param0Type, Param1Type, Param2Type)             VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ,
+                                                                                                          ReturnType ## _RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type ,
+#define  RPC_DEF_HANDLER0_NORETURN()                                                                      VOID_RpcWrp ,
+#define RPC_DEF_HANDLER1_NORETURN(Param0Type)                                                             VOID_RpcWrp_ ## Param0Type ,
+#define RPC_DEF_HANDLER2_NORETURN(Param0Type, Param1Type)                                                 VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ,
+#define RPC_DEF_HANDLER3_NORETURN(Param0Type, Param1Type, Param2Type)                                     VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ,
 #define RPC_DEF_HANDLER4_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type) \
-                                                                                                                                VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ,
+                                                                                                          VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ,
 #define RPC_DEF_HANDLER5_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type, Param4Type) \
-                                                                                                                                VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ,
+                                                                                                          VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ,
 #define RPC_DEF_HANDLER6_NORETURN(Param0Type, Param1Type, Param2Type, Param3Type, Param4Type, Param5Type) \
-                                                                                                                                VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type ,
+                                                                                                          VOID_RpcWrp_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type ,
 #define RPC_REFLECTION_END };
 
 #include <esfwxe/rpcMap/rpcReflection.cc>
@@ -430,11 +433,12 @@ static const RpcWrpT c_rpcSigWrapperMap[RpcReflectionSignatureCnt] = { NULL ,
 // find rpc wrapper by its signature, return 0 if not found
 static __inline RpcWrpT rpcFindWrapper(int sig)
 {
-    if( RpcSig_NULL < sig && 
-            RpcReflectionSignatureCnt > sig )
-        return c_rpcSigWrapperMap[sig];
+  if( RpcSig_NULL < sig && 
+      RpcReflectionSignatureCnt > sig 
+  )
+    return c_rpcSigWrapperMap[sig];
 
-    return 0;
+  return 0;
 }
 
 // execute procedure at the side of the callee. 
@@ -442,27 +446,27 @@ static __inline RpcWrpT rpcFindWrapper(int sig)
 // by the reflection engine
 RpcStatus rpcExecLocal(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen)
 {
-    RpcStatus stat = RpcOK;
+  RpcStatus stat = RpcOK;
 
-    // find rpc moniker entry
-    const RemoteProcMoniker* moniker = rpcFindById(id);
-    if( moniker )
+  // find rpc moniker entry
+  const RemoteProcMoniker* moniker = rpcFindById(id);
+  if( moniker )
+  {
+    // check signature against one stored in moniker
+    if( moniker->sig == sig )
     {
-        // check signature against one stored in moniker
-        if( moniker->sig == sig )
-        {
-            // find wrapper by signature stored in moniker
-            RpcWrpT pfn = rpcFindWrapper(moniker->sig);
-            if( pfn )
-                stat = pfn(stack, stackLen, stackMaxLen, moniker->proc); // execute procedure with wrapper
-            else
-                stat = RpcUnknownSignature;
-        }
-        else
-            stat = RpcSignatureMismatch;
+      // find wrapper by signature stored in moniker
+      RpcWrpT pfn = rpcFindWrapper(moniker->sig);
+      if( pfn )
+        stat = pfn(stack, stackLen, stackMaxLen, moniker->proc); // execute procedure with wrapper
+      else
+        stat = RpcUnknownSignature;
     }
-    else 
-        stat = RpcNotImplemented;
+    else
+      stat = RpcSignatureMismatch;
+  }
+  else 
+    stat = RpcNotImplemented;
 
-    return stat;
+  return stat;
 }
