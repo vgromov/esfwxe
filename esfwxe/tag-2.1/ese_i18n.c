@@ -153,7 +153,7 @@ ESE_CSTR eseI18nUsrappStrGet(eseI18nLangId idLang, eseI18nUsrappStrId idStr)
 #ifndef ESE_I18N_USE_LOCAL_COPY
 ESE_CSTR eseI18nStrArrayGet(eseI18nLangId idLang, eseI18nStrId idStr, int idx)
 #else
-ESE_CSTR eseI18nStrArrayGet(eseI18nLangId idLang, eseI18nUsrappStrId idStr, int idx)
+ESE_CSTR eseI18nUsrappStrArrayGet(eseI18nLangId idLang, eseI18nUsrappStrId idStr, int idx)
 #endif
 {
   int len = 0;

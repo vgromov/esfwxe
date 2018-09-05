@@ -171,7 +171,23 @@ static void fmtEcoE(ESE_STR buff, size_t buffLen, esU16 flags, esU16 type, esU16
     );
   
   buff = fmtBuffInc(buff, &buffLen, len);
-
+#elif defined(ESE_USE_CUSTOM_STRING_DEVICE_INFO) //< ESE_USE_CUSTOM_STRING_DEVICE_INFO should expand into function returnong device name string in either long or short form
+  if( ES_BIT_IS_SET(flags, APPL_ID_FMT_DESCR_SHORT) )
+    len = eseUtilsStrSnprintf(
+      buff,
+      buffLen,
+      "%s",
+      ESE_USE_CUSTOM_STRING_DEVICE_INFO(type, true)
+    );
+  else if( ES_BIT_IS_SET(flags, APPL_ID_FMT_DESCR_LONG) )
+    len = eseUtilsStrSnprintf(
+      buff,
+      buffLen,
+      "%s",
+      ESE_USE_CUSTOM_STRING_DEVICE_INFO(type, false)
+    );
+  
+  buff = fmtBuffInc(buff, &buffLen, len);
 #endif
   
   // Format serial

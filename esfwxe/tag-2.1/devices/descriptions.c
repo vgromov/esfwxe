@@ -7,7 +7,7 @@
 #include <esfwxe/devices/descriptions.h>
 
 #define DEVICE_FLAG_HUB                0x0001
-#define DEVICE_FLAG_HUB_LIGHT  0x0002
+#define DEVICE_FLAG_HUB_LIGHT          0x0002
 
 #if defined(ESE_USE_STRING_DEVICES_INFO) && 1 == ESE_USE_STRING_DEVICES_INFO
 
@@ -20,9 +20,9 @@ static const struct { \
     int descrLongId; \
     esU16 flags; \
     } c_deviceDescrs[] = {
-#    define HUB_ENTRY(CodeName, SdcrId, LdcrId)            { #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB },
-#    define HUB_LIGHT_ENTRY(CodeName, SdcrId, LdcrId)  { #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB|DEVICE_FLAG_HUB_LIGHT },
-#    define APPLIANCE_ENTRY(CodeName, SdcrId, LdcrId)    { #CodeName, SdcrId, LdcrId, 0 },
+#    define HUB_ENTRY(CodeName, SdcrId, LdcrId)         { #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB },
+#    define HUB_LIGHT_ENTRY(CodeName, SdcrId, LdcrId)   { #CodeName, SdcrId, LdcrId, DEVICE_FLAG_HUB|DEVICE_FLAG_HUB_LIGHT },
+#    define APPLIANCE_ENTRY(CodeName, SdcrId, LdcrId)   { #CodeName, SdcrId, LdcrId, 0 },
 #define DEVICE_ENTRIES_END };
 
 #define OCTAVA_DEVICE_ENTRIES_BEGIN \
