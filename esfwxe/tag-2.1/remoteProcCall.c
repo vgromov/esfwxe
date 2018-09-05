@@ -8,6 +8,10 @@
 #include <esfwxe/commintf.h>
 #include <esfwxe/remoteProcCall.h>
 
+#ifdef ESE_USE_DYNAMIC_RPC_REGISTRY
+
+#else //< #ifdef ESE_USE_DYNAMIC_RPC_REGISTRY
+
 // remote procedure moniker
 //
 typedef struct
@@ -80,6 +84,8 @@ static const RemoteProcMoniker* rpcFindById(esU16 id)
 
   return NULL;
 }
+
+#endif //< ESE_USE_DYNAMIC_RPC_REGISTRY
 
 // generate rpc reflection procedure types
 #define RPC_REFLECTION_BEGIN
@@ -444,12 +450,87 @@ static __inline RpcWrpT rpcFindWrapper(int sig)
 // execute procedure at the side of the callee. 
 // dataEnd marks an end of the stack space allocated 
 // by the reflection engine
+#ifdef ESE_USE_DYNAMIC_RPC_REGISTRY
+
+typedef struct tagRemoteProcMoniker
+{
+  esU16 id;             // the procedure identifier
+  esU16 sig;            // the procedure call signature
+  void* proc;           // procedure that should be called
+  tagRemoteProcMoniker* prev;
+  tagRemoteProcMoniker* next;
+
+} RemoteProcMoniker;
+
+typedef struct {
+  RemoteProcMoniker root;
+  esU32 memcacheSize;
+  // Memcache follows...
+  
+} RemoteProcRegistry;
+
+// find procedure moniker by its id, return its pointer if found, 0 otherwise
+static const RemoteProcMoniker* rpcFindById(ESE_HRPCREG reg, esU16 id)
+{
+  if(!reg)
+    return NULL;
+
+  int idx = 0;
+  for( ; idx < CONST_ARRAY_COUNT(c_rpcMap); ++idx )
+  {
+    if( id == c_rpcMap[idx].id )
+      return &c_rpcMap[idx];
+  } 
+
+  return NULL;
+}
+
+ESE_HRPCREG rpcRegistryCreate(esU32 outMemCacheSize)
+{
+  RemoteProcRegistry* reg = (RemoteProcRegistry*)malloc(
+    sizeof(RemoteProcRegistry) + outMemCacheSize
+  );
+  
+  memset(
+    reg,
+    0,
+    sizeof(RemoteProcRegistry) + outMemCacheSize
+  );
+  reg->memcacheSize = outMemCacheSize;
+  reg->root.id = RPID_STD_CAPS_GET;
+  reg->root.sig = esBA_RpcSig;
+  reg->root.proc = rpcStdCapsGet;
+  
+  return reg;
+}
+
+bool rpcProcedureRegister(ESE_HRPCREG reg, esU16 id, esU16 sig, void* pfn);
+void rpcProcedureUnRegister(ESE_HRPCREG reg, esU16 id);
+esU32 rpcRegistryEntriesCountGet(ESE_HRPCREG reg);
+esU32 rpcRegistryMemcacheSizeGet(ESE_HRPCREG reg);
+void* rpcRegistryMemcacheGet(ESE_HRPCREG reg);
+
+RpcStatus rpcExecLocal(ESE_HRPCREG reg, esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);
+{
+  RpcStatus stat = RpcOK;
+
+  // find rpc moniker entry
+  const RemoteProcMoniker* moniker = rpcFindById(
+    registry,
+    id
+  );
+
+#else
+
 RpcStatus rpcExecLocal(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen)
 {
   RpcStatus stat = RpcOK;
 
   // find rpc moniker entry
   const RemoteProcMoniker* moniker = rpcFindById(id);
+  
+#endif
+
   if( moniker )
   {
     // check signature against one stored in moniker
@@ -458,7 +539,12 @@ RpcStatus rpcExecLocal(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 
       // find wrapper by signature stored in moniker
       RpcWrpT pfn = rpcFindWrapper(moniker->sig);
       if( pfn )
-        stat = pfn(stack, stackLen, stackMaxLen, moniker->proc); // execute procedure with wrapper
+        stat = pfn( //< Execute procedure with wrapper
+          stack, 
+          stackLen, 
+          stackMaxLen, 
+          moniker->proc
+        );
       else
         stat = RpcUnknownSignature;
     }

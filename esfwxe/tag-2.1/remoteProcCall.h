@@ -5,7 +5,7 @@
 
 #ifdef __cplusplus
     extern "C" {
-#endif                         
+#endif
 
 // rpc call consists of stack preparation on the server side, stack transfer over the communication channel
 // rpc stack receiving and interpretation on the callee side, stack re-fill on the client side and
@@ -19,71 +19,74 @@
 //
 
 // max frame size used for RPC communication
-#define RPC_FRAME_SIZE                            512
+#ifndef ESE_RPC_FRAME_SIZE
+# define ESE_RPC_FRAME_SIZE                       512
+#endif
 
 // procedure identifiers
 //
-#define RPID_NOID                                        ((esU16)0xFFFF)    // special case - empty DBID
+#define RPID_NOID                                 ((esU16)0xFFFF)       ///< special case - empty DBID
 
 // the standard procedure ids range
-#define  RPID_STD_BASE                                ((esU16)0)
-#define RPID_STD_END                                ((esU16)2047)
+#define  RPID_STD_BASE                            ((esU16)0)
+#define RPID_STD_END                              ((esU16)2047)
 
 // the custom proc ids
-#define RPID_CUSTOM_BASE                        ((esU16)(RPID_STD_END+1))
-#define RPID_CUSTOM_END                            ((esU16)(RPID_NOID-1))
+#define RPID_CUSTOM_BASE                          ((esU16)(RPID_STD_END+1))
+#define RPID_CUSTOM_END                           ((esU16)(RPID_NOID-1))
 
 // standard procedure ids
 enum {
-    RPID_STD_CAPS_GET                                    = RPID_STD_BASE,        ///< Return all procedures supported by the hardware
-    RPID_STD_FWID_GET,                                                                         ///< Request Firmware identification block. For modern devices,
-                                                        ///< which support dual identification feature, this request will return 
-                                                        ///< legacy identifier. To obtain an actual modern one,
-                                                        ///< the RPID_STD_FWID_MODERN_GET request should be used, if supported.
-    RPID_STD_HW_INFO_GET,                                                                    ///< Hardware info block
-    RPID_STD_STORAGE_INFO_GET,                                                        ///< Storage info block
-    RPID_STD_HEALTH_INFO_GET,                                                            ///< Health status
-    RPID_STD_HEALTH_EXEC,                                                                    ///< Execute self-test
-    RPID_STD_DATETIME_SET,                                                                ///< Date time access procedures
-    RPID_STD_DATETIME_GET,
-    RPID_STD_FACTORY_RESET,                                                                ///< Reset to factory defaults
-    RPID_STD_SHUTDOWN,                                                                        ///< Remotely power down device
-    RPID_STD_ENTER_BOOT,                                                                    ///< Remotely  enter bootloader
-    RPID_STD_POWER_STATUS_GET,                                                        ///< Return device power status in EsePowerStatus struct
-    RPID_STD_DIR_LIST_START,                                                            ///< (Re)Start directory listing    
-    RPID_STD_DIR_LIST_NEXT_GET,                                                        ///< Get next item of directory listing
-    RPID_STD_DIR_DELETE,                                                                    ///< Delete directory
-    RPID_STD_FILE_DELETE,                                                                    ///< Delete file
-    RPID_STD_FREESPACE_GET,                                                                ///< Get free file system space info
-    RPID_STD_FILE_READ_START,                                                            ///< Prepare file reading sequence
-    RPID_STD_FILE_READ_NEXT,                                                            ///< Request next file data chunk
-    RPID_STD_HW_UID_GET,                                                                    ///< Retrieve hardware unique ID (128bit, in text form, i.e. char[32]), if supported by hardware, of course...
-    RPID_STD_FINDME,                                                                            ///< Perform some kind of visual|audio device identification. useful in network configurations
-    RPID_STD_SW_INFO_GET,                                                                    ///< Request software information block
-  RPID_STD_FWID_GET_MODERN                              ///< Request modern firmware identification. For devices with dual identification feature.
+  RPID_STD_CAPS_GET                               = RPID_STD_BASE,      ///< Return all procedures supported by the hardware
+  RPID_STD_FWID_GET,                                                    ///< Request Firmware identification block. For modern devices,
+                                                                        ///< which support dual identification feature, this request will return 
+                                                                        ///< legacy identifier. To obtain an actual modern one,
+                                                                        ///< the RPID_STD_FWID_MODERN_GET request should be used, if supported.
+  RPID_STD_HW_INFO_GET,                                                 ///< Hardware info block
+  RPID_STD_STORAGE_INFO_GET,                                            ///< Storage info block
+  RPID_STD_HEALTH_INFO_GET,                                             ///< Health status
+  RPID_STD_HEALTH_EXEC,                                                 ///< Execute self-test
+  RPID_STD_DATETIME_SET,                                                ///< Date time access procedures
+  RPID_STD_DATETIME_GET,
+  RPID_STD_FACTORY_RESET,                                               ///< Reset to factory defaults
+  RPID_STD_SHUTDOWN,                                                    ///< Remotely power down device
+  RPID_STD_ENTER_BOOT,                                                  ///< Remotely  enter bootloader
+  RPID_STD_POWER_STATUS_GET,                                            ///< Return device power status in EsePowerStatus struct
+  RPID_STD_DIR_LIST_START,                                              ///< (Re)Start directory listing    
+  RPID_STD_DIR_LIST_NEXT_GET,                                           ///< Get next item of directory listing
+  RPID_STD_DIR_DELETE,                                                  ///< Delete directory
+  RPID_STD_FILE_DELETE,                                                 ///< Delete file
+  RPID_STD_FREESPACE_GET,                                               ///< Get free file system space info
+  RPID_STD_FILE_READ_START,                                             ///< Prepare file reading sequence
+  RPID_STD_FILE_READ_NEXT,                                              ///< Request next file data chunk
+  RPID_STD_HW_UID_GET,                                                  ///< Retrieve hardware unique ID (128bit, in text form, i.e. char[32]), if supported by hardware, of course...
+  RPID_STD_FINDME,                                                      ///< Perform some kind of visual|audio device identification. useful in network configurations
+  RPID_STD_SW_INFO_GET,                                                 ///< Request software information block
+  RPID_STD_FWID_GET_MODERN                                              ///< Request modern firmware identification. For devices with dual identification feature.
 };
 
 // remote procedure call status
 //
 typedef enum {
-    RpcOK,                                                        // procedure call succeeded
-    RpcNotImplemented,                                // rpc with this idGet is not implemented
-    RpcStackCorrupt,                                    // rpc stack is corrupt and unusable
-    RpcTimedOut,                                            // RPC execution was prematurely cancelled due to timeout
-    RpcStackOverflow,                                    // too many parameters, rpc stack overflow occured
-    RpcUnknownSignature,                            // RPC signature is unknown
-    RpcSignatureMismatch,                            // RPC signature of caller and callee do not match each other
-    RpcResponseIdMismatch,                        // RPC procedure idGet of response does not match one of request 
-    RpcCommunicationError,                        // RPC failed due to communication layer
-    RpcNotReady,                                            // RPC not ready to respond
-    // rpc parameter value errors
-    RpcParam0ValueError,
-    RpcParam1ValueError,
-    RpcParam2ValueError,
-    RpcParam3ValueError,
-    RpcParam4ValueError,
-    RpcParam5ValueError,
-    RpcCancelled,                                            // RPC execution is cancelled
+  RpcOK,                                                                ///< Procedure call succeeded
+  RpcNotImplemented,                                                    ///< RPC with this idGet is not implemented
+  RpcStackCorrupt,                                                      ///< RPC stack is corrupt and unusable
+  RpcTimedOut,                                                          ///< RPC execution was prematurely cancelled due to timeout
+  RpcStackOverflow,                                                     ///< Too many parameters, rpc stack overflow occured
+  RpcUnknownSignature,                                                  ///< RPC signature is unknown
+  RpcSignatureMismatch,                                                 ///< RPC signature of caller and callee do not match each other
+  RpcResponseIdMismatch,                                                ///< RPC procedure idGet of response does not match one of request 
+  RpcCommunicationError,                                                ///< RPC failed due to communication layer
+  RpcNotReady,                                                          ///< RPC not ready to respond
+  
+  /// RPC parameter value errors
+  RpcParam0ValueError,
+  RpcParam1ValueError,
+  RpcParam2ValueError,
+  RpcParam3ValueError,
+  RpcParam4ValueError,
+  RpcParam5ValueError,
+  RpcCancelled,                                                         ///< RPC execution is cancelled
 
 } RpcStatus;
 
@@ -129,10 +132,27 @@ typedef enum {
 
 #include <esfwxe/rpcMap/rpcReflection.cc>
 
-// execute procedure at the side of the callee. 
-// endMax marks an end of the stack space allocated 
-// by the reflection engine
-RpcStatus rpcExecLocal(esU16 idGet, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);
+/// Execute procedure at the side of the callee. 
+/// endMax marks an end of the stack space allocated 
+/// by the reflection engine
+///
+#ifdef ESE_USE_DYNAMIC_RPC_REGISTRY
+
+typedef void* ESE_HRPCREG;
+
+ESE_HRPCREG rpcRegistryCreate(esU32 outMemCacheSize);
+bool rpcProcedureRegister(ESE_HRPCREG reg, esU16 id, esU16 sig, void* pfn);
+void rpcProcedureUnRegister(ESE_HRPCREG reg, esU16 id);
+esU32 rpcRegistryEntriesCountGet(ESE_HRPCREG reg);
+esU32 rpcRegistryMemcacheSizeGet(ESE_HRPCREG reg);
+void* rpcRegistryMemcacheGet(ESE_HRPCREG reg);
+RpcStatus rpcExecLocal(ESE_HRPCREG reg, esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);
+
+#else
+
+RpcStatus rpcExecLocal(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);
+
+#endif
 
 // service interface
 //
