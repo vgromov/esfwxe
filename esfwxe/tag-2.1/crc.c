@@ -2,8 +2,8 @@
 #pragma hdrstop
 
 #ifndef CRC_LOCAL_LINKAGE_DECL
-#    include <esfwxe/crc.h>
-#    define CRC_LOCAL_LINKAGE_DECL
+#  include <esfwxe/crc.h>
+#  define CRC_LOCAL_LINKAGE_DECL
 #endif
 
 // calculate CRC7

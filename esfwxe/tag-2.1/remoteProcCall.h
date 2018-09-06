@@ -28,7 +28,7 @@
 #define RPID_NOID                                 ((esU16)0xFFFF)       ///< special case - empty DBID
 
 // the standard procedure ids range
-#define  RPID_STD_BASE                            ((esU16)0)
+#define RPID_STD_BASE                             ((esU16)0)
 #define RPID_STD_END                              ((esU16)2047)
 
 // the custom proc ids
@@ -69,7 +69,7 @@ enum {
 //
 typedef enum {
   RpcOK,                                                                ///< Procedure call succeeded
-  RpcNotImplemented,                                                    ///< RPC with this idGet is not implemented
+  RpcNotImplemented,                                                    ///< RPC with this ID is not implemented/not registered
   RpcStackCorrupt,                                                      ///< RPC stack is corrupt and unusable
   RpcTimedOut,                                                          ///< RPC execution was prematurely cancelled due to timeout
   RpcStackOverflow,                                                     ///< Too many parameters, rpc stack overflow occured
@@ -86,7 +86,7 @@ typedef enum {
   RpcParam3ValueError,
   RpcParam4ValueError,
   RpcParam5ValueError,
-  RpcCancelled,                                                         ///< RPC execution is cancelled
+  RpcCancelled                                                          ///< RPC execution is cancelled
 
 } RpcStatus;
 
@@ -136,30 +136,47 @@ typedef enum {
 /// endMax marks an end of the stack space allocated 
 /// by the reflection engine
 ///
-#ifdef ESE_USE_DYNAMIC_RPC_REGISTRY
-
-typedef void* ESE_HRPCREG;
-
-ESE_HRPCREG rpcRegistryCreate(esU32 outMemCacheSize);
-bool rpcProcedureRegister(ESE_HRPCREG reg, esU16 id, esU16 sig, void* pfn);
-void rpcProcedureUnRegister(ESE_HRPCREG reg, esU16 id);
-esU32 rpcRegistryEntriesCountGet(ESE_HRPCREG reg);
-esU32 rpcRegistryMemcacheSizeGet(ESE_HRPCREG reg);
-void* rpcRegistryMemcacheGet(ESE_HRPCREG reg);
-RpcStatus rpcExecLocal(ESE_HRPCREG reg, esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);
-
-#else
+#ifndef ESE_USE_DYNAMIC_RPC_REGISTRY
 
 RpcStatus rpcExecLocal(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);
+
+#else //< ESE_USE_DYNAMIC_RPC_REGISTRY
+
+/// RPC dynamic registry and execution context
+typedef void* ESE_HRPCCTX;
+
+/// Create RPC dynamic registry and execution context
+ESE_HRPCCTX rpcContextCreate(int outMemCacheSize);
+
+/// Remove context, unregistering procedures, and deallocating all memory resources
+void rpcContextDelete(ESE_HRPCCTX ctx);
+
+/// Register RPC handler in RPC context
+bool rpcProcedureRegister(ESE_HRPCCTX ctx, int id, int sig, void* pfn);
+
+/// UnRegister RPC handler from RPC context
+void rpcProcedureUnRegister(ESE_HRPCCTX ctx, int id);
+
+/// Return count of registered RPC handlers for specific RPC context
+int rpcContextEntriesCountGet(ESE_HRPCCTX ctx);
+
+/// Return size of RPC context output memcache
+int rpcContextMemcacheSizeGet(ESE_HRPCCTX ctx);
+
+/// Return RPC context memcache buffer
+void* rpcContextMemcacheGet(ESE_HRPCCTX ctx);
+
+/// Execute RPC handler with given ID and signature using specific RPC context
+RpcStatus rpcExecLocal(ESE_HRPCCTX ctx, esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);
 
 #endif
 
 // service interface
 //
 // idGet checks
-#define rpcIsStdPID( pId )            ((esBL)((esU16)(pId) >= RPID_STD_BASE && (esU16)(pId) <= RPID_STD_END))
+#define rpcIsStdPID( pId )           ((esBL)((esU16)(pId) >= RPID_STD_BASE && (esU16)(pId) <= RPID_STD_END))
 #define rpcIsCustomPID( pId )        ((esBL)((esU16)(pId) >= RPID_CUSTOM_BASE && (esU16)(pId) <= RPID_CUSTOM_END))
-#define rpcIsPID( pId )                    ((esBL)(rpcIsStdPID(pId) || rpcIsCustomPID(pId)))
+#define rpcIsPID( pId )              ((esBL)(rpcIsStdPID(pId) || rpcIsCustomPID(pId)))
 
 #ifdef __cplusplus
     }

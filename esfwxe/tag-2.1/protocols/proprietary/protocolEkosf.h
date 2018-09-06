@@ -1,86 +1,90 @@
 #ifndef _protocol_ekosf_h_
 #define _protocol_ekosf_h_
 
-// Functionality configuration header
-#include <protocolEkosfConfig.h>
+/// @file protocolEkosf.h
+/// @brief ES proprietary protocol header.
+/// Initial idea: Sergei Arestov
+/// Implementation: Vsevolod Gromov
+///
 
-// ES proprietary protocol header.
-// Initial idea: Sergei Arestov
-// Implementation: Vsevolod Gromov
-//
+/// Functionality configuration header
+#include <protocolEkosfConfig.h>
 
 #ifdef __cplusplus
     extern "C" {
 #endif 
 
-// frame types
-#define ES_FT_MASTER                               ((esU8)0x7B)
-#define ES_FT_SLAVE                               ((esU8)0x7A)
+/// Frame types
+#define ES_FT_MASTER                            ((esU8)0x7B)
+#define ES_FT_SLAVE                             ((esU8)0x7A)
 
-// command & error code bases
+/// Command & error code bases
 //
-#define ES_CMD_REQUEST_BASE                  ((esU16)0x0000)
-#define ES_CMD_RESPONSE_BASE              ((esU16)0x8000)
-#define ES_ERROR_BASE                              ((esU16)0xFF00)
+#define ES_CMD_REQUEST_BASE                     ((esU16)0x0000)
+#define ES_CMD_RESPONSE_BASE                    ((esU16)0x8000)
+#define ES_ERROR_BASE                           ((esU16)0xFF00)
 
-// basic commands & error codes
-//
+/// Basic commands & error codes
+///
 // commands...
-#define ES_CMD_PING                                  (ES_CMD_REQUEST_BASE)         // "are you there" ping request
-#define ES_CMD_ADDR_SET                          (ES_CMD_REQUEST_BASE+1)     // set new device address
-#define ES_CMD_RATE_SET                          (ES_CMD_REQUEST_BASE+3)     // request new data rate. rate is desired bps value, esU32
-#define ES_CMD_RPC_EXEC                          (ES_CMD_REQUEST_BASE+32)    // executes remote procedure call on the responder's side
-                                                                                                                                    // data contains esU16 == rpc idGet,
-                                                                                                                                    // followed by packed rpc stack
-                                                                                                                                    // respond either with: 
-                                                                                                                                    // ES_ERR_CMD_UNKNOWN (really bad, we cannot do much with such device)
-                                                                                                                                    // ES_ERR_NOTREADY  device is busy executing another procedure, etc.
-                                                                                                                                    // ES_CMD_RPC_EXEC    + ES_CMD_RESPONSE_BASE, followed by response stack
+#define ES_CMD_PING                             (ES_CMD_REQUEST_BASE)       ///< "are you there" ping request
+#define ES_CMD_ADDR_SET                         (ES_CMD_REQUEST_BASE+1)     ///< set new device address
+#define ES_CMD_RATE_SET                         (ES_CMD_REQUEST_BASE+3)     ///< request new data rate. rate is desired bps value, esU32
+#define ES_CMD_RPC_EXEC                         (ES_CMD_REQUEST_BASE+32)    ///< executes remote procedure call on the responder's side
+                                                                            ///< data contains esU16 == rpc idGet,
+                                                                            ///< followed by packed rpc stack
+                                                                            ///< respond either with: 
+                                                                            ///< ES_ERR_CMD_UNKNOWN (really bad, we cannot do much with such device)
+                                                                            ///< ES_ERR_NOTREADY  device is busy executing another procedure, etc.
+                                                                            ///< ES_CMD_RPC_EXEC    + ES_CMD_RESPONSE_BASE, followed by response stack
 
-// service macros
-//
-#define ES_MAKE_RESPONSE( cmd )          ((esU16)((cmd) + ES_CMD_RESPONSE_BASE))
-#define ES_IS_ERROR( cmd )                  ((esBL)((esU16)(cmd) >= ES_ERROR_BASE))
+/// Service macros
+///
+#define ES_MAKE_RESPONSE( cmd )                 ((esU16)((cmd) + ES_CMD_RESPONSE_BASE))
+#define ES_IS_ERROR( cmd )                      ((esBL)((esU16)(cmd) >= ES_ERROR_BASE))
 
-// errors...
-//
-// generic
-#define ES_ERR_DATA_SIZE                      (ES_ERROR_BASE)                     // Data size in header does not equal to real data size...
-#define ES_ERR_DATA_MISALIGN              (ES_ERROR_BASE+1)                 // Wrong data size alignment (not multiple of 2)...
-#define ES_ERR_DATA_CRC                          (ES_ERROR_BASE+2)                 // CRC data error
-#define ES_ERR_CMD_UNKNOWN                  (ES_ERROR_BASE+3)                 // Unknown command
-#define ES_ERR_DATA_TOO_LONG               (ES_ERROR_BASE+4)                  // pending data packet is too long
-// command-related
-#define ES_ERR_DATA_SIZE_UNEXPECTED (ES_ERROR_BASE+5)               // actual data size is unexpected for this command
-#define ES_ERR_WRONG_RATE                      (ES_ERROR_BASE+6)                 // requested rate value is out of range
-#define ES_ERR_WRONG_ADDR                      (ES_ERROR_BASE+7)                 // requested device address is out of range
-#define ES_ERR_NOTREADY                          (ES_ERROR_BASE+8)                  // device is not ready
+/// Errors...
+///
+
+/// Generic
+#define ES_ERR_DATA_SIZE                        (ES_ERROR_BASE)             ///< Data size in header does not equal to real data size...
+#define ES_ERR_DATA_MISALIGN                    (ES_ERROR_BASE+1)           ///< Wrong data size alignment (not multiple of 2)...
+#define ES_ERR_DATA_CRC                         (ES_ERROR_BASE+2)           ///< CRC data error
+#define ES_ERR_CMD_UNKNOWN                      (ES_ERROR_BASE+3)           ///< Unknown command
+#define ES_ERR_DATA_TOO_LONG                    (ES_ERROR_BASE+4)           ///< Pending data packet is too long
+
+/// Command-related
+#define ES_ERR_DATA_SIZE_UNEXPECTED             (ES_ERROR_BASE+5)           ///< Actual data size is unexpected for this command
+#define ES_ERR_WRONG_RATE                       (ES_ERROR_BASE+6)           ///< Requested rate value is out of range
+#define ES_ERR_WRONG_ADDR                       (ES_ERROR_BASE+7)           ///< Requested device address is out of range
+#define ES_ERR_NOTREADY                         (ES_ERROR_BASE+8)           ///< Device is not ready
 
 /// Mandatory packet header struct, which may optionally be followed by data packet
 ///
 typedef struct
 {
-    esU8 frameType;   ///< Frame type specifier (ES_FT_MASTER|ES_FT_SLAVE)
-    esU8 devAddr;          ///< Unique peer device address
-    esU16 command;        ///< Command or error code response
-    esU16 dataLen;        ///< If no data follow header, just set this field to 0
-    esU16 packetNum;  ///< Server marks its packet's sequence  number by this field
-                                        ///  Peer should respond with packet with the same sequence number
-    esU16 reserved;   ///< Reserved space, normally set to all 0s
-    esU16 crc;                ///< 2 byte CRC as of RFC1070
+  esU8 frameType;                                                           ///< Frame type specifier (ES_FT_MASTER|ES_FT_SLAVE)
+  esU8 devAddr;                                                             ///< Unique peer device address
+  esU16 command;                                                            ///< Command or error code response
+  esU16 dataLen;                                                            ///< If no data follow header, just set this field to 0
+  esU16 packetNum;                                                          ///< Server marks its packet's sequence  number by this field
+                                                                            ///  Peer should respond with packet with the same sequence number
+  esU16 reserved;                                                           ///< Reserved space, normally set to all 0s
+  esU16 crc;                                                                ///< 2 byte CRC as of RFC1070
 
 } ProtocolEkosfHdr;
 
-// constants
-//
+/// Constants
+///
 
-// generics
+/// Generics
 enum {
-    ProtocolEkosfHdr_SZE = sizeof(ProtocolEkosfHdr),
+  ProtocolEkosfHdr_SZE = sizeof(ProtocolEkosfHdr),
 };
 
 /// Functionality interface
 ///
+
 /// This method should be implemented in target application.
 /// Its result should be effective wait for tmo milliseconds.
 ///
@@ -101,62 +105,66 @@ struct tagEseProtocolIoMonitor;
 
 /// ES protocol standard IO state struct
 ///
+ESE_ANON_UNION
 typedef struct {
-    union {
-        esU8 data[RPC_FRAME_SIZE];        // io data
+  union {
+    esU8                data[ESE_RPC_FRAME_SIZE];                         ///< IO data
+    struct {
+      ProtocolEkosfHdr  hdr;                                              ///< Request|response header
+      union {
+        esU8            rawData[ESE_RPC_FRAME_SIZE-ProtocolEkosfHdr_SZE]; ///< Raw data (incl. checksum16) following header
         struct {
-            ProtocolEkosfHdr  hdr;             // request|response header
-            union {
-                esU8                  rawData[RPC_FRAME_SIZE-ProtocolEkosfHdr_SZE];// raw data (incl. checksum16) following header
-                struct {
-                    esU16                  idGet;                // rpc idGet
-                    esU16                  sigOrStat;// rpc signature or returned status
-                    esU8                  stack[RPC_FRAME_SIZE-ProtocolEkosfHdr_SZE-6];    // rpc stack space (6 = two WORDs and 1 CRC16 at the end of data)
-                };
-            };
+          esU16         id;                                               ///< RPC id
+          esU16         sigOrStat;                                        ///< RPC signature or returned status
+          esU8          stack[ESE_RPC_FRAME_SIZE-ProtocolEkosfHdr_SZE-6]; ///< RPC stack space (6 = two WORDs and 1 CRC16 at the end of data)
         };
+      };
     };
+  };
 
-    esU32 packetTmo;                               // packet timeout in ms
-    esU32 pendingRate;                            // value for pending rate change
-    EseChannelIo* chnl;                            // communication channel associated with this io state
-    struct tagEseProtocolIoMonitor* mon;            // protocol monitor interface
-    esU16 err;                                            // error reported from protocol communication
-    esI16 pendingAddr;                            // pending address value for address set command, -1 if nothing to change
-    esU8 addr;                                            // our|recently contacted peer address
+  esU32                 packetTmo;                                        ///< Packet timeout in ms
+  esU32                 pendingRate;                                      ///< Value for pending rate change
+  EseChannelIo*         chnl;                                             ///< Communication channel associated with this io state
+#ifdef ESE_USE_DYNAMIC_RPC_REGISTRY
+  ESE_HRPCCTX           rpcCtx;                                           ///< Dynamic RPC context, if ESE_USE_DYNAMIC_RPC_REGISTRY is defined
+#endif
+  struct tagEseProtocolIoMonitor* mon;                                    ///< Protocol monitor interface
+  esU16                 err;                                              ///< Error reported from protocol communication
+  esI16                 pendingAddr;                                      ///< Pending address value for address set command, -1 if nothing to change
+  esU8                  addr;                                             ///< Our|recently contacted peer address
 
 } EseStdIoState;
 
-// default io parameters
+/// Default io parameters
 enum {
-    ekosfDefLegacyPeerAddr     = 5,            // default peer address
-    ekosfBroadcastPeerAddr     = 255,        // default peer address AKA broadcast address. slave will always respond to broadcast packets as well as to its own address packets
-    ekosfDefPacketTmo             =         // default packet timeout in ms.
+  ekosfDefLegacyPeerAddr          = 5,                                    ///< default peer address
+  ekosfBroadcastPeerAddr          = 255,                                  ///< default peer address AKA broadcast address. slave will always respond to broadcast packets as well as to its own address packets
+  ekosfDefPacketTmo               =                                       ///< default packet timeout in ms.
 #ifndef ES_DEF_PACKET_TMO
     100,
 #else
     ES_DEF_PACKET_TMO,
-#endif    
-    ekosfHdrFrameReceiveMaxRetries=   // max count of tries to receive full header frame, identified either by the ES_FT_MASTER or ES_FT_SLAVE markers
+#endif
+  ekosfHdrFrameReceiveMaxRetries  =                                       ///< max count of tries to receive full header frame, identified either by the ES_FT_MASTER or ES_FT_SLAVE markers
 #ifndef ES_HDR_FRAME_MAX_RETRIES
     10, 
 #else
     ES_HDR_FRAME_MAX_RETRIES,
 #endif
-    
-  ekosfMaxAutoSetupAddrTmo = 255 + ekosfDefPacketTmo,
+
+  ekosfMaxAutoSetupAddrTmo        = 255 + ekosfDefPacketTmo,
   
-    EseStdIoState_SZE           = sizeof(EseStdIoState),
-    ekosfMaxDataLen                 = RPC_FRAME_SIZE-ProtocolEkosfHdr_SZE, // max data length is frame size except header length
-    ekosfRpcStackOffs             = 4,                // offset from the beginning of raw data to the start of RPC stack
-    ekosfRpcMinDataLen          = ekosfRpcStackOffs + 2, // minimum data length (incl checksum16) of RPC data packet
-    ekosfRpcMaxStackLen            = ekosfMaxDataLen-ekosfRpcMinDataLen, // max length available for rpc stack     
+  EseStdIoState_SZE               = sizeof(EseStdIoState),
+  ekosfMaxDataLen                 = ESE_RPC_FRAME_SIZE-ProtocolEkosfHdr_SZE,///< max data length is frame size except header length
+  ekosfRpcStackOffs               = 4,                                    ///< offset from the beginning of raw data to the start of RPC stack
+  ekosfRpcMinDataLen              = ekosfRpcStackOffs + 2,                ///< minimum data length (incl checksum16) of RPC data packet
+  ekosfRpcMaxStackLen             = ekosfMaxDataLen-ekosfRpcMinDataLen,   ///< max length available for rpc stack     
 };
 
-#endif // defined( ESE_USE_RPC_STD_MASTER_IMPL ) || defined(ESE_USE_RPC_STD_SLAVE_IMPL)
+#endif //< defined( ESE_USE_RPC_STD_MASTER_IMPL ) || defined(ESE_USE_RPC_STD_SLAVE_IMPL)
 
-// standard server-side services implementation
-//
+/// standard server-side services implementation
+///
 #ifdef ESE_USE_RPC_STD_MASTER_IMPL
 
 // protocol frame monitor services.
