@@ -9,7 +9,10 @@ public:
   EseStreamMemory(esU8* mem, size_t cnt) ESE_NOTHROW;
   virtual ~EseStreamMemory() ESE_NOTHROW;
 
-  /// EseStream interface implementation
+  /// Interface deallocator
+  virtual void destroy() ESE_NOTHROW ESE_OVERRIDE;
+  
+  /// EseStreamIntf interface implementation
   ///
   virtual size_t sizeGet() const ESE_NOTHROW { return m_end-m_start; }
   virtual size_t posGet() const ESE_NOTHROW;

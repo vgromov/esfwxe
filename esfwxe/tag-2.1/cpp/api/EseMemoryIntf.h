@@ -2,6 +2,7 @@
 #define _ese_memory_intf_h_
 
 /// Memory management API
+///
 class ESE_ABSTRACT EseMemoryIntf
 {
 public:

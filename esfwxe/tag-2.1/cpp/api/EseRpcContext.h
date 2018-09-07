@@ -7,7 +7,7 @@
 class EseRpcContext : public EseRpcContextIntf
 {
 public:
-  EseRpcContext(int memcacheSize) ESE_NOTHROW;
+  EseRpcContext(int memcacheSize, void* param = NULL) ESE_NOTHROW;
   virtual ~EseRpcContext() ESE_NOTHROW;
   
   virtual ESE_HRPCCTX ctxRawGet() ESE_NOTHROW ESE_OVERRIDE;
@@ -16,10 +16,12 @@ public:
   virtual int proceduresCountGet() const ESE_NOTHROW ESE_OVERRIDE;
   virtual int memcacheSizeGet() const ESE_NOTHROW ESE_OVERRIDE;
   virtual void* memcacheGet() ESE_NOTHROW ESE_OVERRIDE;
+  virtual void* parameterGet() ESE_NOTHROW ESE_OVERRIDE;
   virtual RpcStatus exec(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen) ESE_NOTHROW ESE_OVERRIDE;
   
 protected:
   ESE_HRPCCTX m_ctx;
+  void* m_param;
 
 private:
   EseRpcContext() ESE_NOTHROW ESE_REMOVE_DECL;

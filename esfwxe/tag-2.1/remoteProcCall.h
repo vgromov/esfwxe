@@ -50,7 +50,7 @@ enum {
   RPID_STD_DATETIME_GET,
   RPID_STD_FACTORY_RESET,                                               ///< Reset to factory defaults
   RPID_STD_SHUTDOWN,                                                    ///< Remotely power down device
-  RPID_STD_ENTER_BOOT,                                                  ///< Remotely  enter bootloader
+  RPID_STD_ENTER_BOOT,                                                  ///< Remotely enter bootloader
   RPID_STD_POWER_STATUS_GET,                                            ///< Return device power status in EsePowerStatus struct
   RPID_STD_DIR_LIST_START,                                              ///< (Re)Start directory listing    
   RPID_STD_DIR_LIST_NEXT_GET,                                           ///< Get next item of directory listing
@@ -142,11 +142,34 @@ RpcStatus rpcExecLocal(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 
 
 #else //< ESE_USE_DYNAMIC_RPC_REGISTRY
 
+typedef struct tagRemoteProcMoniker
+{
+  esU16 id;             //< The procedure identifier
+  esU16 sig;            //< The procedure call signature
+  void* proc;           //< Actual RPC hanlder procedure that should be called
+  void* rpcProxy;       //< RPC proxy with signature corrsponding to sig
+  struct tagRemoteProcMoniker* prev;
+  struct tagRemoteProcMoniker* next;
+
+} RemoteProcMoniker;
+
 /// RPC dynamic registry and execution context
+typedef struct tagRemoteProcContext {
+  RemoteProcMoniker root;
+  esU32 memcacheSize;
+  void* param;
+  // Memcache follows...
+  
+} RemoteProcContext;
 typedef void* ESE_HRPCCTX;
 
-/// Create RPC dynamic registry and execution context
-ESE_HRPCCTX rpcContextCreate(int outMemCacheSize);
+/// @brief Create RPC dynamic registry and execution context
+/// Post-condition - a new RPC dynamic context is created, and one most basic procedure (registered IDs requester) is registered
+/// @param [in]       outMemCacheSize - Size of additional memory cache for RPC handlers to use for temporary output parameters
+/// @param [in]       param           - An optional arbitrary information parameter which is passed through context
+/// @return                           - created context handle, or NULL, if unsuccessful
+///
+ESE_HRPCCTX rpcContextCreate(int outMemCacheSize, void* param);
 
 /// Remove context, unregistering procedures, and deallocating all memory resources
 void rpcContextDelete(ESE_HRPCCTX ctx);
@@ -165,6 +188,9 @@ int rpcContextMemcacheSizeGet(ESE_HRPCCTX ctx);
 
 /// Return RPC context memcache buffer
 void* rpcContextMemcacheGet(ESE_HRPCCTX ctx);
+
+/// Return value of additional parameter passed to rpcContextCreate
+void* rpcContextParameterGet(ESE_HRPCCTX ctx);
 
 /// Execute RPC handler with given ID and signature using specific RPC context
 RpcStatus rpcExecLocal(ESE_HRPCCTX ctx, esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen);

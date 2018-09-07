@@ -6,11 +6,13 @@
 #include "EseRpcContext.h"
 //----------------------------------------------------------------------------------------------
 
-EseRpcContext::EseRpcContext(int memcacheSize) ESE_NOTHROW :
-m_ctx(NULL)
+EseRpcContext::EseRpcContext(int memcacheSize, void* param /*= NULL*/) ESE_NOTHROW :
+m_ctx(NULL),
+m_param(param)
 {
   m_ctx = rpcContextCreate(
-    memcacheSize
+    memcacheSize,
+    reinterpret_cast<EseRpcContextIntf*>(this)
   );
 }
 //----------------------------------------------------------------------------------------------
@@ -72,6 +74,12 @@ void* EseRpcContext::memcacheGet() ESE_NOTHROW
   return rpcContextMemcacheGet(
     m_ctx
   );
+}
+//----------------------------------------------------------------------------------------------
+
+void* EseRpcContext::parameterGet() ESE_NOTHROW
+{
+  return m_param;
 }
 //----------------------------------------------------------------------------------------------
 

@@ -414,24 +414,6 @@ typedef RpcStatus (*RpcWrpT)(esU8* stack, esU32* stackLen, esU32 stackMaxLen, vo
 
 # include <stdlib.h>
 
-typedef struct tagRemoteProcMoniker
-{
-  esU16 id;             //< The procedure identifier
-  esU16 sig;            //< The procedure call signature
-  void* proc;           //< Actual RPC hanlder procedure that should be called
-  void* rpcProxy;       //< RPC proxy with signature corrsponding to sig
-  struct tagRemoteProcMoniker* prev;
-  struct tagRemoteProcMoniker* next;
-
-} RemoteProcMoniker;
-
-typedef struct {
-  RemoteProcMoniker root;
-  esU32 memcacheSize;
-  // Memcache follows...
-  
-} RemoteProcContext;
-
 // Generate rpc reflection procedure types
 #define RPC_REFLECTION_BEGIN
 #define  RPC_DEF_HANDLER0(ReturnType) \
@@ -896,7 +878,7 @@ static esBA rpcStdGetCaps(ESE_HRPCCTX ctx, RpcStatus* stat)
 }
 //----------------------------------------------------------------------------------------------
 
-ESE_HRPCCTX rpcContextCreate(int outMemCacheSize)
+ESE_HRPCCTX rpcContextCreate(int outMemCacheSize, void* param)
 {
   if( outMemCacheSize < 0 )
     outMemCacheSize = 0;
@@ -913,6 +895,7 @@ ESE_HRPCCTX rpcContextCreate(int outMemCacheSize)
   
   // Always register at least one most-basic RPC service - requester of all registered RPC handlers
   ctx->memcacheSize = outMemCacheSize;
+  ctx->param = param;
   ctx->root.id = RPID_STD_CAPS_GET;
   ctx->root.sig = esBA_RpcSig;
   ctx->root.proc = (void*)rpcStdGetCaps;
@@ -1089,6 +1072,15 @@ void* rpcContextMemcacheGet(ESE_HRPCCTX ctx)
 }
 //----------------------------------------------------------------------------------------------
 
+void* rpcContextParameterGet(ESE_HRPCCTX ctx)
+{
+  if(!ctx)
+    return NULL;
+    
+  return ((RemoteProcContext*)ctx)->param;
+}
+//----------------------------------------------------------------------------------------------
+
 RpcStatus rpcExecLocal(ESE_HRPCCTX ctx, esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen)
 {
   RpcStatus stat = RpcOK;
@@ -1116,7 +1108,17 @@ RpcStatus rpcExecLocal(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 
     if( moniker->sig == sig )
     {
       // find wrapper by signature stored in moniker
-      RpcWrpT pfn = rpcFindWrapper(moniker->sig);
+      RpcWrpT pfn = 
+#ifndef ESE_USE_DYNAMIC_RPC_REGISTRY
+
+        rpcFindWrapper(moniker->sig);
+        
+#else //< ESE_USE_DYNAMIC_RPC_REGISTRY
+
+        (RpcWrpT)moniker->rpcProxy;
+        
+#endif //< ESE_USE_DYNAMIC_RPC_REGISTRY
+
       if( pfn )
         stat = pfn( //< Execute procedure with wrapper
 #ifdef ESE_USE_DYNAMIC_RPC_REGISTRY

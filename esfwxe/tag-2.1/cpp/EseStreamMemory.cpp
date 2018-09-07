@@ -3,17 +3,26 @@
 
 #include <algorithm>
 #include "EseStreamMemory.h"
+//----------------------------------------------------------------------------------------------
 
 EseStreamMemory::EseStreamMemory(esU8* mem, size_t cnt) ESE_NOTHROW :
 m_start(mem),
 m_end(mem+cnt),
 m_pos(mem)
 {}
+//----------------------------------------------------------------------------------------------
 
 EseStreamMemory::~EseStreamMemory() ESE_NOTHROW
 {
   close();
 }
+//----------------------------------------------------------------------------------------------
+
+void EseStreamMemory::destroy() ESE_NOTHROW
+{
+  delete this;
+}
+//----------------------------------------------------------------------------------------------
 
 size_t EseStreamMemory::posGet() const ESE_NOTHROW
 {
@@ -22,6 +31,7 @@ size_t EseStreamMemory::posGet() const ESE_NOTHROW
 
   return EseStream::npos;
 }
+//----------------------------------------------------------------------------------------------
 
 size_t EseStreamMemory::posSet(ptrdiff_t offs, EseStream::PosMode mode /*= EseStream::posFromStart*/ ) ESE_NOTHROW
 {
@@ -60,6 +70,7 @@ size_t EseStreamMemory::posSet(ptrdiff_t offs, EseStream::PosMode mode /*= EseSt
 
   return EseStream::npos;
 }
+//----------------------------------------------------------------------------------------------
 
 size_t EseStreamMemory::read(esU8* data, size_t len) ESE_NOTHROW
 {
@@ -74,6 +85,7 @@ size_t EseStreamMemory::read(esU8* data, size_t len) ESE_NOTHROW
 
   return 0;
 }
+//----------------------------------------------------------------------------------------------
 
 size_t EseStreamMemory::write(const esU8* data, size_t len) ESE_NOTHROW
 {
@@ -88,3 +100,4 @@ size_t EseStreamMemory::write(const esU8* data, size_t len) ESE_NOTHROW
   
   return 0;
 }
+//----------------------------------------------------------------------------------------------

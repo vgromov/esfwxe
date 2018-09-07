@@ -30,6 +30,9 @@ public:
   /// Return RPC context memcache buffer
   virtual void* memcacheGet() ESE_NOTHROW = 0;
 
+  /// Return RPC context parameter
+  virtual void* parameterGet() ESE_NOTHROW = 0;
+
   /// Execute RPC handler with given ID and signature using specific RPC context
   virtual RpcStatus exec(esU16 id, esU16 sig, esU8* stack, esU32* stackLen, esU32 stackMaxLen) ESE_NOTHROW = 0;
 };
