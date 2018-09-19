@@ -3,6 +3,7 @@
 #include <esfwxe/utils_str.h>
 
 #include <stdarg.h>
+#include <cstdio>
 
 #include "EseStringApiIntf.h"
 #include "EseStringApi.h"
@@ -91,7 +92,7 @@ int EseStringApi::strlen(ESE_CSTR str) const ESE_NOTHROW
 
 int EseStringApi::vsprintf(ESE_STR target, ESE_CSTR fmt, va_list arg_ptr) const ESE_NOTHROW
 {
-  return vsprintf(
+  return std::vsprintf(
     target,
     fmt,
     arg_ptr
@@ -101,7 +102,7 @@ int EseStringApi::vsprintf(ESE_STR target, ESE_CSTR fmt, va_list arg_ptr) const 
 
 int EseStringApi::vsnprintf(ESE_STR target, esU32 maxTargetLen, ESE_CSTR fmt, va_list arg_ptr) const ESE_NOTHROW
 {
-  return vsnprintf(
+  return std::vsnprintf(
     target,
     maxTargetLen,
     fmt,
@@ -115,7 +116,7 @@ int EseStringApi::sprintf(ESE_STR target, ESE_CSTR fmt, ...) const ESE_NOTHROW
   va_list arg_ptr;
   va_start(arg_ptr, fmt);
 
-  int result = vsprintf(
+  int result = std::vsprintf(
     target,
     fmt,
     arg_ptr
@@ -132,7 +133,7 @@ int EseStringApi::snprintf(ESE_STR target, esU32 maxTargetLen, ESE_CSTR fmt, ...
   va_list arg_ptr;
   va_start(arg_ptr, fmt);
 
-  int result = vsnprintf(
+  int result = std::vsnprintf(
     target,
     maxTargetLen,
     fmt,
