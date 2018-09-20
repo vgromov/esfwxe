@@ -1,6 +1,9 @@
 #ifndef _ese_math_spline_h_
 #define _ese_math_spline_h_
 
+/// Foward declarations
+class EseStreamIntf;
+
 /// Cubic spline calculation implementation
 ///
 class EseMathSpline
@@ -79,13 +82,13 @@ public:
   /// @param maxNodes [optional, in] maximum count of spline nodes to be read from stream
   /// @return       true, on read success, false otherwise.
   ///
-  bool readFrom(EseStream& in, esU16 maxNodes = 0) ESE_NOTHROW;
+  bool readFrom(EseStreamIntf& in, esU16 maxNodes = 0) ESE_NOTHROW;
 
   /// Write spline object to stream
   /// @param out    [in] stream object, spline data to be written to
   /// @return       true, on write success, false otherwise.
   ///
-  bool writeTo(EseStream& out) const ESE_NOTHROW;
+  bool writeTo(EseStreamIntf& out) const ESE_NOTHROW;
 #endif
 
 protected:

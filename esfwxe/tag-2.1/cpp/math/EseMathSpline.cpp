@@ -1,6 +1,9 @@
-#include "stdafx.h"
-#pragma hdrstop
+#include <esfwxe/target.h>
+#include <esfwxe/type.h>
 
+#include <cstring>
+
+#include <esfwxe/cpp/concept/EseStreamIntf.h>
 #include "EseMathSpline.h"
 
 EseMathSpline::EseMathSpline(size_t cnt /*= 0*/, const EseMathSpline::Node* nodes /*= 0*/, bool own /*= true*/) ESE_NOTHROW :
@@ -101,7 +104,7 @@ void EseMathSpline::nodeSet(size_t idx, const EseMathSpline::Node& node) const E
 }
 
 #ifdef USE_SPLINE_SERIALIZATION
-bool EseMathSpline::readFrom(EseStream& in, esU16 maxNodes /*= 0*/) ESE_NOTHROW
+bool EseMathSpline::readFrom(EseStreamIntf& in, esU16 maxNodes /*= 0*/) ESE_NOTHROW
 {
   esU16 newcnt;
   if( sizeof(newcnt) == in.read(reinterpret_cast<esU8*>(&newcnt), sizeof(newcnt)) )
@@ -137,7 +140,7 @@ bool EseMathSpline::readFrom(EseStream& in, esU16 maxNodes /*= 0*/) ESE_NOTHROW
   return false;
 }
 
-bool EseMathSpline::writeTo(EseStream& out) const ESE_NOTHROW
+bool EseMathSpline::writeTo(EseStreamIntf& out) const ESE_NOTHROW
 {
   esU16 cnt = m_cnt;
   esU8 crc = crc8(0xAB, reinterpret_cast<esU8*>(&cnt), sizeof(cnt));
