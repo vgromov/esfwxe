@@ -146,11 +146,7 @@ public:
   inline bool peekBack(DataT& val) const ESE_NOTHROW
   {
     if( m_count )
-    {
-      val = m_data[c_mask & m_in];
-      
-      return true;
-    }
+      return peekIdx(m_count-1, val);
 
     return false;
   }
@@ -173,7 +169,7 @@ public:
   {
     if( idx < m_count )
     {
-      val = m_data[c_mask & (m_in + idx)];
+      val = m_data[c_mask & (m_out + idx)];
       
       return true;
     }
