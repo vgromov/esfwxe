@@ -57,12 +57,12 @@ void EseMathSpline::assign(const EseMathSpline::Node* nodes, size_t cnt, bool ow
 
 const EseMathSpline::Node& EseMathSpline::nodeFind(float x) const ESE_NOTHROW
 {
-	if( x <= m_nodes[0].m_x) ///< use the first node, if x is out of range left-wise
-		return m_nodes[0];
-	else if(x >= m_nodes[m_cnt - 1].m_x) ///< use the last node, if x is out of range right-wise
-		return m_nodes[m_cnt - 1];
-	else
-	{
+  if( x <= m_nodes[0].m_x) ///< use the first node, if x is out of range left-wise
+    return m_nodes[0];
+  else if(x >= m_nodes[m_cnt - 1].m_x) ///< use the last node, if x is out of range right-wise
+    return m_nodes[m_cnt - 1];
+  else
+  {
     // Binary search in the [ x[0], ..., x[n-2] ] last element is excluded, it should be returned by 'if' above 
     size_t mid, left = 0;
     size_t right = m_cnt-1;
@@ -75,8 +75,8 @@ const EseMathSpline::Node& EseMathSpline::nodeFind(float x) const ESE_NOTHROW
         left = mid;
     }
 
-		return m_nodes[left];
-	}
+    return m_nodes[left];
+  }
 }
   
 float EseMathSpline::valueGet(float x, bool& valid) const ESE_NOTHROW
