@@ -105,6 +105,10 @@ protected:
   Node* m_nodes;
   size_t m_cnt;
   bool m_own;
+  
+private:
+  EseMathSpline(const EseMathSpline&) ESE_NOTHROW ESE_REMOVE_DECL;
+  EseMathSpline& operator=(const EseMathSpline&) ESE_NOTHROW ESE_REMOVE_DECL;
 };
 
 #endif // _ese_math_spline_h_

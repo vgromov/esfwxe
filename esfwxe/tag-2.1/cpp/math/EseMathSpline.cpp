@@ -112,15 +112,13 @@ bool EseMathSpline::readFrom(EseStreamIntf& in, esU16 maxNodes /*= 0*/) ESE_NOTH
     if( maxNodes && newcnt > maxNodes )
       return false;
 
-    esU8 crc = crc8(0xAB, reinterpret_cast<esU8*>(&newcnt), sizeof(newcnt));
     if( newcnt )
     {
-      size_t len = sizeof(Node)*newcnt+1; // reserve additional byte for CRC8
+      size_t len = sizeof(Node)*newcnt;
       Node* newNodes = reinterpret_cast<Node*>(malloc(len));
       if( newNodes )
       {
-        if( len == in.read(reinterpret_cast<esU8*>(newNodes), len) &&
-            0 == crc8(crc, reinterpret_cast<esU8*>(newNodes), len) )
+        if( len == in.read(reinterpret_cast<esU8*>(newNodes), len) )
         {
           assign(newNodes, newcnt, true);
           return true;
@@ -129,12 +127,6 @@ bool EseMathSpline::readFrom(EseStreamIntf& in, esU16 maxNodes /*= 0*/) ESE_NOTH
           free(newNodes);
       }
     }
-    else
-    {
-      esU8 tmp;
-      return 1 == in.read(&tmp, 1) &&
-        0 == crc8update(crc, tmp);        
-    }  
   }
 
   return false;
@@ -143,21 +135,23 @@ bool EseMathSpline::readFrom(EseStreamIntf& in, esU16 maxNodes /*= 0*/) ESE_NOTH
 bool EseMathSpline::writeTo(EseStreamIntf& out) const ESE_NOTHROW
 {
   esU16 cnt = m_cnt;
-  esU8 crc = crc8(0xAB, reinterpret_cast<esU8*>(&cnt), sizeof(cnt));
-  size_t len = out.write(reinterpret_cast<esU8*>(&cnt), sizeof(cnt));
-  if( len == sizeof(cnt) )
+  size_t len = out.write(
+    reinterpret_cast<esU8*>(&cnt), 
+    sizeof(cnt)
+  );
+  
+  if( 
+    len == sizeof(cnt) && 
+    m_cnt 
+  )
   {
-    if( m_cnt )
-    {
-      ES_ASSERT( m_nodes );
-      len = sizeof(Node)*m_cnt;
-      crc = crc8(crc, reinterpret_cast<esU8*>(m_nodes), len);
+    ES_ASSERT( m_nodes );
+    len = sizeof(Node)*m_cnt;
 
-      return len == out.write(reinterpret_cast<esU8*>(m_nodes), len) &&
-        1 == out.write( &crc, 1 );
-    }
-    else
-      return 1 == out.write( &crc, 1 );
+    return len == out.write(
+      reinterpret_cast<esU8*>(m_nodes), 
+      len
+    );
   }
   
   return false;

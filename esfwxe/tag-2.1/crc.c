@@ -306,21 +306,28 @@ static const esU32 c_crc32ieee802_3_table[256] = {
 
 CRC_LOCAL_LINKAGE_DECL esU32 crc32ieee802_3_update(esU32 crc, esU8 data)
 {
-    return (crc >> 8) ^ c_crc32ieee802_3_table[(crc ^ (esU32)data) & 0xFF];
+  return (crc >> 8) ^ c_crc32ieee802_3_table[(crc ^ (esU32)data) & 0xFF];
 }
 #    else // USE_CRC32_IEEE_802_3_TAB_IMPL
 CRC_LOCAL_LINKAGE_DECL esU32 crc32ieee802_3_update(esU32 crc, esU8 data)
 {
-    return (crc >> 8) ^ c_crc32ieee802_3_table[(crc ^ (esU32)data) & 0xFF];
+  crc = crc ^ data;
+  for(int j = 7; j >= 0; j--) 
+  {
+    esU32 mask = -(crc & 1);
+    crc = (crc >> 1) ^ (0xEDB88320UL & mask); // 0xEDB88320 - reflected 0x04C11DB7
+  }
+
+  return ~crc;
 }
 #    endif // USE_CRC32_IEEE_802_3_TAB_IMPL
 
 CRC_LOCAL_LINKAGE_DECL esU32 crc32ieee802_3(esU32 crc, const esU8* buff, esU32 buffLen)
 {
-    while( buffLen-- )
-        crc = crc32ieee802_3_update(crc, *buff++);
-    
-    return crc;
+  while( buffLen-- )
+      crc = crc32ieee802_3_update(crc, *buff++);
+  
+  return crc;
 }
 #endif // USE_CRC32_IEEE_802_3
 
