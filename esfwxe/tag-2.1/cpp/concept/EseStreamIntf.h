@@ -1,6 +1,8 @@
 #ifndef _ese_stream_intf_h_
 #define _ese_stream_intf_h_
 
+#include <stddef.h>
+
 /// IO Stream object interface
 ///
 class ESE_ABSTRACT EseStreamIntf

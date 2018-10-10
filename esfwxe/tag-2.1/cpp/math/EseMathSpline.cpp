@@ -1,10 +1,12 @@
 #include <esfwxe/target.h>
 #include <esfwxe/type.h>
 
+#include <cstdlib>
 #include <cstring>
 
 #include <esfwxe/cpp/concept/EseStreamIntf.h>
 #include "EseMathSpline.h"
+#include "EseMathConsts.h"
 
 EseMathSpline::EseMathSpline(size_t cnt /*= 0*/, const EseMathSpline::Node* nodes /*= 0*/, bool own /*= true*/) ESE_NOTHROW :
 m_nodes(0),
@@ -30,9 +32,9 @@ bool EseMathSpline::isEqualTo(const EseMathSpline::Node* other, size_t cnt) cons
 void EseMathSpline::cleanup() ESE_NOTHROW
 {
   if( m_own && m_nodes )
-    free( m_nodes );
+    std::free( m_nodes );
 
-  m_nodes = 0;
+  m_nodes = NULL;
   m_cnt = 0;
 }
 
@@ -44,10 +46,10 @@ void EseMathSpline::assign(const EseMathSpline::Node* nodes, size_t cnt, bool ow
   m_cnt = cnt;
   m_own = own;
 
-  if( 0 == m_nodes && m_cnt )
+  if( NULL == m_nodes && m_cnt )
   {
     m_nodes = reinterpret_cast<Node*>(
-      malloc( sizeof(Node)*m_cnt )
+      std::malloc( sizeof(Node)*m_cnt )
     );
     ES_ASSERT( m_nodes );
 
@@ -104,6 +106,7 @@ void EseMathSpline::nodeSet(size_t idx, const EseMathSpline::Node& node) const E
 }
 
 #ifdef USE_SPLINE_SERIALIZATION
+# if defined(USE_SPLINE_SERIALIZATION_READ) && 0 != USE_SPLINE_SERIALIZATION_READ
 bool EseMathSpline::readFrom(EseStreamIntf& in, esU16 maxNodes /*= 0*/) ESE_NOTHROW
 {
   esU16 newcnt;
@@ -131,7 +134,9 @@ bool EseMathSpline::readFrom(EseStreamIntf& in, esU16 maxNodes /*= 0*/) ESE_NOTH
 
   return false;
 }
+# endif
 
+# if defined(USE_SPLINE_SERIALIZATION_WRITE) && 0 != USE_SPLINE_SERIALIZATION_WRITE
 bool EseMathSpline::writeTo(EseStreamIntf& out) const ESE_NOTHROW
 {
   esU16 cnt = m_cnt;
@@ -156,4 +161,5 @@ bool EseMathSpline::writeTo(EseStreamIntf& out) const ESE_NOTHROW
   
   return false;
 }
+# endif
 #endif

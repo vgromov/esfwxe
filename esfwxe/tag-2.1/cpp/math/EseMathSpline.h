@@ -1,6 +1,15 @@
 #ifndef _ese_math_spline_h_
 #define _ese_math_spline_h_
 
+#ifdef USE_SPLINE_SERIALIZATION
+# if !defined(USE_SPLINE_SERIALIZATION_READ) && !defined(USE_SPLINE_SERIALIZATION_WRITE)
+#   undef USE_SPLINE_SERIALIZATION
+# endif
+#else
+# undef USE_SPLINE_SERIALIZATION_READ
+# undef USE_SPLINE_SERIALIZATION_WRITE
+#endif
+
 /// Foward declarations
 class EseStreamIntf;
 
@@ -32,14 +41,14 @@ public:
   /// @param own    [in] optional flag specifying that spline object should take ownership of the nodes buffer.
   ///                    If cnt is not 0, and nodes is NULL, an object created its own nodes buffer, and ownership flag is always set to true.
   ///
-  EseMathSpline(size_t cnt = 0, const EseMathSpline::Node* nodes = 0, bool own = true) ESE_NOTHROW;
+  EseMathSpline(size_t cnt = 0, const EseMathSpline::Node* nodes = NULL, bool own = true) ESE_NOTHROW;
   ~EseMathSpline() ESE_NOTHROW;
 
   /// Return true if this spline data match other data
   bool isEqualTo(const EseMathSpline::Node* other, size_t cnt) const ESE_NOTHROW;
 
   /// Return true if spline nodes were not set-up
-  inline bool isEmpty() const ESE_NOTHROW { return 0 == m_nodes || 2 > m_cnt; }
+  inline bool isEmpty() const ESE_NOTHROW { return NULL == m_nodes || 2 > m_cnt; }
 
   /// Return nodes buffer ownership flag
   inline bool ownsNodes() const ESE_NOTHROW { return m_own; }
@@ -51,6 +60,11 @@ public:
   ///                    If cnt is not 0, and nodes is NULL, an object created its own nodes buffer, and ownership flag is always set to true.
   ///
   void assign(const EseMathSpline::Node* nodes, size_t cnt, bool own) ESE_NOTHROW;
+  
+  /// Cleanup nodes buffer, if needed.
+  /// Spline becomes isEmpty after call to this method.
+  ///
+  void cleanup() ESE_NOTHROW;
   
   /// Spline nodes indexed read
   /// @param idx    [in] requested node index, internally checked for validity in DEBUG code
@@ -77,24 +91,25 @@ public:
   /// Serializable implementation
   ///
 
+# if defined(USE_SPLINE_SERIALIZATION_READ) && 0 != USE_SPLINE_SERIALIZATION_READ
   /// Read spline object from stream, optionally limiting maximum count of nodes to be read
   /// @param in     [in] stream object, spline data to be read from
   /// @param maxNodes [optional, in] maximum count of spline nodes to be read from stream
   /// @return       true, on read success, false otherwise.
   ///
   bool readFrom(EseStreamIntf& in, esU16 maxNodes = 0) ESE_NOTHROW;
+# endif
 
+# if defined(USE_SPLINE_SERIALIZATION_WRITE) && 0 != USE_SPLINE_SERIALIZATION_WRITE
   /// Write spline object to stream
   /// @param out    [in] stream object, spline data to be written to
   /// @return       true, on write success, false otherwise.
   ///
   bool writeTo(EseStreamIntf& out) const ESE_NOTHROW;
+# endif
 #endif
 
 protected:
-  /// Cleanup nodes buffer, if needed.
-  void cleanup() ESE_NOTHROW;
-
   /// Locate proper spline node.
   /// @param        [in] x argument value to lookup spline node by
   /// @return       Located spline node
