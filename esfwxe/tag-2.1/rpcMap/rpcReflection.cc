@@ -32,6 +32,7 @@ RPC_REFLECTION_BEGIN
     RPC_DEF_HANDLER2_NORETURN(    esU32,          esBA)
     RPC_DEF_HANDLER1(esBA,        esU8)
     RPC_DEF_HANDLER3_NORETURN(    esU8,           esU8,       esU16)
+    RPC_DEF_HANDLER4_NORETURN(    esU32,          esU32,      esU32,      esBA )
 RPC_REFLECTION_END
 
 // macro defines housekeeping
