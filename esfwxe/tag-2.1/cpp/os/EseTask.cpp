@@ -290,9 +290,12 @@ void EseTask::worker( void* params ) ESE_NOTHROW
     // Leverage priority to the maximum just before task exit,
     // to perform handle nullification and task deletion without|with as little context switch as possible 
     //
-    vTaskPrioritySet(0, taskMaxPriority);
+    vTaskPrioritySet(
+      NULL, 
+      taskMaxPriority
+    );
 
-    task->m_h = 0;
+    task->m_h = NULL;
     // Execution lock is unlocked here automatically
   }
 
