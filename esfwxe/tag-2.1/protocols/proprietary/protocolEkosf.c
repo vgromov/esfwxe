@@ -645,7 +645,7 @@ RpcStatus ekosfDoRPC( EseStdIoState* io, esU16 rpcId, esU16 rpcSig, esU32* stack
     ++(*stackSize);
   }
 
-  io->idGet = rpcId; 
+  io->id = rpcId; 
   io->sigOrStat = rpcSig;
   if( 
     ekosfExecCommand(
@@ -664,7 +664,7 @@ RpcStatus ekosfDoRPC( EseStdIoState* io, esU16 rpcId, esU16 rpcSig, esU32* stack
       if( io->hdr.dataLen >= ekosfRpcMinDataLen )
       {
         *stackSize = io->hdr.dataLen - ekosfRpcMinDataLen;
-        if( io->idGet == rpcId )
+        if( io->id == rpcId )
           result = (RpcStatus)io->sigOrStat;
         else // response idGet and request idGet mismatch
           result = RpcResponseIdMismatch;

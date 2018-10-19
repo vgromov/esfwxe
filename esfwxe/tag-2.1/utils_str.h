@@ -1,6 +1,8 @@
 #ifndef _utils_str_h_
 #define _utils_str_h_
 
+#include <stdbool.h>
+
 /// String utilities
 ///
 

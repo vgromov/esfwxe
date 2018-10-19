@@ -51,7 +51,12 @@ static esBA rpcStdGetCaps(RpcStatus* stat)
 }
 //----------------------------------------------------------------------------------------------
 
-extern "C" esBA rpcGetFwId(RpcStatus*);
+#ifdef __cplusplus
+extern "C" 
+#else
+extern 
+#endif
+esBA rpcGetFwId(RpcStatus*);
 
 // helper defines to declare and register RemoteProcMoniker(s)
 #define RPC_MAP_ENTRY( id, sig, proc ) \
