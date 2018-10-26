@@ -24,7 +24,7 @@ ESE_I18N_STRING_ENTRY(en,   istrEL3C_DCR_LONG,        "Lux, Chroma, Flicker, Col
 ESE_I18N_STRING_ENTRY(en,   istrECLG1_DCR_SHORT,      "eCLg-01")
 ESE_I18N_STRING_ENTRY(en,   istrECLG1_DCR_LONG,       "eCoLogger-01")
 ESE_I18N_STRING_ENTRY(en,   istrLUPINX_DCR_SHORT,     "Lupin-X")
-ESE_I18N_STRING_ENTRY(en,   istrLUPINX_DCR_LONG,      "Lux, Chroma, Flicker meter, Lupin-X")
+ESE_I18N_STRING_ENTRY(en,   istrLUPINX_DCR_LONG,      "Luxmeter Lupin-X")
 // Octava devices description strings
 ESE_I18N_STRING_ENTRY(en,   istrP380E_DCR_SHORT,      "P3-80E")
 ESE_I18N_STRING_ENTRY(en,   istrP380E_DCR_LONG,       "Electrostatic field meter P3-80E")

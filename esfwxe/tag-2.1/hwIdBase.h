@@ -125,9 +125,9 @@ typedef struct {
 ///
 typedef struct
 {
-    EseFwSwInfo         fwSwInfo;       ///< Firmware file info
-    EseBlockIntegrity   calIntegrity;   ///< Calibration integrity check block, if applicable
-    EseFwInfo           fwInfo;         ///< Universal 64 byte firmware information
+  EseFwSwInfo         fwSwInfo;       ///< Firmware file info
+  EseBlockIntegrity   calIntegrity;   ///< Calibration integrity check block, if applicable
+  EseFwInfo           fwInfo;         ///< Universal 64 byte firmware information
     
 } EseSoftwareInfo;
 
@@ -137,17 +137,17 @@ typedef struct
 #define ApplianceFirmwareID EseBasicFirmwareID
 
 enum { 
-    Type_SZE = sizeof(esU16),
-    EseDevNum_SZE = sizeof(EseDeviceNum),
-    EseVerInfo_SZE = sizeof(EseVerInfo),
-    ApplianceFirmwareID_NoFw_SZE = EseDevNum_SZE+Type_SZE,
-    EseBasicFirmwareID_SZE = sizeof(EseBasicFirmwareID),
+  Type_SZE = sizeof(esU16),
+  EseDevNum_SZE = sizeof(EseDeviceNum),
+  EseVerInfo_SZE = sizeof(EseVerInfo),
+  ApplianceFirmwareID_NoFw_SZE = EseDevNum_SZE+Type_SZE,
+  EseBasicFirmwareID_SZE = sizeof(EseBasicFirmwareID),
   ApplianceFirmwareID_SZE = EseBasicFirmwareID_SZE,
-    EseUID_SZE = sizeof(EseUID),
-    EseHubFirmwareID_SZE = sizeof(EseHubFirmwareID),
-    EseBlockIntegrity_SZE = sizeof(EseBlockIntegrity),
-    EseFwSwInfo_SZE = sizeof(EseFwSwInfo),
-    EseSoftwareInfo_SZE = sizeof(EseSoftwareInfo),
+  EseUID_SZE = sizeof(EseUID),
+  EseHubFirmwareID_SZE = sizeof(EseHubFirmwareID),
+  EseBlockIntegrity_SZE = sizeof(EseBlockIntegrity),
+  EseFwSwInfo_SZE = sizeof(EseFwSwInfo),
+  EseSoftwareInfo_SZE = sizeof(EseSoftwareInfo),
   EseFwInfo_SZE = sizeof(EseFwInfo),
 };
 
