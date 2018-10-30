@@ -101,6 +101,13 @@ public:
 # endif
 
 # if defined(USE_SPLINE_SERIALIZATION_WRITE) && 0 != USE_SPLINE_SERIALIZATION_WRITE
+
+  /// Write nodes of the spline object to stream
+  /// @param out    [in] stream object, spline data to be written to
+  /// @return       true, on write success, false otherwise.
+  ///
+  bool writeNodesTo(EseStreamIntf& out) const ESE_NOTHROW;
+  
   /// Write spline object to stream
   /// @param out    [in] stream object, spline data to be written to
   /// @return       true, on write success, false otherwise.

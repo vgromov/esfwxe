@@ -137,6 +137,17 @@ bool EseMathSpline::readFrom(EseStreamIntf& in, esU16 maxNodes /*= 0*/) ESE_NOTH
 # endif
 
 # if defined(USE_SPLINE_SERIALIZATION_WRITE) && 0 != USE_SPLINE_SERIALIZATION_WRITE
+bool EseMathSpline::writeNodesTo(EseStreamIntf& out) const ESE_NOTHROW
+{
+  ES_ASSERT( m_nodes );
+  size_t len = sizeof(Node)*m_cnt;
+
+  return len == out.write(
+    reinterpret_cast<esU8*>(m_nodes), 
+    len
+  );
+}
+
 bool EseMathSpline::writeTo(EseStreamIntf& out) const ESE_NOTHROW
 {
   esU16 cnt = m_cnt;
@@ -150,13 +161,7 @@ bool EseMathSpline::writeTo(EseStreamIntf& out) const ESE_NOTHROW
     m_cnt 
   )
   {
-    ES_ASSERT( m_nodes );
-    len = sizeof(Node)*m_cnt;
-
-    return len == out.write(
-      reinterpret_cast<esU8*>(m_nodes), 
-      len
-    );
+    return writeNodesTo(out);
   }
   
   return false;

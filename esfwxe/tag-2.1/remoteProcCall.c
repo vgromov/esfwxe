@@ -844,10 +844,8 @@ static inline const RemoteProcMoniker* rpcFindById(ESE_HRPCCTX ctx, esU16 id)
   {
     if( id == pmon->id )
       return pmon;
-    else if( id < pmon->id )
-      pmon = pmon->next;
-    else //< All monikers are sorted by IDs by-design, so if id > pmon->id no need to proceed further
-      return NULL;
+
+    pmon = pmon->next;
   }
 
   return NULL;

@@ -29,8 +29,8 @@ typedef union {
 ///
 typedef struct 
 {
-    esU16 year;                ///< Year of production
-    esU16 ser;                  ///< Device production (serial) number within year
+  esU16 year;                     ///< Year of production
+  esU16 ser;                      ///< Device production (serial) number within year
 
 } EseDeviceNum;
 
@@ -38,9 +38,9 @@ typedef struct
 ///
 typedef struct
 {
-    esU16         type;            ///< Device type (model) id
-     EseDeviceNum num;          ///< Device production number
-    EseVerInfo ver;            ///< Firmware major|minor version
+  esU16         type;             ///< Device type (model) id
+  EseDeviceNum  num;              ///< Device production number
+  EseVerInfo    ver;              ///< Firmware major|minor version
 
 } EseBasicFirmwareID;
 
@@ -57,9 +57,9 @@ typedef struct {
 ///
 typedef struct
 {
-    EseBasicFirmwareID id;
-    EseUID key;
-    esU32 funcMask;
+  EseBasicFirmwareID id;
+  EseUID key;
+  esU32 funcMask;
 
 }    EseHubFirmwareID;
 
@@ -67,9 +67,9 @@ typedef struct
 ///
 typedef struct
 {
-    esU32 crcPrev;          ///< CRC32 of the previous block contents. 0, if this is the first version of block
-    esU32 crcCur;              ///< Current CRC32 (as calculated by CRC32 IEEE 802.3)
-    esDT  ts;                ///< Recent block update timestamp
+  esU32 crcPrev;                ///< CRC32 of the previous block contents. 0, if this is the first version of block
+  esU32 crcCur;                 ///< Current CRC32 (as calculated by CRC32 IEEE 802.3)
+  esDT  ts;                     ///< Recent block update timestamp
     
 } EseBlockIntegrity;
 
@@ -77,11 +77,11 @@ typedef struct
 ///
 typedef struct
 {
-    char name[64];        ///< Readable name of the firmware
-    char file[32];        ///< Firmware file used for flashing
+  char name[64];                ///< Readable name of the firmware
+  char file[32];                ///< Firmware file used for flashing
   
   /// Firmware integrity information
-    EseBlockIntegrity integrity;
+  EseBlockIntegrity integrity;
 
 } EseFwSwInfo;
 
