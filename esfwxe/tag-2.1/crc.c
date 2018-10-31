@@ -309,13 +309,35 @@ CRC_LOCAL_LINKAGE_DECL esU32 crc32ieee802_3_update(esU32 crc, esU8 data)
   return (crc >> 8) ^ c_crc32ieee802_3_table[(crc ^ (esU32)data) & 0xFF];
 }
 #    else // USE_CRC32_IEEE_802_3_TAB_IMPL
+
+static esU32 crc32ieee802_3_reflect(esU8 data)
+{
+  esU32 result = 0;
+  esU8 bit = 0;
+  
+  while( bit < 8 )
+  {
+    if( data & 1 )
+      result |= (1 << (7-bit));
+    
+    data >>= 1;
+    ++bit;
+  }
+  
+  return result;
+}
+
 CRC_LOCAL_LINKAGE_DECL esU32 crc32ieee802_3_update(esU32 crc, esU8 data)
 {
-  crc = crc ^ data;
-  for(int j = 7; j >= 0; j--) 
+  esU8 bit = 8;
+  crc ^= (crc32ieee802_3_reflect(data) << 24);
+  while(bit > 0) 
   {
-    esU32 mask = -(crc & 1);
-    crc = (crc >> 1) ^ (0xEDB88320UL & mask); // 0xEDB88320 - reflected 0x04C11DB7
+    crc <<= 1;
+    if( crc & 0x80000000UL )
+      crc ^= 0x04C11DB7UL;
+    
+    --bit;
   }
 
   return ~crc;
