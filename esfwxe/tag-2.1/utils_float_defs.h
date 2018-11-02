@@ -40,9 +40,17 @@
 
 // if we're building escomm package - import implementations from escore
 //# if defined(ESCOMM_EXPORTS)
-extern "C" int es_finitef(float f);
-extern "C" int es_isnanf(float f);
-extern "C" float es_modff(float x, float* intpart);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int es_finitef(float f);
+int es_isnanf(float f);
+float es_modff(float x, float* intpart);
+
+#ifdef __cplusplus
+}
+#endif
 
 # ifndef esModfF
 #   define esModfF      es_modff
