@@ -65,7 +65,7 @@ enum {
   RPID_STD_FWID_GET_MODERN,                                             ///< Request modern firmware identification. For devices with dual identification feature.
   /// For devices, which implement its own ISP
   ///
-  RPID_STD_FW_UPLOAD_START,                                             ///< Request FW upload start. Signature && Payload: VOID_RpcSig_esU32(Flags)_esBA(Optional start data)
+  RPID_STD_FW_UPLOAD_START,                                             ///< Request FW upload start. Signature && Payload: esU32(Max fw frame size)_RpcSig_esU32(Flags)_esBA(Optional start data)
   RPID_STD_FW_UPLOAD,                                                   ///< Request FW portion upload. Signature && Payload: VOID_RpcSig_esBA(FW portion data)
   RPID_STD_FW_UPLOAD_END                                                ///< Request FW upload end. VOID_RpcSig
 };
