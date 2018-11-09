@@ -1132,7 +1132,7 @@ static void ekosfStdSlaveRpcCallHandle(EseStdIoState* client)
       "rpcExecLocal(id: %d, sig: %d, stacklen: %d) returns %d\n",
       (int)client->id, 
       (int)client->sigOrStat,
-      (int)stackLen, 
+      (int)(client->hdr.dataLen - ekosfRpcMinDataLen), 
       (int)stat
     )
 
