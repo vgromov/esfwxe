@@ -1128,6 +1128,7 @@ static void ekosfStdSlaveRpcCallHandle(EseStdIoState* client)
       ekosfRpcMaxStackLen
     );
       
+/*
     ES_DEBUG_TRACE4(
       "rpcExecLocal(id: %d, sig: %d, stacklen: %d) returns %d\n",
       (int)client->id, 
@@ -1135,6 +1136,7 @@ static void ekosfStdSlaveRpcCallHandle(EseStdIoState* client)
       (int)(client->hdr.dataLen - ekosfRpcMinDataLen), 
       (int)stat
     )
+*/
 
     // update returned status
     client->sigOrStat = stat;
@@ -1261,19 +1263,19 @@ static esBL ekosfStdSlaveCommandsHandle(EseStdIoState* client)
   switch( client->hdr.command )
   {
   case ES_CMD_PING:
-    ES_DEBUG_TRACE0("Ponging\n")
+    ES_PROTOCOL_TRACE0("Ponging\n")
     ekosfUpdateHdr(&client->hdr, ES_FT_SLAVE, ES_MAKE_RESPONSE(ES_CMD_PING), 0);
     break;
   case ES_CMD_ADDR_SET:
-    ES_DEBUG_TRACE0("Setting client address\n")
+    ES_PROTOCOL_TRACE0("Setting client address\n")
     result = ekosfStdSlaveAddrSetHandle(client);
     break;
   case ES_CMD_RATE_SET:
-    ES_DEBUG_TRACE0("Setting client baudrate\n")
+    ES_PROTOCOL_TRACE0("Setting client baudrate\n")
     ekosfStdSlaveRateChangeHandle(client);
     break;
   case ES_CMD_RPC_EXEC:
-    ES_DEBUG_TRACE0("Executing RPC\n")
+    ES_PROTOCOL_TRACE0("Executing RPC\n")
     ekosfStdSlaveRpcCallHandle(client);
     break;
   default:
