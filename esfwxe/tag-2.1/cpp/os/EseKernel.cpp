@@ -16,16 +16,6 @@
 #include <esfwxe/cpp/os/EseTask.h>
 #include <esfwxe/cpp/os/EseKernel.h>
 
-#if defined(USE_SYSTICK_TRACE)
-# define ESE_SYSTICK_TRACE_CFG  DEBUG_TRACE_PIN_CONFIG(C,11)
-# define ESE_SYSTICK_TRACE_ON   DEBUG_TRACE_PIN_ON(C,11)
-# define ESE_SYSTICK_TRACE_OFF  DEBUG_TRACE_PIN_OFF(C,11)
-#else
-# define ESE_SYSTICK_TRACE_CFG
-# define ESE_SYSTICK_TRACE_ON
-# define ESE_SYSTICK_TRACE_OFF
-#endif
-
 extern "C" {
 
 extern void xPortSysTickHandler(void);

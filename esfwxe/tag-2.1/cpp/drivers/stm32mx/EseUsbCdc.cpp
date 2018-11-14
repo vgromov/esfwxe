@@ -355,10 +355,8 @@ uint8_t EseUsbCdc::onTxComplete(USBD_HandleTypeDef *pdev, uint8_t epnum) ESE_NOT
     hcdc->TxState = 0;
     return EseUsbCdc::_1.continueTxFromIsr();
   }
-  else
-  {
-    return USBD_FAIL;
-  }
+
+  return USBD_FAIL;
 }
 
 #pragma Otime
