@@ -15,6 +15,14 @@
 #include <esfwxe/cpp/os/EseMutex.h>
 #include <esfwxe/cpp/os/EseTask.h>
 #include <esfwxe/cpp/os/EseKernel.h>
+//----------------------------------------------------------------------------------------------
+
+#ifndef ESE_SYSTICK_TRACE_CFG
+# define ESE_SYSTICK_TRACE_CFG
+# define ESE_SYSTICK_TRACE_ON
+# define ESE_SYSTICK_TRACE_OFF
+#endif
+//----------------------------------------------------------------------------------------------
 
 extern "C" {
 
@@ -27,6 +35,7 @@ uint32_t HAL_GetTick(void)
 {
   return s_tick;
 }
+//----------------------------------------------------------------------------------------------
 
 // HAL expects tick is expressed in ms
 #pragma Otime
@@ -34,6 +43,7 @@ void HAL_IncTick(void)
 {
   s_tick += EseKernel::c_msInTick;
 }
+//----------------------------------------------------------------------------------------------
 
 // Standar system tick handler implementation
 #pragma Otime
@@ -59,6 +69,7 @@ void xPortSysTickHandler(void)
   
   ESE_SYSTICK_TRACE_OFF
 }
+//----------------------------------------------------------------------------------------------
 
 #pragma Otime
 void HAL_Delay(uint32_t Delay)
@@ -78,8 +89,11 @@ void HAL_Delay(uint32_t Delay)
     }
   }
 }
+//----------------------------------------------------------------------------------------------
 
 } // extern "C"
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
 /// Kernel services implementation
 ///
@@ -92,6 +106,7 @@ void EseKernel::sysTickInc(esU32 ms) ESE_NOTHROW
   vTaskStepTick( rtosMS_TO_TICKS(ms) );
 #endif
 }
+//----------------------------------------------------------------------------------------------
 
 #pragma Otime
 void EseKernel::start() ESE_NOTHROW
@@ -100,18 +115,21 @@ void EseKernel::start() ESE_NOTHROW
   
   vTaskStartScheduler();
 }
+//----------------------------------------------------------------------------------------------
 
 #pragma Otime
 void EseKernel::stop() ESE_NOTHROW
 {
   vTaskEndScheduler();
 }
+//----------------------------------------------------------------------------------------------
 
 #pragma Otime
 void EseKernel::suspend() ESE_NOTHROW
 {
   vTaskSuspendAll();
 }
+//----------------------------------------------------------------------------------------------
 
 #pragma Otime
 void EseKernel::resume() ESE_NOTHROW
@@ -121,6 +139,7 @@ void EseKernel::resume() ESE_NOTHROW
     EseTask::yield();
   }
 }
+//----------------------------------------------------------------------------------------------
 
 #pragma Otime
 void EseKernel::idleSuspend() ESE_NOTHROW
@@ -129,6 +148,7 @@ void EseKernel::idleSuspend() ESE_NOTHROW
     xTaskGetIdleTaskHandle()
   );
 }
+//----------------------------------------------------------------------------------------------
 
 #pragma Otime
 void EseKernel::idleResume() ESE_NOTHROW
@@ -137,3 +157,27 @@ void EseKernel::idleResume() ESE_NOTHROW
     xTaskGetIdleTaskHandle()
   );
 }
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+
+EseIsrCriticalSection::EseIsrCriticalSection() ESE_NOTHROW :
+m_primask(0)
+{
+  if(0 != __get_IPSR())
+  {
+    m_primask = __get_PRIMASK();
+    taskENTER_CRITICAL_FROM_ISR();
+  }
+  else
+    taskENTER_CRITICAL();
+}
+//----------------------------------------------------------------------------------------------
+
+EseIsrCriticalSection::~EseIsrCriticalSection() ESE_NOTHROW
+{
+  if(0 != __get_IPSR())
+    taskEXIT_CRITICAL_FROM_ISR(m_primask);
+  else
+    taskEXIT_CRITICAL();
+}
+//----------------------------------------------------------------------------------------------

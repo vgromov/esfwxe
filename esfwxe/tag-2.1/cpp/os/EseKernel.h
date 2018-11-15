@@ -21,17 +21,8 @@ namespace EseKernel
 class EseIsrCriticalSection
 {
 public:
-  inline EseIsrCriticalSection() ESE_NOTHROW :
-  m_primask(__get_PRIMASK())
-  {
-    __disable_irq();
-  }
-  
-  inline ~EseIsrCriticalSection() ESE_NOTHROW
-  {
-    if( !m_primask )
-      __enable_irq();
-  }
+  EseIsrCriticalSection() ESE_NOTHROW;
+  ~EseIsrCriticalSection() ESE_NOTHROW;
 
 private:  
   esU32 m_primask;

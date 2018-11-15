@@ -26,14 +26,22 @@
 //----------------------------------------------------------------------
 #include <esfwxe/cpp/drivers/stm32mx/EseUsbCdc.h>
 
-#if defined(USE_USB_ISR_TRACE)
-# define ESE_USB_ISR_TRACE_CFG  DEBUG_TRACE_PIN_CONFIG(C,11)
-# define ESE_USB_ISR_TRACE_ON   DEBUG_TRACE_PIN_ON(C,11)
-# define ESE_USB_ISR_TRACE_OFF  DEBUG_TRACE_PIN_OFF(C,11)
-#else
+#ifndef ESE_USB_ISR_TRACE_CFG
 # define ESE_USB_ISR_TRACE_CFG
 # define ESE_USB_ISR_TRACE_ON
 # define ESE_USB_ISR_TRACE_OFF
+#endif
+
+#ifndef ESE_USBCDCRX_TRACE_CFG 
+# define ESE_USBCDCRX_TRACE_CFG
+# define ESE_USBCDCRX_TRACE_ON
+# define ESE_USBCDCRX_TRACE_OFF
+#endif
+
+#ifndef ESE_USBCDCTX_TRACE_CFG 
+# define ESE_USBCDCTX_TRACE_CFG
+# define ESE_USBCDCTX_TRACE_ON
+# define ESE_USBCDCTX_TRACE_OFF
 #endif
 
 extern "C" 
@@ -147,6 +155,8 @@ bool EseUsbCdc::doInit() ESE_NOTHROW
   m_txIdle.unlock();
   
   ESE_USB_ISR_TRACE_CFG
+  ESE_USBCDCTX_TRACE_CFG
+  ESE_USBCDCRX_TRACE_CFG
   
   return true;
 }
@@ -159,6 +169,8 @@ void EseUsbCdc::doUninit() ESE_NOTHROW
   m_mx.uninit();
   
   ESE_USB_ISR_TRACE_OFF
+  ESE_USBCDCTX_TRACE_OFF
+  ESE_USBCDCRX_TRACE_OFF
 }
 
 bool EseUsbCdc::doCheckConfigured() ESE_NOTHROW
@@ -366,6 +378,8 @@ size_t EseUsbCdc::doReceive(esU8* data, size_t toRead, esU32 tmo) ESE_NOTHROW
     portMAX_DELAY :
     pdMS_TO_TICKS(tmo);
 
+  ESE_USBCDCRX_TRACE_ON
+
   esU32 prevTs = EseTask::tickCountGet();
   esU32 ts = prevTs;
   esU32 ticksPerByte = tmoTicks/toRead;
@@ -376,10 +390,20 @@ size_t EseUsbCdc::doReceive(esU8* data, size_t toRead, esU32 tmo) ESE_NOTHROW
 
   while( toRead )
   {
-    if( rtosOK == m_rx.popFront(*pos, ticksPerByte, true) )
+    rtosStatus stat = m_rx.popFront(
+      *pos, 
+      ticksPerByte, 
+      true
+    );
+    
+    if( rtosOK == stat )
     {
+      ESE_USBCDCRX_TRACE_OFF
+      
       --toRead;
       ++pos;
+      
+      ESE_USBCDCRX_TRACE_ON
     }
     
     if( tmoTicks != portMAX_DELAY )
@@ -396,6 +420,8 @@ size_t EseUsbCdc::doReceive(esU8* data, size_t toRead, esU32 tmo) ESE_NOTHROW
     }
   }
  
+  ESE_USBCDCRX_TRACE_OFF
+  
   return pos-data;
 }
 
@@ -404,25 +430,44 @@ size_t EseUsbCdc::doSend(const esU8* data, size_t toWrite, esU32 tmo) ESE_NOTHRO
 {
   const esU8* pos = data;
 
-//  ES_DEBUG_TRACE1("EseUsbCdc::doSend toWrite=%d\n", (int)toWrite)
-  
   // 1) If there is no ongoing TX operation, we may stuff data from tx queue directly into static buffer
   // with zero waiting time as well
   //
-  if( rtosOK == m_txIdle.lock(1) )
+  
+  rtosStatus stat = m_txIdle.lock(1);
+  
+  ESE_USBCDCTX_TRACE_ON
+  
+  if( rtosOK == stat )
   {
     esU8* sPos = m_tmpTx;
     esU8* sEnd = m_tmpTx+staticIoBlockLen;
     while( sPos < sEnd && toWrite )
     {
+      ESE_USBCDCTX_TRACE_OFF
+      
       *sPos++ = *pos++;
       --toWrite;
+      
+      ESE_USBCDCTX_TRACE_ON
     }
       
     // if we still have data to write - append these data to the end of tx queue,
     // we should have free space there now
-    while( toWrite && rtosOK == m_tx.pushBack(*pos, 0) )
+    while( toWrite )
     {
+      ESE_USBCDCTX_TRACE_OFF
+    
+      stat = m_tx.pushBack(
+        *pos, 
+        0
+      );
+      
+      ESE_USBCDCTX_TRACE_ON
+
+      if( rtosOK != stat )
+        break;
+    
       --toWrite;
       ++pos;
     }
@@ -433,8 +478,6 @@ size_t EseUsbCdc::doSend(const esU8* data, size_t toWrite, esU32 tmo) ESE_NOTHRO
     {
       EseIsrCriticalSection cs;
 
-//      ES_DEBUG_TRACE0("ITX\n")
-
       USBD_CDC_SetTxBuffer(&m_devh, m_tmpTx, sPos-m_tmpTx);
       m_error = USBD_CDC_TransmitPacket(&m_devh);
     }
@@ -442,7 +485,9 @@ size_t EseUsbCdc::doSend(const esU8* data, size_t toWrite, esU32 tmo) ESE_NOTHRO
     if( USBD_OK != m_error )
     {
       m_txIdle.unlock();
-    
+      
+      ESE_USBCDCTX_TRACE_OFF
+  
       return 0;    
     }
   }
@@ -462,8 +507,21 @@ size_t EseUsbCdc::doSend(const esU8* data, size_t toWrite, esU32 tmo) ESE_NOTHRO
     esU32 prevTs = EseTask::tickCountGet();
     esU32 ts = prevTs;
 
-    while( toWrite && rtosOK == m_tx.pushBack(*pos, tmoTicks, true) )
+    while( toWrite )
     {
+      ESE_USBCDCTX_TRACE_OFF
+      
+      stat = m_tx.pushBack(
+        *pos, 
+        tmoTicks, 
+        true
+      );
+
+      ESE_USBCDCTX_TRACE_ON
+      
+      if( rtosOK != stat )
+        break;
+    
       if( tmoTicks != portMAX_DELAY )
       {
         ts = EseTask::tickCountGet();
@@ -481,6 +539,8 @@ size_t EseUsbCdc::doSend(const esU8* data, size_t toWrite, esU32 tmo) ESE_NOTHRO
       ++pos;
     }
   }
+  
+  ESE_USBCDCTX_TRACE_OFF
  
   return pos-data;
 }
