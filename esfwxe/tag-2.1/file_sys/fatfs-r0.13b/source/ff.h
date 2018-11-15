@@ -355,10 +355,10 @@ int ff_del_syncobj (FF_SYNC_t sobj);    /* Delete a sync object */
 #define FS_EXFAT  4
 
 /* File attribute bits for directory entry (FILINFO.fattrib) */
-#define  AM_RDO  0x01    /* Read only */
-#define  AM_HID  0x02    /* Hidden */
-#define  AM_SYS  0x04    /* System */
-#define  AM_VOL  0x08    /* Volume label */
+#define AM_RDO  0x01    /* Read only */
+#define AM_HID  0x02    /* Hidden */
+#define AM_SYS  0x04    /* System */
+#define AM_VOL  0x08    /* Volume label */
 #define AM_DIR  0x10    /* Directory */
 #define AM_ARC  0x20    /* Archive */
 
