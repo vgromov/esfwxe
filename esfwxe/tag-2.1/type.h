@@ -22,6 +22,8 @@
 # endif
 #endif // USE_EMULATOR
 
+#include <stdint.h>
+
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -33,14 +35,14 @@ typedef ESE_CHAR*                   ESE_STR;
 // Basic _sized_ typedefs. these _must_ be in one word, without spaces, it's strongly required for
 // the remote reflection engine implementation
 //
-typedef signed char                 esI8;
-typedef unsigned char               esU8;
-typedef signed short                esI16;
-typedef unsigned short              esU16;
-typedef signed long                 esI32;
-typedef unsigned long               esU32;
-typedef long long                   esI64;
-typedef unsigned long long          esU64;
+typedef int8_t                      esI8;
+typedef uint8_t                     esU8;
+typedef int16_t                     esI16;
+typedef uint16_t                    esU16;
+typedef int32_t                     esI32;
+typedef uint32_t                    esU32;
+typedef int64_t                     esI64;
+typedef uint64_t                    esU64;
 
 typedef esI64                       esDT;
 typedef esI64                       esTS;
@@ -96,7 +98,7 @@ typedef struct _tagEsMemSpaceInfo {
   esU16 frac;
   esU8 unit; // = msuXXX
   esU8 dummy;
-  
+
 } EsMemSpaceInfo;
 
 // file system result
@@ -149,7 +151,7 @@ enum {
   FsAttrVolumeLabel      = 0x08,
   FsAttrDirectory        = 0x10,
   FsAttrArchive          = 0x20,
-  
+
   /// Standard HW config info flags
   HwCfgStdBletooth       = 0x0001,
   HwCfgStdBletoothLE     = 0x0002,
@@ -157,9 +159,9 @@ enum {
   HwCfgStdUSBslave       = 0x0008,
   HwCfgStdUSBhost        = 0x0010,
   HwCfgStdAccumulator    = 0x0020,
-  
+
   /// Struct sizes
-  PowerStatus_SZE        = sizeof(EsePowerStatus),  
+  PowerStatus_SZE        = sizeof(EsePowerStatus),
   FsItem_SZE             = sizeof(FsItem),
   FsResult_SZE           = sizeof(FsResult),
   FsItemResult_SZE       = sizeof(FsItemResult),
@@ -238,7 +240,7 @@ enum {
 # ifndef ESE_MODERN_CPP
 #   if __cplusplus >= 201103L
 #     define ESE_MODERN_CPP
-#   endif 
+#   endif
 # endif
 
 # ifdef USE_CPP_EXCEPTIONS
@@ -265,7 +267,7 @@ enum {
 # if defined(__GNUC__) || defined(__ARMCC_VERSION)
 #   define ESE_ABSTRACT
 # else
-#   define ESE_ABSTRACT    __declspec(novtable) 
+#   define ESE_ABSTRACT    __declspec(novtable)
 # endif
 #endif
 
