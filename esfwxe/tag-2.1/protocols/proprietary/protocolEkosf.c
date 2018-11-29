@@ -238,7 +238,7 @@ static int ekosfFullHdrFrameReceive(EseStdIoState* io, esBL slave)
   {
     esU32 addRead;
     
-    read = end-pos;
+    read = static_cast<esU32>(end-pos);
     addRead = ProtocolEkosfHdr_SZE-read;
     
     ES_DEBUG_TRACE3(
@@ -759,7 +759,7 @@ RpcStatus ReturnType ## _Rpc_ ## Param0Type (EseStdIoState* io, esU16 rpcId, Ret
     const esU8* end = io->stack + ekosfRpcMaxStackLen; \
     if( put_ ## Param0Type(&pos, end, p0) )    \
     {    \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, ReturnType ## _RpcSig_ ## Param0Type, &stackSize ); \
         if( result == RpcOK ) \
         {    \
@@ -782,7 +782,7 @@ RpcStatus ReturnType ## _Rpc_ ## Param0Type ## _ ## Param1Type (EseStdIoState* i
     if( put_ ## Param0Type(&pos, end, p0) && \
             put_ ## Param1Type(&pos, end, p1) )    \
     {    \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
         result = ekosfDoRPC( io, rpcId, ReturnType ## _RpcSig_ ## Param0Type ## _ ## Param1Type, &stackSize ); \
         if( result == RpcOK ) \
         {    \
@@ -806,7 +806,7 @@ RpcStatus ReturnType ## _Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Typ
             put_ ## Param1Type(&pos, end, p1) && \
             put_ ## Param2Type(&pos, end, p2) )    \
     {    \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, ReturnType ## _RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type, &stackSize ); \
         if( result == RpcOK ) \
         {    \
@@ -831,7 +831,7 @@ RpcStatus ReturnType ## _Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Typ
             put_ ## Param2Type(&pos, end, p2) &&    \
             put_ ## Param3Type(&pos, end, p3) )    \
     {    \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, ReturnType ## _RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type, &stackSize ); \
         if( result == RpcOK ) \
         {    \
@@ -857,7 +857,7 @@ RpcStatus ReturnType ## _Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Typ
             put_ ## Param3Type(&pos, end, p3) && \
             put_ ## Param4Type(&pos, end, p4) )    \
     {    \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, ReturnType ## _RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type, &stackSize ); \
         if( result == RpcOK ) \
         {    \
@@ -884,7 +884,7 @@ RpcStatus ReturnType ## _Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Typ
             put_ ## Param4Type(&pos, end, p4) && \
             put_ ## Param5Type(&pos, end, p5) )    \
     {    \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, ReturnType ## _RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type, &stackSize ); \
         if( result == RpcOK ) \
         {    \
@@ -914,7 +914,7 @@ RpcStatus VOID_Rpc_ ## Param0Type (EseStdIoState* io, esU16 rpcId, Param0Type p0
     const esU8* end = io->stack + ekosfRpcMaxStackLen; \
     if( put_ ## Param0Type(&pos, end, p0) )    \
     { \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, VOID_RpcSig_ ## Param0Type, &stackSize ); \
     } \
     else { \
@@ -930,7 +930,7 @@ RpcStatus VOID_Rpc_ ## Param0Type ## _ ## Param1Type (EseStdIoState* io, esU16 r
     if( put_ ## Param0Type(&pos, end, p0) && \
             put_ ## Param1Type(&pos, end, p1) )    \
     { \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, VOID_RpcSig_ ## Param0Type ## _ ## Param1Type, &stackSize ); \
     } \
     else { \
@@ -947,7 +947,7 @@ RpcStatus VOID_Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type (EseStdI
             put_ ## Param1Type(&pos, end, p1) && \
             put_ ## Param2Type(&pos, end, p2) )    \
     { \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, VOID_RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type, &stackSize ); \
     } \
     else { \
@@ -965,7 +965,7 @@ RpcStatus VOID_Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## 
             put_ ## Param2Type(&pos, end, p2) &&    \
             put_ ## Param3Type(&pos, end, p3) )    \
     { \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
         result = ekosfDoRPC( io, rpcId, VOID_RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type, &stackSize ); \
     } \
     else { \
@@ -984,7 +984,7 @@ RpcStatus VOID_Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## 
             put_ ## Param3Type(&pos, end, p3) && \
             put_ ## Param4Type(&pos, end, p4) )    \
     { \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
         result = ekosfDoRPC( io, rpcId, VOID_RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type, &stackSize ); \
     } \
     else { \
@@ -1004,7 +1004,7 @@ RpcStatus VOID_Rpc_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## 
             put_ ## Param4Type(&pos, end, p4) && \
             put_ ## Param5Type(&pos, end, p5) )    \
     { \
-        esU32 stackSize = pos-io->stack; \
+        esU32 stackSize = (esU32)(pos-io->stack); \
          result = ekosfDoRPC( io, rpcId, VOID_RpcSig_ ## Param0Type ## _ ## Param1Type ## _ ## Param2Type ## _ ## Param3Type ## _ ## Param4Type ## _ ## Param5Type, &stackSize ); \
     } \
     else { \
