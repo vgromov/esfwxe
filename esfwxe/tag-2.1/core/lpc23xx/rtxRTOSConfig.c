@@ -11,7 +11,7 @@
 
 #include <targetConfig.h>
 #include <rtxRTOSConfig.h>          /* RTX user configuration header    */
-#include <RTX_Config.h>							// rtx types and os defines
+#include <RTX_Config.h>              // rtx types and os defines
 #include <rtl.h>
 
 /*----------------------------------------------------------------------------
@@ -213,17 +213,17 @@ extern void os_clock_interrupt (void);
 
 void os_idle_demon (void) __task 
 {
-	/* The idle demon is a system task. It is running when no other task is   */
-	/* ready to run (idle situation). It must not terminate. Therefore it     */
-	/* should contain at least an endless loop.                               */
-	
-	for(;;) 
-	{
-		// enter low-power mode in idle mode
+  /* The idle demon is a system task. It is running when no other task is   */
+  /* ready to run (idle situation). It must not terminate. Therefore it     */
+  /* should contain at least an endless loop.                               */
+  
+  for(;;) 
+  {
+    // enter low-power mode in idle mode
 #ifndef JTAG_DEBUG
-		_idle_(); 	
+    _idle_();   
 #endif
-	}
+  }
 } /* end of os_idle_demon */
 
 

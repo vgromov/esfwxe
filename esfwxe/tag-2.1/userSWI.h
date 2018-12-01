@@ -10,7 +10,7 @@
 #endif
 
 #define DEF_SWI_HANDLER(swiNumber, swiHandlerName) \
-	void __svc( swiNumber ) swiHandlerName (void);
+  void __svc( swiNumber ) swiHandlerName (void);
 #define IMPL_SWI_HANDLER
 
 #include <swiImpl.cc>
@@ -22,4 +22,4 @@
 // swi handler implementations must be placed in the same swiImpl.cc
 // in #ifdef | #endif IMPL_SWI section using IMPL_SWI_HANDLER( swiHandlerName ) as implementation entry point
 
-#endif //	_user_SWI_h_
+#endif //  _user_SWI_h_

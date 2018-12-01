@@ -70,7 +70,7 @@ CDC_BUF_T  CDC_OutBuf;                                 /* buffer for all CDC Out
 int CDC_RdOutBuf (char *buffer, const int *length) {
   int bytesToRead, bytesRead;
   
-  /* Read *length bytes, block if *bytes are not avaialable	*/
+  /* Read *length bytes, block if *bytes are not avaialable  */
   bytesToRead = *length;
   bytesToRead = (bytesToRead < (*length)) ? bytesToRead : (*length);
   bytesRead = bytesToRead;
@@ -284,7 +284,7 @@ esBL CDC_SendBreak (unsigned short wDurationOfBreak) {
  *---------------------------------------------------------------------------*/
 void CDC_BulkIn(void) {
   int numBytesRead, numBytesAvail;
-	
+  
   ser_AvailChar (&numBytesAvail);
 
   /* ... add code to check for overwrite */
@@ -293,7 +293,7 @@ void CDC_BulkIn(void) {
 
   /* send over USB */
   if (numBytesRead > 0) {
-	USB_WriteEP (CDC_DEP_IN, &BulkBufIn[0], numBytesRead);
+  USB_WriteEP (CDC_DEP_IN, &BulkBufIn[0], numBytesRead);
   }
   else {
     CDC_DepInEmpty = 1;

@@ -60,12 +60,12 @@ bool max4400x::wordSet(esU8 reg, esU16 w) ESE_NOTHROW
 
 bool max4400x::byteGet(esU8 reg, esU8& b) ESE_NOTHROW
 {
-	return 1 == m_i2c.masterMemReceive(m_addr, reg, 1, &b, 1, m_tmo);
+  return 1 == m_i2c.masterMemReceive(m_addr, reg, 1, &b, 1, m_tmo);
 }
 
 bool max4400x::wordGet(esU8 reg, esU16& w) ESE_NOTHROW
 {
-	if( 2 == m_i2c.masterMemReceive(m_addr, reg, 1, reinterpret_cast<esU8*>(&w), 2, m_tmo) )
+  if( 2 == m_i2c.masterMemReceive(m_addr, reg, 1, reinterpret_cast<esU8*>(&w), 2, m_tmo) )
   {
     w = SWAPB_WORD(w);
     return true;
@@ -229,7 +229,7 @@ bool max4400x::tempRead(esU16& temp) ESE_NOTHROW
 
 bool max4400x::allRead(max4400x::AllChannels& data) ESE_NOTHROW
 {
-	if( sizeof(max4400x::AllChannels) == m_i2c.masterMemReceive(m_addr, max4400xRAMBCLEARH, 1, reinterpret_cast<esU8*>(&data), sizeof(max4400x::AllChannels), m_tmo) )
+  if( sizeof(max4400x::AllChannels) == m_i2c.masterMemReceive(m_addr, max4400xRAMBCLEARH, 1, reinterpret_cast<esU8*>(&data), sizeof(max4400x::AllChannels), m_tmo) )
   {
     data.c = SWAPB_WORD(data.c);
     data.r = SWAPB_WORD(data.r);

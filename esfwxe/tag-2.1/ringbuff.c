@@ -1,7 +1,7 @@
 #ifndef USE_EMULATOR
-#	include <esfwxe/target.h>
+#  include <esfwxe/target.h>
 #else
-#	include <emulator_stubs.h>
+#  include <emulator_stubs.h>
 #endif
 #pragma hdrstop 
 
@@ -9,102 +9,102 @@
 #include <esfwxe/utils.h>
 
 #if defined(USE_ISR_SAFE_RB) && !defined(USE_EMULATOR)
-#	ifdef USE_USER_SWI
-#		include "userSWI.h"
-//#	else
-//		extern void disableIrq(void);	
-//		extern void enableIrq(void);	
-#	endif
+#  ifdef USE_USER_SWI
+#    include "userSWI.h"
+//#  else
+//    extern void disableIrq(void);  
+//    extern void enableIrq(void);  
+#  endif
 #endif
 
 // ring buffer initialization 
 //
 void rbInit(rbHANDLE buff, void* data, esU32 size)
 {
-	buff->data 	= data;	// data buffer begin
-	buff->mask 	= size-1UL;
-	buff->in = buff->out = buff->count = 0;
+  buff->data   = data;  // data buffer begin
+  buff->mask   = size-1UL;
+  buff->in = buff->out = buff->count = 0;
 }
 
 // is empty
 #ifdef USE_ISR_SAFE_RB
-	esBL rbIsEmpty(rbHANDLE buff)
-	{
-		esBL result;
-		disableIrq();
-		result = rbIsEmptyFromIsr(buff);
-		enableIrq();
+  esBL rbIsEmpty(rbHANDLE buff)
+  {
+    esBL result;
+    disableIrq();
+    result = rbIsEmptyFromIsr(buff);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbIsEmptyFromIsr(rbHANDLE buff)
+  esBL rbIsEmptyFromIsr(rbHANDLE buff)
 #else
-	esBL rbIsEmpty(rbHANDLE buff)	
-#endif	// USE_ISR_SAFE_R
-	{
-		return (0 == buff->count);		
-	}
+  esBL rbIsEmpty(rbHANDLE buff)  
+#endif  // USE_ISR_SAFE_R
+  {
+    return (0 == buff->count);    
+  }
 
 // is full
 #ifdef USE_ISR_SAFE_RB
-	esBL rbIsFull(rbHANDLE buff)
-	{
-		esBL result;
-		disableIrq();
-		result = rbIsFullFromIsr(buff);
-		enableIrq();
+  esBL rbIsFull(rbHANDLE buff)
+  {
+    esBL result;
+    disableIrq();
+    result = rbIsFullFromIsr(buff);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbIsFullFromIsr(rbHANDLE buff)
+  esBL rbIsFullFromIsr(rbHANDLE buff)
 #else
-	esBL rbIsFull(rbHANDLE buff)	
-#endif	// USE_ISR_SAFE_R
+  esBL rbIsFull(rbHANDLE buff)  
+#endif  // USE_ISR_SAFE_R
 {
-	return buff->mask+1 == buff->count;
+  return buff->mask+1 == buff->count;
 }
 
 // elements count
 #ifdef USE_ISR_SAFE_RB
-	esU32 rbGetCount(rbHANDLE buff)
-	{
-		esU32 result;
-		disableIrq();
-		result = rbGetCountFromIsr(buff);
-		enableIrq();
+  esU32 rbGetCount(rbHANDLE buff)
+  {
+    esU32 result;
+    disableIrq();
+    result = rbGetCountFromIsr(buff);
+    enableIrq();
 
-		return result;
-	}	
+    return result;
+  }  
 
-	esU32 rbGetCountFromIsr(rbHANDLE buff)
+  esU32 rbGetCountFromIsr(rbHANDLE buff)
 #else
-	esU32 rbGetCount(rbHANDLE buff)	
-#endif	// USE_ISR_SAFE_RB
+  esU32 rbGetCount(rbHANDLE buff)  
+#endif  // USE_ISR_SAFE_RB
 {
- 	return buff->count;
+   return buff->count;
 }
 
 // flush entire buffer
 #ifdef USE_ISR_SAFE_RB
-	void rbFlush(rbHANDLE buff)
-	{
-		disableIrq();
-		rbFlushFromIsr(buff);
-		enableIrq();
-	}
+  void rbFlush(rbHANDLE buff)
+  {
+    disableIrq();
+    rbFlushFromIsr(buff);
+    enableIrq();
+  }
 
-	void rbFlushFromIsr(rbHANDLE buff)
+  void rbFlushFromIsr(rbHANDLE buff)
 #else
-	void rbFlush(rbHANDLE buff)	
-#endif	// USE_ISR_SAFE_RB
+  void rbFlush(rbHANDLE buff)  
+#endif  // USE_ISR_SAFE_RB
 {
-	buff->in = buff->out = buff->count = 0;
+  buff->in = buff->out = buff->count = 0;
 }
 
 #define RB_IS_NOT_FULL(buff) \
-	(buff->mask+1 != buff->count)
+  (buff->mask+1 != buff->count)
 
 // esU8 access
 //
@@ -113,85 +113,85 @@ void rbInit(rbHANDLE buff, void* data, esU32 size)
 // append byte to buffer waiting timeout for buffer space to become available
 esBL rbPushTimeoutB(rbHANDLE buff, esU8 b, esU32 timeout)
 {
-	esBL result = rbPushB(buff, b);
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPushB(buff, b);
-	}
+  esBL result = rbPushB(buff, b);
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPushB(buff, b);
+  }
 
-	return result;
+  return result;
 }
 
 // append byte to the end of the buffer, return (false) if fail, (true) on success
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPushB(rbHANDLE buff, esU8 b)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPushFromIsrB(buff, b);
-		enableIrq();
+  esBL rbPushB(rbHANDLE buff, esU8 b)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPushFromIsrB(buff, b);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPushFromIsrB(rbHANDLE buff, esU8 b)
+  esBL rbPushFromIsrB(rbHANDLE buff, esU8 b)
 #else
-	esBL rbPushB(rbHANDLE buff, esU8 b)	
-#endif	// USE_ISR_SAFE_RB
+  esBL rbPushB(rbHANDLE buff, esU8 b)  
+#endif  // USE_ISR_SAFE_RB
 {
-	if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
-	{
-		((esU8*)buff->data)[buff->mask & buff->in++] = b;
-		++buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
+  {
+    ((esU8*)buff->data)[buff->mask & buff->in++] = b;
+    ++buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // pop byte from the buffer with timeout in ms
 esBL rbPopTimeoutB(rbHANDLE buff, esU8* b, esU32 timeout)
-{		
-	esBL result = rbPopB(buff, b);
+{    
+  esBL result = rbPopB(buff, b);
 
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPopB(buff, b);
-	}
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPopB(buff, b);
+  }
 
-	return result;
+  return result;
 }
 
 // pop byte from front of the buffer
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPopB(rbHANDLE buff, esU8* b)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPopFromIsrB(buff, b);
-		enableIrq();
+  esBL rbPopB(rbHANDLE buff, esU8* b)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPopFromIsrB(buff, b);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPopFromIsrB(rbHANDLE buff, esU8* b)
+  esBL rbPopFromIsrB(rbHANDLE buff, esU8* b)
 #else
-	esBL rbPopB(rbHANDLE buff, esU8* b)	
-#endif	// USE_ISR_SAFE_RB
+  esBL rbPopB(rbHANDLE buff, esU8* b)  
+#endif  // USE_ISR_SAFE_RB
 {
-	if( buff->count )
-	{
-		if(b)
-			*b = ((esU8*)buff->data)[buff->mask & buff->out++];
-		else
-			++buff->out;
-		--buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( buff->count )
+  {
+    if(b)
+      *b = ((esU8*)buff->data)[buff->mask & buff->out++];
+    else
+      ++buff->out;
+    --buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 #endif // USE_BYTE_RB
@@ -202,86 +202,86 @@ esBL rbPopTimeoutB(rbHANDLE buff, esU8* b, esU32 timeout)
 
 // append word to the end of the buffer, return FALSE if fail, TRUE on success
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPushW(rbHANDLE buff, esU16 w)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPushFromIsrW(buff, w);
-		enableIrq();
+  esBL rbPushW(rbHANDLE buff, esU16 w)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPushFromIsrW(buff, w);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPushFromIsrW(rbHANDLE buff, esU16 w)
-#else	// USE_ISR_SAFE_RB
-	esBL rbPushW(rbHANDLE buff, esU16 w)
+  esBL rbPushFromIsrW(rbHANDLE buff, esU16 w)
+#else  // USE_ISR_SAFE_RB
+  esBL rbPushW(rbHANDLE buff, esU16 w)
 #endif // USE_ISR_SAFE_RB
 {
-	if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
-	{
-		((esU16*)buff->data)[buff->mask & buff->in++] = w;
-		++buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
+  {
+    ((esU16*)buff->data)[buff->mask & buff->in++] = w;
+    ++buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // append word to buffer waiting timeout for buffer space to become available
 esBL rbPushTimeoutW(rbHANDLE buff, esU16 w, esU32 timeout)
 {
-	esBL result = rbPushW(buff, w);
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPushW(buff, w);
-	}
+  esBL result = rbPushW(buff, w);
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPushW(buff, w);
+  }
 
-	return result;
+  return result;
 }
 
 // pop word from front of the buffer
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPopW(rbHANDLE buff, esU16* w)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPopFromIsrW(buff, w);
-		enableIrq();
+  esBL rbPopW(rbHANDLE buff, esU16* w)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPopFromIsrW(buff, w);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPopFromIsrW(rbHANDLE buff, esU16* w)
+  esBL rbPopFromIsrW(rbHANDLE buff, esU16* w)
 #else
-	esBL rbPopW(rbHANDLE buff, esU16* w)
+  esBL rbPopW(rbHANDLE buff, esU16* w)
 #endif
 {
-	if( buff->count )
-	{
-		if(w)
-			*w = ((esU16*)buff->data)[buff->mask & buff->out++];
-		else
-			++buff->out;
-		--buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( buff->count )
+  {
+    if(w)
+      *w = ((esU16*)buff->data)[buff->mask & buff->out++];
+    else
+      ++buff->out;
+    --buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // pop word from the buffer with timeout in ms
 esBL rbPopTimeoutW(rbHANDLE buff, esU16* w, esU32 timeout)
 {
-	esBL result = rbPopW(buff, w);
+  esBL result = rbPopW(buff, w);
 
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPopW(buff, w);
-	}
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPopW(buff, w);
+  }
 
-	return result;
+  return result;
 }
 
 #endif // USE_WORD_RB
@@ -291,86 +291,86 @@ esBL rbPopTimeoutW(rbHANDLE buff, esU16* w, esU32 timeout)
 #ifdef USE_DWORD_RB
 // append dword to the end of the buffer, return FALSE if fail, TRUE on success
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPushDW(rbHANDLE buff, esU32 dw)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPushFromIsrDW(buff, dw);
-		enableIrq();
+  esBL rbPushDW(rbHANDLE buff, esU32 dw)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPushFromIsrDW(buff, dw);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPushFromIsrDW(rbHANDLE buff, esU32 dw)
-#else	// USE_ISR_SAFE_RB
-	esBL rbPushDW(rbHANDLE buff, esU32 dw)
+  esBL rbPushFromIsrDW(rbHANDLE buff, esU32 dw)
+#else  // USE_ISR_SAFE_RB
+  esBL rbPushDW(rbHANDLE buff, esU32 dw)
 #endif // USE_ISR_SAFE_RB
 {
-	if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
-	{
-		((esU32*)buff->data)[buff->mask & buff->in++] = dw;
-		++buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
+  {
+    ((esU32*)buff->data)[buff->mask & buff->in++] = dw;
+    ++buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // append dword to buffer waiting timeout for buffer space to become available
 esBL rbPushTimeoutDW(rbHANDLE buff, esU32 dw, esU32 timeout)
 {
-	esBL result = rbPushDW(buff, dw);
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPushDW(buff, dw);
-	}
+  esBL result = rbPushDW(buff, dw);
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPushDW(buff, dw);
+  }
 
-	return result;
+  return result;
 }
 
 // pop dword from front of the buffer
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPopDW(rbHANDLE buff, esU32* dw)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPopFromIsrDW(buff, dw);
-		enableIrq();
+  esBL rbPopDW(rbHANDLE buff, esU32* dw)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPopFromIsrDW(buff, dw);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPopFromIsrDW(rbHANDLE buff, esU32* dw)
+  esBL rbPopFromIsrDW(rbHANDLE buff, esU32* dw)
 #else
-	esBL rbPopDW(rbHANDLE buff, esU32* dw)
+  esBL rbPopDW(rbHANDLE buff, esU32* dw)
 #endif
 {
-	if( buff->count )
-	{
-		if(dw)
-			*dw = ((esU32*)buff->data)[buff->mask & buff->out++];
-		else
-			++buff->out;
-		--buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( buff->count )
+  {
+    if(dw)
+      *dw = ((esU32*)buff->data)[buff->mask & buff->out++];
+    else
+      ++buff->out;
+    --buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // pop dword from the buffer with timeout in ms
 esBL rbPopTimeoutDW(rbHANDLE buff, esU32* dw, esU32 timeout)
 {
-	esBL result = rbPopDW(buff, dw);
+  esBL result = rbPopDW(buff, dw);
 
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPopDW(buff, dw);
-	}
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPopDW(buff, dw);
+  }
 
-	return result;
+  return result;
 }
 
 #endif // USE_DWORD_RB
@@ -380,85 +380,85 @@ esBL rbPopTimeoutDW(rbHANDLE buff, esU32* dw, esU32 timeout)
 #ifdef USE_FLOAT_RB
 // append float to the end of the buffer, return FALSE if fail, TRUE on success
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPushF(rbHANDLE buff, esF f)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPushFromIsrF(buff, f);
-		enableIrq();
+  esBL rbPushF(rbHANDLE buff, esF f)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPushFromIsrF(buff, f);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPushFromIsrF(rbHANDLE buff, esF f)
-#else	// USE_ISR_SAFE_RB
-	esBL rbPushF(rbHANDLE buff, esF f)
+  esBL rbPushFromIsrF(rbHANDLE buff, esF f)
+#else  // USE_ISR_SAFE_RB
+  esBL rbPushF(rbHANDLE buff, esF f)
 #endif // USE_ISR_SAFE_RB
 {
-	if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
-	{
-		((esF*)buff->data)[buff->mask & buff->in++] = f;
-		++buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( RB_IS_NOT_FULL(buff) ) // if we have room in buffer
+  {
+    ((esF*)buff->data)[buff->mask & buff->in++] = f;
+    ++buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // append float to buffer waiting timeout for buffer space to become available
 esBL rbPushTimeoutF(rbHANDLE buff, esF f, esU32 timeout)
 {
-	esBL result = rbPushF(buff, f);
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPushF(buff, f);
-	}
+  esBL result = rbPushF(buff, f);
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPushF(buff, f);
+  }
 
-	return result;
+  return result;
 }
 
 // pop float from front of the buffer
 #ifdef USE_ISR_SAFE_RB
-	esBL rbPopF(rbHANDLE buff, esF* f)
-	{
-		esBL result;
-		disableIrq();
-		result = rbPopFromIsrF(buff, f);
-		enableIrq();
+  esBL rbPopF(rbHANDLE buff, esF* f)
+  {
+    esBL result;
+    disableIrq();
+    result = rbPopFromIsrF(buff, f);
+    enableIrq();
 
-		return result;
-	}
+    return result;
+  }
 
-	esBL rbPopFromIsrF(rbHANDLE buff, esF* f)
+  esBL rbPopFromIsrF(rbHANDLE buff, esF* f)
 #else
-	esBL rbPopF(rbHANDLE buff, esF* f)
+  esBL rbPopF(rbHANDLE buff, esF* f)
 #endif
 {
-	if( buff->count )
-	{
-		if(f)
-			*f = ((esF*)buff->data)[buff->mask & buff->out++];
-		else
-			++buff->out;
-		--buff->count;
-		return TRUE;
-	}
-	else
-		return FALSE;
+  if( buff->count )
+  {
+    if(f)
+      *f = ((esF*)buff->data)[buff->mask & buff->out++];
+    else
+      ++buff->out;
+    --buff->count;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // pop float from the buffer with timeout in ms
 esBL rbPopTimeoutF(rbHANDLE buff, esF* f, esU32 timeout)
 {
-	esBL result = rbPopF(buff, f);
-	while( !result && timeout-- )
-	{
-		usDelay(1000);
-		result = rbPopF(buff, f);
-	}
+  esBL result = rbPopF(buff, f);
+  while( !result && timeout-- )
+  {
+    usDelay(1000);
+    result = rbPopF(buff, f);
+  }
 
-	return result;
+  return result;
 }
 
 #endif // USE_FLOAT_RB

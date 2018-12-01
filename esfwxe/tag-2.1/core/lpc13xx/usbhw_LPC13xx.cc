@@ -145,8 +145,8 @@ void USB_Init (void) {
 
   USB_Reset();
   USB_SetAddress(0);
-	
-	LPC_SYSCON->SYSAHBCLKCTRL &= ~IOCON_CLOCK_CONNECT;
+  
+  LPC_SYSCON->SYSAHBCLKCTRL &= ~IOCON_CLOCK_CONNECT;
 }
 
 // USB hardware uninit 
@@ -154,17 +154,17 @@ void USB_UnInit (void)
 {
   LPC_SYSCON->SYSAHBCLKCTRL |= IOCON_CLOCK_CONNECT; /* enable AHB clock for IO configuration block. */
 
-  LPC_IOCON->PIO0_3  = 0xD0;              	// Reset functions
-  LPC_IOCON->PIO0_6  = 0xD0;              	// Reset functions
+  LPC_IOCON->PIO0_3  = 0xD0;                // Reset functions
+  LPC_IOCON->PIO0_6  = 0xD0;                // Reset functions
 
-	LPC_SYSCON->SYSAHBCLKCTRL &= ~(1<<14);   	/* Disable AHB clock for USB_REG. */
+  LPC_SYSCON->SYSAHBCLKCTRL &= ~(1<<14);     /* Disable AHB clock for USB_REG. */
 
 #if USB_LPC13XX_FIQ
   NVIC_DisableIRQ(USB_FIQn);                 /* disable USB HighPriority interrupt */
 #endif /* USB_LPC13XX_FIQ */
   NVIC_DisableIRQ(USB_IRQn);                 /* disable USB LowPriority interrupt */
 
-	LPC_SYSCON->SYSAHBCLKCTRL &= ~IOCON_CLOCK_CONNECT;
+  LPC_SYSCON->SYSAHBCLKCTRL &= ~IOCON_CLOCK_CONNECT;
 }
 
 /*

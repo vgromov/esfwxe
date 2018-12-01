@@ -57,7 +57,7 @@
 /*----------------------------------------------------------------------------
   Define clocks
  *----------------------------------------------------------------------------*/
-#define __XTAL            (Fosc)    			/* Oscillator frequency             */
+#define __XTAL            (Fosc)          /* Oscillator frequency             */
 #define __SYS_OSC_CLK     (    __XTAL)    /* Main oscillator frequency        */
 #define __IRC_OSC_CLK     (12000000UL)    /* Internal RC oscillator frequency */
 
@@ -141,8 +141,8 @@ volatile esU32 SystemCoreClock = __SYSTEM_CLOCK;
 
 esU32 systemCoreFrequencyGet(void)            /* Get Core Clock Frequency      */
 {
-	uint32_t wdt_osc = 0;
-	SystemCoreClock = 0;
+  uint32_t wdt_osc = 0;
+  SystemCoreClock = 0;
 
   /* Determine clock frequency according to clock register values             */
   switch ((LPC_SYSCON->WDTOSCCTRL >> 5) & 0x0F) {
@@ -203,7 +203,7 @@ esU32 systemCoreFrequencyGet(void)            /* Get Core Clock Frequency      *
   }
 
   SystemCoreClock /= LPC_SYSCON->SYSAHBCLKDIV; 
-	return SystemCoreClock;
+  return SystemCoreClock;
 }
 
 void configurePLL(void)
@@ -225,7 +225,7 @@ void configurePLL(void)
 #if ((MAINCLKSEL_Val & 0x03) == 3)                /* Main Clock is PLL Out    */
   LPC_SYSCON->SYSPLLCTRL    = SYSPLLCTRL_Val;
   LPC_SYSCON->PDRUNCFG     &= ~(1 << 7);          /* Power-up SYSPLL          */
-  while (!(LPC_SYSCON->SYSPLLSTAT & 0x01));	      /* Wait Until PLL Locked    */
+  while (!(LPC_SYSCON->SYSPLLSTAT & 0x01));        /* Wait Until PLL Locked    */
 #endif
 
 #if (((MAINCLKSEL_Val & 0x03) == 2) )
@@ -268,21 +268,21 @@ void configurePLL(void)
 
 void powerResetInit(void)
 {
-	// power up only IRC && flash by default
-	LPC_SYSCON->PDRUNCFG = 0x00007FF8;
-	// feed APB clock to all default system blocks (see docs), except for ssp, wdt, usb
-	LPC_SYSCON->SYSAHBCLKCTRL	= 0x0000005F;
+  // power up only IRC && flash by default
+  LPC_SYSCON->PDRUNCFG = 0x00007FF8;
+  // feed APB clock to all default system blocks (see docs), except for ssp, wdt, usb
+  LPC_SYSCON->SYSAHBCLKCTRL  = 0x0000005F;
 }
 
 void gpioResetInit( void )
 {
 #ifdef JTAG_DEBUG
-	LPC_SYSCON->SYSAHBCLKCTRL |= IOCON_CLOCK_CONNECT;
-	// configure SWO, SWCLK, SWDIO
-	LPC_IOCON->PIO0_9 = 0xD3;
-	LPC_IOCON->SWCLK_PIO0_10 = 0xD0;
-	LPC_IOCON->SWDIO_PIO1_3 = 0xD0;
-	LPC_SYSCON->SYSAHBCLKCTRL &= ~IOCON_CLOCK_CONNECT;	
+  LPC_SYSCON->SYSAHBCLKCTRL |= IOCON_CLOCK_CONNECT;
+  // configure SWO, SWCLK, SWDIO
+  LPC_IOCON->PIO0_9 = 0xD3;
+  LPC_IOCON->SWCLK_PIO0_10 = 0xD0;
+  LPC_IOCON->SWDIO_PIO1_3 = 0xD0;
+  LPC_SYSCON->SYSAHBCLKCTRL &= ~IOCON_CLOCK_CONNECT;  
 #endif
 }
 
@@ -297,11 +297,11 @@ void gpioResetInit( void )
  */
 void targetResetInit(void) 
 {
-	powerResetInit();
+  powerResetInit();
   gpioResetInit();
-	configurePLL();
-	systemCoreFrequencyGet();
-	// cortex CMSIS HAL is used for VICs
+  configurePLL();
+  systemCoreFrequencyGet();
+  // cortex CMSIS HAL is used for VICs
 }
 
 #endif // _target_hw_c_

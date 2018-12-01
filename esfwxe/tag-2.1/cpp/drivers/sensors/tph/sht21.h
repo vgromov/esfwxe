@@ -2,17 +2,17 @@
 #define _sht_21_h_
 
 #ifdef __cplusplus
-	extern "C" {
+  extern "C" {
 #endif
 
 // driver for Sensitron SHT21 humidity & temperature sensor chip
 //
 enum {
-	// user register bits
-	sht21DisableOtpReload 	= 0x02,
-	sht21EnableOnchipHeater	= 0x04,
-	sht21EndOfBattLess225		= 0x40,
-	sht21MsrResolutionMask	= 0x81,
+  // user register bits
+  sht21DisableOtpReload   = 0x02,
+  sht21EnableOnchipHeater  = 0x04,
+  sht21EndOfBattLess225    = 0x40,
+  sht21MsrResolutionMask  = 0x81,
 };
 
 // sht21 api
@@ -36,7 +36,7 @@ esBL sht21TemperatureGetBlocking(i2cHANDLE h, esU8 precision, long* result);
 esBL sht21HumidityGetBlocking(i2cHANDLE h, esU8 precision, long* result);
 
 #ifdef __cplusplus
-	}
+  }
 #endif
 
 #endif // _sht_21_h_

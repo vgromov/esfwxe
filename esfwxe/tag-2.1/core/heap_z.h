@@ -8,27 +8,27 @@
 #pragma pack( push, 1 )
 //----------------------------------------------------------------------------
 typedef union type_size {
-	unsigned long mark;
-	struct {
-	unsigned long size:24;
-	unsigned long type:8;
-	};
+  unsigned long mark;
+  struct {
+  unsigned long size:24;
+  unsigned long type:8;
+  };
 }type_size;
 
 // Memory Control Block (MCB)
 //----------------------------------------------------------------------------
 typedef struct heap_mcb
 {
-	struct heap_mcb *next;   	// Указатель на следующий MCB
-			  					// mcb.next  последнего MCM всегда указывает на
-			  					// первый MCB.
-	struct heap_mcb *prev;   	// Указатель на предыдущий MCB.
-								// Для первого MCB этот указатель указывает
-								// сам на себя.
-	union type_size ts;  		// Размер блока памяти (в байтах)
+  struct heap_mcb *next;     // Указатель на следующий MCB
+                  // mcb.next  последнего MCM всегда указывает на
+                  // первый MCB.
+  struct heap_mcb *prev;     // Указатель на предыдущий MCB.
+                // Для первого MCB этот указатель указывает
+                // сам на себя.
+  union type_size ts;      // Размер блока памяти (в байтах)
 
-	void *owner;        		// Владелец блока памяти (TCB владельца)
-								// Собственно контролируемый блок памяти расположен сразу за MCB
+  void *owner;            // Владелец блока памяти (TCB владельца)
+                // Собственно контролируемый блок памяти расположен сразу за MCB
 } heap_mcb;
 
 
@@ -36,12 +36,12 @@ typedef struct heap_mcb
 // Структура-описатель кучи (тип-структура t_heap)
 //----------------------------------------------------------------------------
 typedef struct heap_t
-{ 	// Указатель на начало heap (первый MCB)
-	struct heap_mcb *start;
-	// Указатель на первый свободный MCB
-	struct heap_mcb *freem;
-	// RAW размер кучи
-	unsigned long hsize;
+{   // Указатель на начало heap (первый MCB)
+  struct heap_mcb *start;
+  // Указатель на первый свободный MCB
+  struct heap_mcb *freem;
+  // RAW размер кучи
+  unsigned long hsize;
 } heap_t;
 #pragma pack( pop )
 
@@ -70,22 +70,22 @@ void free_z( heap_t *heap, void *ptr );
 
 //----------------------------------------------------------------------------
 enum MCB_MARK {
-	MARK_FREE = 0,
-	MARK_SYSTEM,
-	MARK_TCB,
-	MARK_STACK,
-	MARK_QCB,
-	MARK_QUEUE,
-	MARK_CCB,
-	MARK_MUTEX,
-	MARK_8,
-	MARK_9,
-	MARK_A,
-	MARK_B,
-	MARK_C,
-	MARK_D,
-	MARK_E,
-	MARK_F
+  MARK_FREE = 0,
+  MARK_SYSTEM,
+  MARK_TCB,
+  MARK_STACK,
+  MARK_QCB,
+  MARK_QUEUE,
+  MARK_CCB,
+  MARK_MUTEX,
+  MARK_8,
+  MARK_9,
+  MARK_A,
+  MARK_B,
+  MARK_C,
+  MARK_D,
+  MARK_E,
+  MARK_F
 };
 
 //----------------------------------------------------------------------------

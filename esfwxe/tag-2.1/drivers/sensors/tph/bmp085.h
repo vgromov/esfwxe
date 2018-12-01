@@ -5,12 +5,12 @@
 //
 
 #ifdef __cplusplus
-	extern "C" {
+  extern "C" {
 #endif
 
 // sensor calibration data struct
 typedef struct {
-	esI16 AC1;
+  esI16 AC1;
   esI16 AC2;
   esI16 AC3;
   esU16 AC4;
@@ -53,7 +53,7 @@ esBL bmp085PressureGetBlocking(i2cHANDLE h, const bmp085Calibration* cal, esU8 p
 esBL bmp085PressureGet(i2cHANDLE h, const bmp085Calibration* cal, esU8 precision, long* b5, long* p);
 
 #ifdef __cplusplus
-	}
+  }
 #endif
 
 #endif // _bmp_085_h_

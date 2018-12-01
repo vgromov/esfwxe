@@ -2,34 +2,34 @@
 #define _ccd_tcd_h_
 
 #ifdef __cplusplus
-	extern "C" {
+  extern "C" {
 #endif
 
 // driver api abstraction for the toshiba CCD sensors
 //
 
 enum {
-	// internal state flags
-	//
-	// in pixel bits
-	ccdTcdfInDummyPixel 		= 0x01,
-	ccdTcdfInBlackPixel			= 0x02,
-	ccdTcdfInDataPixel			= 0x04,
-	ccdTcdfInTrailingPixel 	= 0x08,
-	ccdTcdfInPixelMask			= ccdTcdfInDummyPixel|
-														ccdTcdfInBlackPixel|
-														ccdTcdfInDataPixel|
-														ccdTcdfInTrailingPixel,
-	// master clock line state bit
-	ccdTcdfMasterClockHigh	= 0x10,
+  // internal state flags
+  //
+  // in pixel bits
+  ccdTcdfInDummyPixel     = 0x01,
+  ccdTcdfInBlackPixel      = 0x02,
+  ccdTcdfInDataPixel      = 0x04,
+  ccdTcdfInTrailingPixel   = 0x08,
+  ccdTcdfInPixelMask      = ccdTcdfInDummyPixel|
+                            ccdTcdfInBlackPixel|
+                            ccdTcdfInDataPixel|
+                            ccdTcdfInTrailingPixel,
+  // master clock line state bit
+  ccdTcdfMasterClockHigh  = 0x10,
 };
 
 // chip types
 typedef enum {
-	tcdInvalid,
-	tcd1304xx,
-	// must go last
-	ccdTcdTypeCnt
+  tcdInvalid,
+  tcd1304xx,
+  // must go last
+  ccdTcdTypeCnt
 
 } ccdTcdType;
 
@@ -43,32 +43,32 @@ typedef void (*ccdTcdConveyorEndReachedPfn)(ccdTcdHandle h);
 typedef void (*ccdTcdOnInPixelTickPfn)(esU8 tick, esU8 pixelFlags);
 // ccd structure itself
 typedef struct _ccdTcdStruct {
-	ccdTcdConfigLinesPfn configLines;
-	ccdTcdLineSetPfn integrationClearGate;
-	ccdTcdLineSetPfn shutter;
-	ccdTcdLineSetPfn masterClock;
-	// external handlers
-	ccdTcdLineSetPfn onMasterClock;
-	ccdTcdLineSetPfn onDummyPixels;
-	ccdTcdLineSetPfn onBlackPixels;
-	ccdTcdLineSetPfn onDataPixels;
-	ccdTcdLineSetPfn onTrailingPixels;
-	ccdTcdLineSetPfn onPixelRefData;
-	ccdTcdLineSetPfn onPixelData;
-	ccdTcdOnInPixelTickPfn onPixelTick;
-	ccdTcdConveyorEndReachedPfn onConveyorEndReached;
-	// master tick counter
-	esU32 masterTickCnt;
-	// integration controls
-	esU32 integrationDuration;
-	esU32 shutterStart;
-	esU32 shutterEnd;
-	// pixel data levels capture controls
-	esU8 pixelTickCnt;
-	// helper internal state flags
-	esU8 flags;
-	// ccd chip type
-	esU8 type;
+  ccdTcdConfigLinesPfn configLines;
+  ccdTcdLineSetPfn integrationClearGate;
+  ccdTcdLineSetPfn shutter;
+  ccdTcdLineSetPfn masterClock;
+  // external handlers
+  ccdTcdLineSetPfn onMasterClock;
+  ccdTcdLineSetPfn onDummyPixels;
+  ccdTcdLineSetPfn onBlackPixels;
+  ccdTcdLineSetPfn onDataPixels;
+  ccdTcdLineSetPfn onTrailingPixels;
+  ccdTcdLineSetPfn onPixelRefData;
+  ccdTcdLineSetPfn onPixelData;
+  ccdTcdOnInPixelTickPfn onPixelTick;
+  ccdTcdConveyorEndReachedPfn onConveyorEndReached;
+  // master tick counter
+  esU32 masterTickCnt;
+  // integration controls
+  esU32 integrationDuration;
+  esU32 shutterStart;
+  esU32 shutterEnd;
+  // pixel data levels capture controls
+  esU8 pixelTickCnt;
+  // helper internal state flags
+  esU8 flags;
+  // ccd chip type
+  esU8 type;
 
 } ccdTcdStruct;
 
@@ -76,7 +76,7 @@ typedef struct _ccdTcdStruct {
 //
 // one-time ccd struct initializer
 void ccdTcdInit(ccdTcdHandle h, ccdTcdType type,
-	ccdTcdConfigLinesPfn configLines, ccdTcdLineSetPfn integrationClearGate, ccdTcdLineSetPfn shutter, ccdTcdLineSetPfn masterClock );
+  ccdTcdConfigLinesPfn configLines, ccdTcdLineSetPfn integrationClearGate, ccdTcdLineSetPfn shutter, ccdTcdLineSetPfn masterClock );
 // type info access
 ccdTcdType ccdTcdTypeGet(ccdTcdHandle h);
 // configure ccd io lines
@@ -109,7 +109,7 @@ void ccdTcdOnPixelTickSet(ccdTcdHandle h, ccdTcdOnInPixelTickPfn onPixelTick);
 void ccdTcdConveyorEndReachedSet(ccdTcdHandle h, ccdTcdConveyorEndReachedPfn onConveyorEndReached);
 
 #ifdef __cplusplus
-	}
+  }
 #endif
 
 #endif // _ccd_tcd_h_

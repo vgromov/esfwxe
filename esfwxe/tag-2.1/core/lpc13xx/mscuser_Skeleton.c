@@ -574,7 +574,7 @@ fail:
           MSC_ReadCapacity();
           break;
         case SCSI_READ10:
-		case SCSI_READ12:
+    case SCSI_READ12:
           if (MSC_RWSetup()) {
             if ((CBW.bmFlags & 0x80) != 0) {
               LED_On (LED_RD);    /* Turn On Read LED */
@@ -588,7 +588,7 @@ fail:
           }
           break;
         case SCSI_WRITE10:
-		case SCSI_WRITE12:
+    case SCSI_WRITE12:
           if (MSC_RWSetup()) {
             if ((CBW.bmFlags & 0x80) == 0) {
               LED_On (LED_WR);    /* Turn On Write LED */

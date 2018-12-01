@@ -167,7 +167,7 @@ typedef struct
        uint32_t RESERVED1[1];
   __IO uint32_t SYSRSTSTAT;             /*!< Offset: 0x030 (R/W)  System reset status Register */
        uint32_t RESERVED2[3];
-  __IO uint32_t SYSPLLCLKSEL;           /*!< Offset: 0x040 (R/W)  System PLL clock source select Register */	
+  __IO uint32_t SYSPLLCLKSEL;           /*!< Offset: 0x040 (R/W)  System PLL clock source select Register */  
   __IO uint32_t SYSPLLCLKUEN;           /*!< Offset: 0x044 (R/W)  System PLL clock source update enable Register */
   __IO uint32_t USBPLLCLKSEL;
   __IO uint32_t USBPLLCLKUEN;
@@ -458,8 +458,8 @@ typedef struct
   __O  uint32_t FEED;                   /*!< Offset: 0x008 ( /W)  Watchdog feed sequence Register */
   __I  uint32_t TV;                     /*!< Offset: 0x00C (R/ )  Watchdog timer value Register */
        uint32_t RESERVED0;
-  __IO uint32_t WARNINT;				/*!< Offset: 0x014 (R/W)  Watchdog timer warning int. Register */
-  __IO uint32_t WINDOW;					/*!< Offset: 0x018 (R/W)  Watchdog timer window value Register */
+  __IO uint32_t WARNINT;        /*!< Offset: 0x014 (R/W)  Watchdog timer warning int. Register */
+  __IO uint32_t WINDOW;          /*!< Offset: 0x018 (R/W)  Watchdog timer window value Register */
 } LPC_WWDT_TypeDef;
 /*@}*/ /* end of group LPC13xx_WWDT */
 
@@ -532,7 +532,7 @@ typedef struct
 #define LPC_SYSCON_BASE       (LPC_APB0_BASE + 0x48000)
 #define LPC_SSP1_BASE         (LPC_APB0_BASE + 0x58000)
 
-/* AHB peripherals                                                            */	
+/* AHB peripherals                                                            */  
 #define LPC_GPIO_BASE         (LPC_AHB_BASE  + 0x00000)
 #define LPC_GPIO0_BASE        (LPC_AHB_BASE  + 0x00000)
 #define LPC_GPIO1_BASE        (LPC_AHB_BASE  + 0x10000)
@@ -565,6 +565,6 @@ typedef struct
 }
 #endif
 
-#define IOCON_CLOCK_CONNECT	(1 << 16)
+#define IOCON_CLOCK_CONNECT  (1 << 16)
 
 #endif  /* __LPC13xx_H__ */

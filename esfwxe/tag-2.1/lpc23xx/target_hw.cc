@@ -10,39 +10,39 @@
 *****************************************************************************/
 
 /******************************************************************************
-** Function name:		TargetInit
+** Function name:    TargetInit
 **
-** Descriptions:		Initialize the target board; it is called in a necessary 
-**									place, change it as needed
+** Descriptions:    Initialize the target board; it is called in a necessary 
+**                  place, change it as needed
 **
-** parameters:			None
-** Returned value:		None
+** parameters:      None
+** Returned value:    None
 ** 
 ******************************************************************************/
 static void TargetInit(void)
 {
-	// we have to clear PDN bit in AD0CR before disabling ADC power
-	AD0CR &= ~0x0020000;
+  // we have to clear PDN bit in AD0CR before disabling ADC power
+  AD0CR &= ~0x0020000;
 
   // disable all peripheral power
-	PCONP = 0;
+  PCONP = 0;
 }
 
 /******************************************************************************
-** Function name:		GPIOResetInit
+** Function name:    GPIOResetInit
 **
-** Descriptions:		Initialize the target board before running the main() 
-**				function; User may change it as needed, but may not 
-**				deleted it.
+** Descriptions:    Initialize the target board before running the main() 
+**        function; User may change it as needed, but may not 
+**        deleted it.
 **
-** parameters:			None
-** Returned value:		None
+** parameters:      None
+** Returned value:    None
 ** 
 ******************************************************************************/
 void GPIOResetInit( void )
 {
   /* Reset all GPIO pins to default: primary function, FIO */
-	PINSEL0 = 0x00000000;
+  PINSEL0 = 0x00000000;
   PINSEL1 = 0x00000000;
   PINSEL2 = 0x00000000;
   PINSEL3 = 0x00000000;
@@ -54,10 +54,10 @@ void GPIOResetInit( void )
   PINSEL9 = 0x00000000;
   PINSEL10 = 0x00000000;
   
-	// FIO reset
-	SCS 	 |= 0x00000001;
+  // FIO reset
+  SCS    |= 0x00000001;
 
-	FIO0MASK = 0x00000000;
+  FIO0MASK = 0x00000000;
   FIO1MASK = 0x00000000;
   FIO2MASK = 0x00000000;
   FIO3MASK = 0x00000000;
@@ -77,16 +77,16 @@ void GPIOResetInit( void )
 }
 
 /******************************************************************************
-** Function name:		ConfigurePLL
+** Function name:    ConfigurePLL
 **
-** Descriptions:		Configure PLL switching to main OSC instead of IRC
-**						at power up and wake up from power down. 
-**						This routine is used in TargetResetInit() and those
-**						examples using power down and wake up such as
-**						USB suspend to resume, ethernet WOL, and power management
-**						example
-** parameters:			None
-** Returned value:		None
+** Descriptions:    Configure PLL switching to main OSC instead of IRC
+**            at power up and wake up from power down. 
+**            This routine is used in TargetResetInit() and those
+**            examples using power down and wake up such as
+**            USB suspend to resume, ethernet WOL, and power management
+**            example
+** parameters:      None
+** Returned value:    None
 ** 
 ******************************************************************************/
 void ConfigurePLL ( void )
@@ -95,84 +95,84 @@ void ConfigurePLL ( void )
 
   if ( PLLSTAT & (1 << 25) )
   {
-	PLLCON = 1;			/* Enable PLL, disconnected */
-	PLLFEED = 0xaa;
-	PLLFEED = 0x55;
+  PLLCON = 1;      /* Enable PLL, disconnected */
+  PLLFEED = 0xaa;
+  PLLFEED = 0x55;
   }
 
-  PLLCON = 0;				/* Disable PLL, disconnected */
+  PLLCON = 0;        /* Disable PLL, disconnected */
   PLLFEED = 0xaa;
   PLLFEED = 0x55;
     
-  SCS |= 0x20;			/* Enable main OSC */
-  while( !(SCS & 0x40) );	/* Wait until main OSC is usable */
+  SCS |= 0x20;      /* Enable main OSC */
+  while( !(SCS & 0x40) );  /* Wait until main OSC is usable */
 
-  CLKSRCSEL = 0x1;		/* select main OSC, as the PLL clock source */
+  CLKSRCSEL = 0x1;    /* select main OSC, as the PLL clock source */
 
   PLLCFG = (PLL_M-1) | ((PLL_N-1) << 16);
   PLLFEED = 0xaa;
   PLLFEED = 0x55;
       
-  PLLCON = 1;				/* Enable PLL, disconnected */
+  PLLCON = 1;        /* Enable PLL, disconnected */
   PLLFEED = 0xaa;
   PLLFEED = 0x55;
 
-  CCLKCFG = MCU_CLK_DIV-1;	/* Set clock divider */
+  CCLKCFG = MCU_CLK_DIV-1;  /* Set clock divider */
 #if USE_USB
-  USBCLKCFG = USBCLKDivValue;		/* usbclk = 288 MHz/6 = 48 MHz */
+  USBCLKCFG = USBCLKDivValue;    /* usbclk = 288 MHz/6 = 48 MHz */
 #endif
 
-  while ( ((PLLSTAT & (1 << 26)) == 0) );	/* Check lock bit status */
+  while ( ((PLLSTAT & (1 << 26)) == 0) );  /* Check lock bit status */
     
   MValue = PLLSTAT & 0x00007FFF;
   NValue = (PLLSTAT & 0x00FF0000) >> 16;
   while ((MValue != (PLL_M-1)) && ( NValue != (PLL_N-1)) );
 
-  PLLCON = 3;				/* enable and connect */
+  PLLCON = 3;        /* enable and connect */
   PLLFEED = 0xaa;
   PLLFEED = 0x55;
-  while ( ((PLLSTAT & (1 << 25)) == 0) );	/* Check connect bit status */
+  while ( ((PLLSTAT & (1 << 25)) == 0) );  /* Check connect bit status */
 }
 
 /******************************************************************************
-** Function name:		TargetResetInit
+** Function name:    TargetResetInit
 **
-** Descriptions:		Initialize the target board before running the main() 
-**						function; User may change it as needed, but may not 
-**						deleted it.
+** Descriptions:    Initialize the target board before running the main() 
+**            function; User may change it as needed, but may not 
+**            deleted it.
 **
-** parameters:			None
-** Returned value:		None
+** parameters:      None
+** Returned value:    None
 ** 
 ******************************************************************************/
 void targetResetInit(void)
 {
 #ifdef __DEBUG_RAM    
-  MEMMAP = 0x2;			/* remap to internal RAM */
+  MEMMAP = 0x2;      /* remap to internal RAM */
 #endif
 
 #ifdef __DEBUG_FLASH    
-  MEMMAP = 0x1;			/* remap to internal flash */
+  MEMMAP = 0x1;      /* remap to internal flash */
 #endif
 
 #if USE_USB
-  PCONP |= 0x80000000;		/* Turn On USB PCLK */
+  PCONP |= 0x80000000;    /* Turn On USB PCLK */
 #endif
   /* Configure PLL, switch from IRC to Main OSC */
   ConfigurePLL();
 
   /* Set system timers for each component */
 #if (Fpclk / (Fmcu / 4)) == 1
-  PCLKSEL0 = 0x00000000;	/* PCLK is 1/4 CCLK */
+  PCLKSEL0 = 0x00000000;  /* PCLK is 1/4 CCLK */
   PCLKSEL1 = 0x00000000;
 #endif
 #if (Fpclk / (Fmcu / 4)) == 2
-  PCLKSEL0 = 0xAAAAAAAA;	/* PCLK is 1/2 CCLK */
-  PCLKSEL1 = 0xAAAAAAAA;	 
+  PCLKSEL0 = 0xAAAAAAAA;  /* PCLK is 1/2 CCLK */
+  PCLKSEL1 = 0xAAAAAAAA;   
 #endif
 #if (Fpclk / (Fmcu / 4)) == 4
-  PCLKSEL0 = 0x55555555;	/* PCLK is the same as CCLK */
-  PCLKSEL1 = 0x55555555;	
+  PCLKSEL0 = 0x55555555;  /* PCLK is the same as CCLK */
+  PCLKSEL1 = 0x55555555;  
 #endif
 
   /* Set memory accelerater module*/
@@ -195,7 +195,7 @@ void targetResetInit(void)
 
   vicInit();
 
-	TargetInit();
+  TargetInit();
 }
 
 /******************************************************************************

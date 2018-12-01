@@ -4,13 +4,13 @@
 //#define fftDBL_PRECISION
 
 #ifdef __cplusplus
-	extern "C" {
+  extern "C" {
 #endif
 
 typedef enum {
-	fftDirect = 1,
-	fftInverse = -1
-	
+  fftDirect = 1,
+  fftInverse = -1
+  
 } fftDirection;
 
 // Replaces data[1..2*len] by its discrete Fourier transform, if direction is fftDirect; or replaces
@@ -30,7 +30,7 @@ void fft1dReal(float* data, unsigned long len, fftDirection direction);
 void fft1dMagnitude(float* data, unsigned long len);
 
 #ifdef __cplusplus
-	}
+  }
 #endif
 
 #endif //_fft_h_

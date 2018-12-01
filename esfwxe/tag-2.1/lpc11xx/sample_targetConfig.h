@@ -7,33 +7,33 @@
 //
 
 #if defined(_DEBUG) || defined(DEBUG)
-#	ifndef DEBUG
-#		define DEBUG
-#	endif
-#	ifndef _DEBUG
-#		define _DEBUG
-#	endif
+#  ifndef DEBUG
+#    define DEBUG
+#  endif
+#  ifndef _DEBUG
+#    define _DEBUG
+#  endif
 #endif 
 
 #if defined(_DEBUG) || defined(DEBUG)
 // use jtag debug (no WDT)
 // remove in production code
-#	define JTAG_DEBUG
-#	undef  NDEBUG
+#  define JTAG_DEBUG
+#  undef  NDEBUG
 // use trace facility
-#	define USE_TRACE
+#  define USE_TRACE
 #elif !defined(DEBUG) && !defined(_DEBUG)
-#	ifndef NDEBUG
-#		define NDEBUG
-#	endif
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 // define USE_CODE_READ_PROTECTION to produce final code not-readable from flash
-#	define USE_CODE_READ_PROTECTION
+#  define USE_CODE_READ_PROTECTION
 #endif
 
 // frequency configuration data
 //
 // external Xtal frequency
-#define Fosc						14745600	
+#define Fosc            14745600  
 
 
 /*

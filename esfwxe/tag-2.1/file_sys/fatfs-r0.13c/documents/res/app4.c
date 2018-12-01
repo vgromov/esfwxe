@@ -11,8 +11,8 @@
 
 
 static
-DWORD pn (		/* Pseudo random number generator */
-    DWORD pns	/* 0:Initialize, !0:Read */
+DWORD pn (    /* Pseudo random number generator */
+    DWORD pns  /* 0:Initialize, !0:Read */
 )
 {
     static DWORD lfsr;

@@ -4,7 +4,7 @@
 #include "adcConfig.h"
 
 #ifdef __cplusplus
-	extern "C" { 
+  extern "C" { 
 #endif
 
 // adc driver header
@@ -36,7 +36,7 @@ esU32 adcGetStatus(void);
 esU16 adcGetResult(esU8 channel);
 
 #ifdef __cplusplus
-	}
+  }
 #endif
 
 #endif

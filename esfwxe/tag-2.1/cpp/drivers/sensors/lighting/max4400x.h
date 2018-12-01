@@ -12,13 +12,13 @@ public:
   {
     /// Slave address for max44006
     ///
-    _6addr0 						= 0x88,
-    _6addr1 						= 0x8A,
+    _6addr0             = 0x88,
+    _6addr1             = 0x8A,
 
     /// Slave address for max44008
     ///
-    _8addr0 						= 0x80,
-    _8addr1 						= 0x82,
+    _8addr0             = 0x80,
+    _8addr1             = 0x82,
 
     /// Interrupt register bits.
     /// Reading the Interrupt Status register clears the PWRON and AMBINTS bits if set, and deasserts the INT pin (INT pin is 
@@ -39,7 +39,7 @@ public:
     
     /// Main Configuration register bits
     ///
-    cfgMaskAMBINTE			= 0x01, ///< Ambient interrupt enable.
+    cfgMaskAMBINTE      = 0x01, ///< Ambient interrupt enable.
     cfgAMBINTE_ON       = 0x01, ///< 1 - Detection of ambient interrupt events is enabled (see the AMBINTS bit for more details).
     cfgAMBINTE_OFF      = 0x00, ///< 0 - The AMBINTS bit and INT pin remain unasserted even if an ambient interrupt 
                                 ///< event has occurred. The AMBINTS bit is set to 0 if previously set to 1.
@@ -75,7 +75,7 @@ public:
     ambCfgAMBTIM_1_56   = 0x0C, ///<  011           1.5625            256             8             64x
     ambCfgAMBTIM_400    = 0x10, ///<  100           400               16384           14            1/4x
     
-    ambCfgMaskTEMPEN		= 0x20, ///< Temperature sensor channel enable bit.
+    ambCfgMaskTEMPEN    = 0x20, ///< Temperature sensor channel enable bit.
     ambCfgTEMPEN_ON     = 0x20, ///< 1 - Enables temperature sensor.
     ambCfgTEMPEN_OFF    = 0x00, ///< 0 - Disables temperature sensor.
                                                                               
@@ -87,7 +87,7 @@ public:
                                 ///< 0 - Disables IR compensation. 
                                 ///< 1 - Enables IR compensation. Only for MODE = CfgMODE_CL_T
                                         
-    ambCfgMaskTRIM			= 0x80, ///< Automatic gain adjustment on sensor overload
+    ambCfgMaskTRIM      = 0x80, ///< Automatic gain adjustment on sensor overload
     ambCfgTRIM_DEFAULT  = 0x00, ///< 0 - Use factory-programmed gains for all the channels. Ignore any bytes written to TRIM_GAIN_GREEN[6:0], 
     ambCfgTRIM_CUSTOM   = 0x80, ///< TRIM_GAIN_RED[6:0], TRIM_GAIN_BLUE[6:0], TRIM_GAIN_CLEAR[6:0], and TRIM_GAIN_IR[6:0] registers. 
                                 ///< 1 - Use bytes written to TRIM_GAIN_GREEN[6:0], TRIM_GAIN_RED[6:0], TRIM_GAIN_BLUE[6:0], TRIM_GAIN_CLEAR[6:0], 

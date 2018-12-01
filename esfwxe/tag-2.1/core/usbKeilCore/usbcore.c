@@ -36,6 +36,6 @@ extern MSC_CSW CSW;
 #endif
 
 #if LPC13XX == 1
-#	include <esfwxe/core/lpc13xx/usbcore.cc>
-#	include <esfwxe/core/lpc13xx/usbhw_LPC13xx.cc>
+#  include <esfwxe/core/lpc13xx/usbcore.cc>
+#  include <esfwxe/core/lpc13xx/usbhw_LPC13xx.cc>
 #endif

@@ -29,8 +29,8 @@ extern "C" void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c);
 #pragma Otime
 static inline esU32 i2cGetMaxByteTimeoutMs( esU32 len, esU32 baud, esU32 dataBits ) ESE_NOTHROW
 {
-	esU32 result = (len * 2000 * (dataBits + 2)) / baud;
-	return result ? result : 1;
+  esU32 result = (len * 2000 * (dataBits + 2)) / baud;
+  return result ? result : 1;
 }
 
 //----------------------------------------------------------------------
@@ -129,7 +129,7 @@ bool EseI2c::doCheckConfigured() ESE_NOTHROW
 #pragma Otime
 esU32 EseI2c::dataXferTimeoutEstimateGet(size_t len) const ESE_NOTHROW
 {
-	return i2cGetMaxByteTimeoutMs(
+  return i2cGetMaxByteTimeoutMs(
     len, 
     100000, ///< Consider we got slow 100 kHz bus 
     8       ///< Consider we got 8 bit word

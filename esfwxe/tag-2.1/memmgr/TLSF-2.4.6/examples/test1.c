@@ -10,9 +10,9 @@
 
 #define NUM_MALLOC      (10000)
 #define SIZE_MALLOC     (10000)
-#define POOL_SIZE	(NUM_MALLOC*SIZE_MALLOC)
+#define POOL_SIZE  (NUM_MALLOC*SIZE_MALLOC)
 
-#define	FILL_MEM	(0)
+#define  FILL_MEM  (0)
 
 typedef struct
 {
@@ -58,7 +58,7 @@ update (int print, const char *n, double s, double e, minmax * data)
     data->sumquad += d * d;
     mean = data->sum / data->n;
     sigma = sqrt ((data->sumquad - ((data->sum * data->sum) / data->n)) /
-		  (data->n));
+      (data->n));
     if (d < data->min) {
       data->min = d;
     }
@@ -69,11 +69,11 @@ update (int print, const char *n, double s, double e, minmax * data)
   else {
     mean = data->sum / data->n;
     sigma = sqrt ((data->sumquad - ((data->sum * data->sum) / data->n)) /
-		  (data->n));
+      (data->n));
   }
   if (print) {
     printf ("%s min=%.9f, max=%.9f, mean=%.9f, sigma=%.9f\n",
-	    n ? n : data->name, data->min, data->max, mean, sigma);
+      n ? n : data->name, data->min, data->max, mean, sigma);
     if (n == NULL) {
       data->min = 1e37;
       data->max = 0.0;
@@ -117,21 +117,21 @@ main (void)
   for (j = 0; j < 1000; j++) {
     for (i = 0; i < NUM_MALLOC; i++) {
       if (m[i]) {
-	t = (size_t) (1 + drand48 () * SIZE_MALLOC);
+  t = (size_t) (1 + drand48 () * SIZE_MALLOC);
         s = getcurtime ();
-	m[i] = tlsf_realloc (m[i], t);
+  m[i] = tlsf_realloc (m[i], t);
         update (0, "realloc", s, getcurtime (), &raldata);
-	if (((unsigned long) m[i] & (sizeof(void *) * 2 - 1)) != 0) {
-	  fprintf(stderr,"Alignment error %p\n", m[i]);
-	}
+  if (((unsigned long) m[i] & (sizeof(void *) * 2 - 1)) != 0) {
+    fprintf(stderr,"Alignment error %p\n", m[i]);
+  }
 #if FILL_MEM
         memset (m[i], -1, t);
 #endif
       }
       if (m[i]) {
-	s = getcurtime ();
-	tlsf_free (m[i]);
-	update (0, "free   ", s, getcurtime (), &freedata);
+  s = getcurtime ();
+  tlsf_free (m[i]);
+  update (0, "free   ", s, getcurtime (), &freedata);
       }
       t = (size_t) (1 + drand48 () * SIZE_MALLOC);
       s = getcurtime ();
@@ -149,7 +149,7 @@ main (void)
     if ((s - last_h) > 10) {
       last_h = s;
       printf ("Count = %d %f\n",
-	      n * NUM_MALLOC, last_h - first);
+        n * NUM_MALLOC, last_h - first);
       update (1, NULL, 0.0, getcurtime (), &maldata);
       update (1, NULL, 0.0, getcurtime (), &raldata);
       update (1, NULL, 0.0, getcurtime (), &freedata);

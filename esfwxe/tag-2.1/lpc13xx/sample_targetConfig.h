@@ -7,33 +7,33 @@
 //
 
 #if defined(_DEBUG) || defined(DEBUG)
-#	ifndef DEBUG
-#		define DEBUG
-#	endif
-#	ifndef _DEBUG
-#		define _DEBUG
-#	endif
+#  ifndef DEBUG
+#    define DEBUG
+#  endif
+#  ifndef _DEBUG
+#    define _DEBUG
+#  endif
 #endif 
 
 #if defined(_DEBUG) || defined(DEBUG)
 // use jtag debug (no WDT)
 // remove in production code
-#	define JTAG_DEBUG
-#	undef  NDEBUG
+#  define JTAG_DEBUG
+#  undef  NDEBUG
 // use trace facility
-#	define USE_TRACE
+#  define USE_TRACE
 #elif !defined(DEBUG) && !defined(_DEBUG)
-#	ifndef NDEBUG
-#		define NDEBUG
-#	endif
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 // define USE_CODE_READ_PROTECTION to produce final code not-readable from flash
-#	define USE_CODE_READ_PROTECTION
+#  define USE_CODE_READ_PROTECTION
 #endif
 
 // frequency configuration data
 //
 // external Xtal frequency
-#define Fosc						12000000UL	
+#define Fosc            12000000UL  
 
 
 /*
@@ -254,7 +254,7 @@
 #define USB_ADC_CIF_NUM     0
 #define USB_ADC_SIF1_NUM    1
 #define USB_ADC_SIF2_NUM    2
-#define USB_CDC  			0
+#define USB_CDC        0
 #define USB_CDC_CIF_NUM     0
 #define USB_CDC_DIF_NUM     1
 #define USB_CDC_BUFSIZE     64
@@ -283,7 +283,7 @@
 //-------- <<< end of configuration section >>> ------------------------------
 */
 
-#define Fmcu	SystemCoreClock
+#define Fmcu  SystemCoreClock
 #define Fpclk SystemCoreClock
 
 // project-specific defines

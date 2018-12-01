@@ -42,7 +42,7 @@
 
 /* USB Hardware Functions */
 extern void USB_Init        (void);
-extern void USB_UnInit 			(void);
+extern void USB_UnInit       (void);
 extern void USB_Connect     (esBL con);
 extern void USB_Reset       (void);
 extern void USB_Suspend     (void);
@@ -62,6 +62,6 @@ extern void USB_ClearEPBuf  (U32  EPNum);
 extern U32  USB_ReadEP      (U32  EPNum, U8 *pData);
 extern U32  USB_WriteEP     (U32  EPNum, U8 *pData, U32 cnt);
 extern U32  USB_GetFrame    (void);
-extern U32 	EPAdr						(U32 EPNum);
+extern U32   EPAdr            (U32 EPNum);
 
 #endif  /* __USBHW_LPC13xx_H__ */

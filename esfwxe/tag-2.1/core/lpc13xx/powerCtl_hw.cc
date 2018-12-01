@@ -4,20 +4,20 @@
 void powerCtlEnterIdle(void)
 {
 #ifndef JTAG_DEBUG
-	// DPDEN in PCON set to 0;	
-	// SLEEPDEEP in SCR set to 0;
-	// clear sleep and deep pwrdown flags
-	LPC_PMU->PCON	= 0x00000900;
-	// select simple sleep mode
-	SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
-	__WFI();
+  // DPDEN in PCON set to 0;  
+  // SLEEPDEEP in SCR set to 0;
+  // clear sleep and deep pwrdown flags
+  LPC_PMU->PCON  = 0x00000900;
+  // select simple sleep mode
+  SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
+  __WFI();
 #endif
 }
 
 void powerCtlEnterPowerDown(void)
 {
 #ifndef JTAG_DEBUG
-	// TODO: handle properly for lpc1343 core
-	//PCON |= 0x02;		// enter power down mode
+  // TODO: handle properly for lpc1343 core
+  //PCON |= 0x02;    // enter power down mode
 #endif
 }

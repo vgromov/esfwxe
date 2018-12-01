@@ -294,7 +294,7 @@ void EseUsbCdc::onSetLineCodingFromIsr(const uint8_t* pbuf) ESE_NOTHROW
                          (pbuf[2] << 16) | (pbuf[3] << 24));
   m_lineCfg.format     = pbuf[4];
   m_lineCfg.paritytype = pbuf[5];
-  m_lineCfg.datatype   = pbuf[6];	  
+  m_lineCfg.datatype   = pbuf[6];    
 }
 
 #pragma Otime

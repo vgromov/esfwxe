@@ -5,28 +5,28 @@
 #define IDX2EP(idx) ((((idx)<<7)&0x80)|(((idx)>>1)&0xF))  /** convert from endpoint index to endpoint address */
 
 enum {
-	// interrupt register masks
-	USBINT_NONE 		= 0,
-	USBINT_ERR			= 0x00000200,
-	USBINT_EPRLZED	= 0x00000100,
-	USBINT_TxENDPKT	= 0x00000080,
-	USBINT_RxENDPKT	= 0x00000040,
-	USBINT_CDFULL		=	0x00000020,
-	USBINT_CCEMPTY	=	0x00000010,
-	USBINT_DEVSTAT	=	0x00000008,
-	USBINT_EPSLOW		=	0x00000004,
-	USBINT_EPFAST		=	0x00000002,
-	USBINT_FRAME		=	0x00000001,
-	USBINT_ALL			=	USBINT_ERR|USBINT_EPRLZED|USBINT_TxENDPKT|USBINT_RxENDPKT|
-										USBINT_CDFULL|USBINT_CCEMPTY|USBINT_DEVSTAT|
-										USBINT_EPSLOW|USBINT_EPFAST|USBINT_FRAME,
-	// usb control register
-	USBCTL_RDEN			= 0x00000001,
-	USBCTL_WREN			= 0x00000002,
-	// usp recieve packet length register
-	USBRXLEN_LENMASK= 0x000001FF,
-	USBRXLEN_PKTRDY = 0x00000800,
-	USBRXLEN_DVALID = 0x00000400,
+  // interrupt register masks
+  USBINT_NONE     = 0,
+  USBINT_ERR      = 0x00000200,
+  USBINT_EPRLZED  = 0x00000100,
+  USBINT_TxENDPKT  = 0x00000080,
+  USBINT_RxENDPKT  = 0x00000040,
+  USBINT_CDFULL    =  0x00000020,
+  USBINT_CCEMPTY  =  0x00000010,
+  USBINT_DEVSTAT  =  0x00000008,
+  USBINT_EPSLOW    =  0x00000004,
+  USBINT_EPFAST    =  0x00000002,
+  USBINT_FRAME    =  0x00000001,
+  USBINT_ALL      =  USBINT_ERR|USBINT_EPRLZED|USBINT_TxENDPKT|USBINT_RxENDPKT|
+                    USBINT_CDFULL|USBINT_CCEMPTY|USBINT_DEVSTAT|
+                    USBINT_EPSLOW|USBINT_EPFAST|USBINT_FRAME,
+  // usb control register
+  USBCTL_RDEN      = 0x00000001,
+  USBCTL_WREN      = 0x00000002,
+  // usp recieve packet length register
+  USBRXLEN_LENMASK= 0x000001FF,
+  USBRXLEN_PKTRDY = 0x00000800,
+  USBRXLEN_DVALID = 0x00000400,
 };
 
 //
@@ -260,26 +260,26 @@ void usbISR_Handler(void)
     }
   }
   
-	VICVectAddr = 0;
+  VICVectAddr = 0;
 
   // we can switch context if necessary
-	rtosExitSwitchingIsr( higherPriorityTaskWoken );
+  rtosExitSwitchingIsr( higherPriorityTaskWoken );
 }
 
 // freertos usb isr handler
 __asm void usbISRHandler(void)
 {
-	PRESERVE8
-	ARM
-	INCLUDE freeRTOS/Source/portable/RVDS/ARM7_LPC21xx/portmacro.inc
+  PRESERVE8
+  ARM
+  INCLUDE freeRTOS/Source/portable/RVDS/ARM7_LPC21xx/portmacro.inc
 
-	portSAVE_CONTEXT 	
+  portSAVE_CONTEXT   
 
 ; ---------- call ISR worker
-	IMPORT 	usbISR_Handler
-	BL			usbISR_Handler
+  IMPORT   usbISR_Handler
+  BL      usbISR_Handler
 
-	portRESTORE_CONTEXT
+  portRESTORE_CONTEXT
 }
 
 //

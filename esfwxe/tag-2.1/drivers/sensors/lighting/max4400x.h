@@ -5,7 +5,7 @@
 ///
 
 #ifdef __cplusplus
-	extern "C" {
+  extern "C" {
 #endif
 
 /// MAX4400x adresses, register bit masks
@@ -14,13 +14,13 @@ enum
 {
   /// Slave address for max44006
   ///
-  max44006addr0 							= 0x88,
-  max44006addr1 							= 0x8A,
+  max44006addr0               = 0x88,
+  max44006addr1               = 0x8A,
 
   /// Slave address for max44008
   ///
-  max44008addr0 							= 0x80,
-  max44008addr1 							= 0x82,
+  max44008addr0               = 0x80,
+  max44008addr1               = 0x82,
 
   /// Interrupt register bits.
   /// Reading the Interrupt Status register clears the PWRON and AMBINTS bits if set, and deasserts the INT pin (INT pin is 
@@ -41,13 +41,13 @@ enum
   
   /// Main Configuration register bits
   ///
-  max4400xCfgMaskAMBINTE			= 0x01, ///< Ambient interrupt enable.
-	max4400xCfgAMBINTE_ON       = 0x01, ///< 1 - Detection of ambient interrupt events is enabled (see the AMBINTS bit for more details).
+  max4400xCfgMaskAMBINTE      = 0x01, ///< Ambient interrupt enable.
+  max4400xCfgAMBINTE_ON       = 0x01, ///< 1 - Detection of ambient interrupt events is enabled (see the AMBINTS bit for more details).
   max4400xCfgAMBINTE_OFF      = 0x00, ///< 0 - The AMBINTS bit and INT pin remain unasserted even if an ambient interrupt 
                                       ///< event has occurred. The AMBINTS bit is set to 0 if previously set to 1.
                                       ///< An active ambient interrupt can trigger a hardware interrupt (INT pin pulled low) 
                                       ///< and set the AMBINTS bit.
-																			
+                                      
   max4400xCfgMaskAMBSEL       = 0x0C, ///< Ambient Interrupt Select.
   max4400xCfgAMBSEL_CLEAR     = 0x00, ///< 00 CLEAR channel data is used to compare with ambient interrupt thresholds and ambient timer settings.
   max4400xCfgAMBSEL_GREEN     = 0x04, ///< 01 GREEN channel data is used to compare with ambient interrupt thresholds and ambient timer settings.
@@ -77,7 +77,7 @@ enum
   max4400xAmbCfgAMBTIM_1_56   = 0x0C, ///<  011           1.5625            256             8             64x
   max4400xAmbCfgAMBTIM_400    = 0x10, ///<  100           400               16384           14            1/4x
   
-	max4400xAmbCfgMaskTEMPEN		= 0x20, ///< Temperature sensor channel enable bit.
+  max4400xAmbCfgMaskTEMPEN    = 0x20, ///< Temperature sensor channel enable bit.
   max4400xAmbCfgTEMPEN_ON     = 0x20, ///< 1 - Enables temperature sensor.
   max4400xAmbCfgTEMPEN_OFF    = 0x00, ///< 0 - Disables temperature sensor.
                                                                             
@@ -89,8 +89,8 @@ enum
                                       ///< 0 - Disables IR compensation. 
                                       ///< 1 - Enables IR compensation. Only for MODE = max4400xCfgMODE_CL_T
                                       
-  max4400xAmbCfgMaskTRIM			= 0x80, ///< Automatic gain adjustment on sensor overload
-	max4400xAmbCfgTRIM_DEFAULT  = 0x00, ///< 0 - Use factory-programmed gains for all the channels. Ignore any bytes written to TRIM_GAIN_GREEN[6:0], 
+  max4400xAmbCfgMaskTRIM      = 0x80, ///< Automatic gain adjustment on sensor overload
+  max4400xAmbCfgTRIM_DEFAULT  = 0x00, ///< 0 - Use factory-programmed gains for all the channels. Ignore any bytes written to TRIM_GAIN_GREEN[6:0], 
   max4400xAmbCfgTRIM_CUSTOM   = 0x80, ///< TRIM_GAIN_RED[6:0], TRIM_GAIN_BLUE[6:0], TRIM_GAIN_CLEAR[6:0], and TRIM_GAIN_IR[6:0] registers. 
                                       ///< 1 - Use bytes written to TRIM_GAIN_GREEN[6:0], TRIM_GAIN_RED[6:0], TRIM_GAIN_BLUE[6:0], TRIM_GAIN_CLEAR[6:0], 
                                       ///< and TRIM_GAIN_IR[6:0] registers to set the gain for each channel.

@@ -62,8 +62,8 @@ extern "C" void HAL_UART_MspDeInit(UART_HandleTypeDef* huart);
 #pragma Otime
 static __inline esU32 uartGetMaxByteTimeoutMs( esU32 len, esU32 baud, esU32 dataBits, esU32 stopBits, esU32 parityBits ) ESE_NOTHROW
 {
-	esU32 result = (len * 2000 * (dataBits + stopBits + parityBits + 1)) / baud;
-	return result ? result : 1;
+  esU32 result = (len * 2000 * (dataBits + stopBits + parityBits + 1)) / baud;
+  return result ? result : 1;
 }
 
 //----------------------------------------------------------------------
@@ -174,12 +174,12 @@ bool EseUart::doCheckConfigured() ESE_NOTHROW
 #pragma Otime
 esU32 EseUart::dataXferTimeoutEstimateGet(size_t len) const ESE_NOTHROW
 {
-	return uartGetMaxByteTimeoutMs(
+  return uartGetMaxByteTimeoutMs(
     len, 
     m_h.Init.BaudRate, 
     5+(IS_UART_WORD_LENGTH(m_h.Init.WordLength) ? 16 : 8), 
     1+(IS_UART_STOPBITS(m_h.Init.StopBits) ? 2 : 1), 
-		IS_UART_PARITY(m_h.Init.Parity) ? 1 : 0
+    IS_UART_PARITY(m_h.Init.Parity) ? 1 : 0
   );
 }
 

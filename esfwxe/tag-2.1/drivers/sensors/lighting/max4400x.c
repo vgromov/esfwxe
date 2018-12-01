@@ -40,33 +40,33 @@ enum {
 //
 static __inline esBL max4400xByteSet(i2cHANDLE handle, esU8 slave, esU8 reg, esU8 b)
 {
-	esU8 tmp[2];
-	tmp[0] = reg;
-	tmp[1] = b;
-	
-	return i2cPutBytes(handle, slave, tmp, 2) == 2;
+  esU8 tmp[2];
+  tmp[0] = reg;
+  tmp[1] = b;
+  
+  return i2cPutBytes(handle, slave, tmp, 2) == 2;
 }
 
 static __inline esBL max4400xWordSet(i2cHANDLE handle, esU8 slave, esU8 reg, esU16 w)
 {
-	esU8 tmp[3];
-	tmp[0] = reg;
-	tmp[1] = HIBYTE(w);
+  esU8 tmp[3];
+  tmp[0] = reg;
+  tmp[1] = HIBYTE(w);
   tmp[2] = LOBYTE(w);
 
-	return i2cPutBytes(handle, slave, tmp, 3) == 3;
+  return i2cPutBytes(handle, slave, tmp, 3) == 3;
 }
 
 static __inline esBL max4400xByteGet(i2cHANDLE handle, esU8 slave, esU8 reg, esU8* b)
 {
-	return i2cPutBytes(handle, slave, &reg, 1) == 1 &&
-		i2cGetBytes(handle, slave, b, 1) == 1;
+  return i2cPutBytes(handle, slave, &reg, 1) == 1 &&
+    i2cGetBytes(handle, slave, b, 1) == 1;
 }
 
 static __inline esBL max4400xWordGet(i2cHANDLE handle, esU8 slave, esU8 reg, esU16* w)
 {
-	if( i2cPutBytes(handle, slave, &reg, 1) == 1 &&
-		i2cGetBytes(handle, slave, (esU8*)w, 2) == 2 )
+  if( i2cPutBytes(handle, slave, &reg, 1) == 1 &&
+    i2cGetBytes(handle, slave, (esU8*)w, 2) == 2 )
   {
     *w = SWAPB_WORD(*w);
     return TRUE;

@@ -4,9 +4,9 @@
 void wdtInit(void)
 {
 #ifndef JTAG_DEBUG
- 	WDTC = 2 * Fpclk;	// once WDEN is set, the WDT will start after feeding
+   WDTC = 2 * Fpclk;  // once WDEN is set, the WDT will start after feeding
   WDMOD = WDEN | WDRESET; // enable watchdog, reset MCU on underflow
-	// feed and start watchdog
+  // feed and start watchdog
   WDFEED = 0xAA;
   WDFEED = 0x55;
 #endif

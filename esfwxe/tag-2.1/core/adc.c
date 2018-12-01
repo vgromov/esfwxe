@@ -1,12 +1,12 @@
 #include <target.h>
 
 #ifdef USE_FREE_RTOS
-	#include <FreeRTOS.h>
-	#include <semphr.h>
+  #include <FreeRTOS.h>
+  #include <semphr.h>
 #endif
 
 #ifdef USE_RTX_RTOS
-	#include <rtl.h>
+  #include <rtl.h>
 #endif
 
 #pragma hdrstop
@@ -89,16 +89,16 @@ static esU16 s_data[ADC_CHANNEL_COUNT];
 // interlocked access to the shared resource
 esBL adcLock(esU32 timeout)
 {
-	if( s_mutex )
-		return xSemaphoreTake(s_mutex, timeout) == pdTRUE;
-	
-	return FALSE;
+  if( s_mutex )
+    return xSemaphoreTake(s_mutex, timeout) == pdTRUE;
+  
+  return FALSE;
 }
 
 void adcUnlock(void)
 {
-	if( s_mutex )
-		xSemaphoreGive(s_mutex);
+  if( s_mutex )
+    xSemaphoreGive(s_mutex);
 }
 
 // power control
@@ -111,26 +111,26 @@ void adcPowerDown(void);
 void adcInit(esU32 freq, esU8 chnlMask)
 {
 #ifdef USE_FREE_RTOS
-	if( !s_mutex )
-		s_mutex = xSemaphoreCreateMutex();
+  if( !s_mutex )
+    s_mutex = xSemaphoreCreateMutex();
 
-	if( !s_completion )
-		vSemaphoreCreateBinary( s_completion );
+  if( !s_completion )
+    vSemaphoreCreateBinary( s_completion );
 #endif
-	adcStop();
-	adcPowerUp();
+  adcStop();
+  adcPowerUp();
 
-	
+  
 }
 
 void adcStart(esU8 startCondition)
 {
-	adcStop();
+  adcStop();
 }
 
 void adcStartBurst(esU8 accuracy)
 {
-	adcStop();
+  adcStop();
 
 }
 
@@ -144,16 +144,16 @@ void adcStop(void)
 // binary semaphore for optimal MCU usage 
 esBL adcWaitForDone(esU32 timeout)
 {
-	esBL result = FALSE;
+  esBL result = FALSE;
 
-	if( s_completion )
-	{
-		result = xSemaphoreTake(s_completion, timeout) == pdTRUE;
-		if( result )
-			xSemaphoreGive(s_completion);
-	}
+  if( s_completion )
+  {
+    result = xSemaphoreTake(s_completion, timeout) == pdTRUE;
+    if( result )
+      xSemaphoreGive(s_completion);
+  }
 
-	return result;
+  return result;
 }
 
 // access conversion results & status

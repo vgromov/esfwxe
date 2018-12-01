@@ -23,7 +23,7 @@
 #include <tlsfConfig.h>
 
 #ifdef __cplusplus
-	extern "C" {
+  extern "C" {
 #endif
 
 size_t init_memory_pool(size_t, void *);
@@ -42,7 +42,7 @@ void *tlsf_realloc(void *ptr, size_t size);
 void *tlsf_calloc(size_t nelem, size_t elem_size);
 
 #ifdef __cplusplus
-	}
+  }
 #endif
 
 #endif
