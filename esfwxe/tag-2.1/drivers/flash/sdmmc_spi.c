@@ -302,19 +302,30 @@ static esBL sdmmcEnterIdle(spiHANDLE h, SdmmcInfo* info, esBL useCrc)
   spiPutBytes(h, s_sdmmcBuff, 12);
 
   // issue CMD0 && check response
-  if( sdmmcSendCmd(h, info, CMD0, 0) &&
-      sdmmcStatIdle == info->stat )
+  if( 
+    sdmmcSendCmd(h, info, CMD0, 0) &&
+    sdmmcStatIdle == info->stat 
+  )
   {
     // set primary initialized flag
     info->flags = sdmmcOk;
 
     // activate CRC support, if required
-    if( useCrc &&
-        sdmmcSendCmd(h, info, CMD59, 1) &&
-        sdmmcStatIdle == info->stat 
+    if( 
+      useCrc &&
+      sdmmcSendCmd(h, info, CMD59, 1) &&
+      sdmmcStatIdle == info->stat
     )
-      info->flags |= sdmmcUseCrc;
-
+      ES_BIT_SET(info->flags, sdmmcUseCrc);
+    
+    if( 
+      ES_BIT_MASK_MATCH_ALL(info->stat, sdmmcStatIdle|sdmmcStatCmdCrcError)  //< We already have active CRC
+    )
+    {
+      ES_BIT_SET(info->flags, sdmmcUseCrc);
+      ES_BIT_CLR(info->stat, sdmmcStatCmdCrcError);
+    }
+    
     return TRUE;  
   }
 
@@ -447,14 +458,18 @@ static esBL sdmmcCheckCardSupport(spiHANDLE h, SdmmcInfo* info, esU16 v)
   esBL result = FALSE;
   esU32 vMask = sdmmcMakeVoltageMask(v);
   // send CMD8 with proper CRC to check if card is sd2 and host voltage is supported
-  if( !sdmmcSendCmd(h, info, CMD8, 0x01AA) || 
-      (sdmmcStatIllegalCmd & info->stat) )
+  if( 
+    !sdmmcSendCmd(h, info, CMD8, 0x01AA) || 
+    (sdmmcStatIllegalCmd & info->stat) 
+  )
     // error or no response - try sd1 or mmc3
     result = sdmmcCheckSd1(h, info, vMask) || 
           sdmmcCheckMmc3(h, info, vMask);
   // check if voltage and bit pattern match
-  else if( s_sdmmcBuff[3] == 0x01 && 
-          s_sdmmcBuff[4] == 0xAA )
+  else if( 
+    s_sdmmcBuff[3] == 0x01 && 
+    s_sdmmcBuff[4] == 0xAA 
+  )
     result = sdmmcCheckSd2(h, info, vMask);
 
   return result;
