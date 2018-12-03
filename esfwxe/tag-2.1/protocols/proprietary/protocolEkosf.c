@@ -238,7 +238,7 @@ static int ekosfFullHdrFrameReceive(EseStdIoState* io, esBL slave)
   {
     esU32 addRead;
     
-    read = static_cast<esU32>(end-pos);
+    read = (esU32)(end-pos);
     addRead = ProtocolEkosfHdr_SZE-read;
     
     ES_DEBUG_TRACE3(

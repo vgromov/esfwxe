@@ -78,7 +78,7 @@ esU32 binToHex( const esU8* bin, esU32 binLen, ESE_STR buff, esU32 buffLen, esBL
     if( doZeroTerminate && buff < buffEnd )
       *buff = 0;
 
-    return static_cast<esU32>(bin-binBeg);
+    return (esU32)(bin-binBeg);
   }
 
   return 0;  

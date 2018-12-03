@@ -6,7 +6,7 @@
 #include <esfwxe/utils.h>
 #include "EseMathValStat.h"
 
-void valStatReset(EseMathValStat* stat)
+void eseMathValStatReset(EseMathValStat* stat)
 {
   ES_ASSERT( stat );
 
@@ -14,7 +14,7 @@ void valStatReset(EseMathValStat* stat)
   stat->m_flags = eseValStatInvalid;
 }
 
-void valStatValAppend(EseMathValStat* stat, esF val)
+void eseMathValStatValAppend(EseMathValStat* stat, esF val)
 {
   ES_ASSERT( stat );
 
@@ -40,7 +40,7 @@ void valStatValAppend(EseMathValStat* stat, esF val)
   ++stat->m_cnt;
 }
 
-void valStatAvgComplete(EseMathValStat* stat)
+void eseMathValStatAvgComplete(EseMathValStat* stat)
 {
   ES_ASSERT( stat );
 
@@ -54,7 +54,7 @@ void valStatAvgComplete(EseMathValStat* stat)
   stat->m_avg /= (esF)stat->m_cnt;
 }
 
-void valStatUaValAppend(EseMathValStat* stat, esF val)
+void eseMathValStatUaValAppend(EseMathValStat* stat, esF val)
 {
   ES_ASSERT( stat );
   if( ES_BIT_IS_SET(stat->m_flags, eseValStatInvalidAvg) || stat->m_cnt < 2 )
@@ -64,7 +64,7 @@ void valStatUaValAppend(EseMathValStat* stat, esF val)
   stat->m_ua += delta*delta;
 }
 
-void valStatComplete(EseMathValStat* stat, esF deviceErr, esBL errIsRel)
+void eseMathValStatComplete(EseMathValStat* stat, esF deviceErr, esBL errIsRel)
 {
   ES_ASSERT( stat );
   if( ES_BIT_IS_SET(stat->m_flags, eseValStatInvalidAvg) || stat->m_cnt < 2 )
